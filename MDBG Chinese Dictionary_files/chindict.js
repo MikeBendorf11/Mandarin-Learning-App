@@ -4,17 +4,17 @@
  * Copyrights MDBG 2015
  */
 
-jQuery.fn.identify = function(prefix) {
-    var i = 0;
-    return this.each(function() {
-        if(this.id) return;
-        do { 
-            i++;
-            var id = prefix + '_' + i;
-        } while($('#' + id).length > 0);            
-        $(this).attr('id', id);            
-    });
-};
+// jQuery.fn.identify = function(prefix) {
+//     var i = 0;
+//     return this.each(function() {
+//         if(this.id) return;
+//         do { 
+//             i++;
+//             var id = prefix + '_' + i;
+//         } while($('#' + id).length > 0);            
+//         $(this).attr('id', id);            
+//     });
+// };
 
 var mdbg = {};
 
@@ -29,7 +29,7 @@ function enableHWIme(inputElementId) {
 	var divHWIme = $('#hwime_' + inputElementId);
 	divHWIme.show();
 
-	var mdbgHwIme = new MdbgHwIme(divHWIme, "dictionary-ajax?c=hwime", function(selectedChar) {
+	var mdbgHwIme = new MdbgHwIme(divHWIme, "https://cors-anywhere.herokuapp.com/https://www.mdbg.net/chinese/dictionary-ajax?c=hwime", function(selectedChar) {
 		var txbInput = $('#' + inputElementId);
 
 		if(txbInput.typeahead !== undefined && inputElementId == 'txt_word')
@@ -882,269 +882,269 @@ mdbg.PlaylistSoundPlayer = function(element) {
 	};
 };
 
-/* ---------- Start Lightbox ---------- */
+// /* ---------- Start Lightbox ---------- */
 
-/*
-Created By: Chris Campbell
-Website: http://particletree.com
-Date: 2/1/2006
+// /*
+// Created By: Chris Campbell
+// Website: http://particletree.com
+// Date: 2/1/2006
 
-Adapted By: Simon de Haan
-Website: http://blog.eight.nl
-Date: 21/2/2006
+// Adapted By: Simon de Haan
+// Website: http://blog.eight.nl
+// Date: 21/2/2006
 
-Adapted By: MDBG
-Website: https://www.mdbg.net
-Date: 2011-12-09
+// Adapted By: MDBG
+// Website: https://www.mdbg.net
+// Date: 2011-12-09
 
-Inspired by the lightbox implementation found at http://www.huddletogether.com/projects/lightbox/
-And the lightbox gone wild by ParticleTree at http://particletree.com/features/lightbox-gone-wild/
+// Inspired by the lightbox implementation found at http://www.huddletogether.com/projects/lightbox/
+// And the lightbox gone wild by ParticleTree at http://particletree.com/features/lightbox-gone-wild/
 
-*/
+// */
 
-mdbg.lightbox = function(ctrl, content, onActivate, onDeactivate) {
+// mdbg.lightbox = function(ctrl, content, onActivate, onDeactivate) {
 
-	this.contentElement = null;
-	this.content = null;
-	this.onActivate = null;
-	this.onDeactivate = null;
-	this.yPos = 0;
-	this.xPos = 0;
+// 	this.contentElement = null;
+// 	this.content = null;
+// 	this.onActivate = null;
+// 	this.onDeactivate = null;
+// 	this.yPos = 0;
+// 	this.xPos = 0;
 
-	// Test if the browser is Internet Explorer
-	this.isIE = function() {
-		if(navigator.userAgent.toLocaleLowerCase().match(/msie/) == 'msie')
-			return true;
-		else
-			return false;
-	};
+// 	// Test if the browser is Internet Explorer
+// 	this.isIE = function() {
+// 		if(navigator.userAgent.toLocaleLowerCase().match(/msie/) == 'msie')
+// 			return true;
+// 		else
+// 			return false;
+// 	};
 	
-	// Turn everything on - mainly the IE fixes
-	this.activate = function() {
-		if (this.isIE()) {
-			this.getScroll();
-			this.prepareIE('100%', 'hidden');
-			this.setScroll(0,0);
-			this.hideSelects('hidden');
-		}
+// 	// Turn everything on - mainly the IE fixes
+// 	this.activate = function() {
+// 		if (this.isIE()) {
+// 			this.getScroll();
+// 			this.prepareIE('100%', 'hidden');
+// 			this.setScroll(0,0);
+// 			this.hideSelects('hidden');
+// 		}
 		
-		if(this.content)
-		{
-			this.contentElement.html(this.content);
-		}
+// 		if(this.content)
+// 		{
+// 			this.contentElement.html(this.content);
+// 		}
 		
-		this.displayLightbox("block");
+// 		this.displayLightbox("block");
 
-		if(this.onActivate)
-		{
-			this.onActivate();
-		}
-	};
+// 		if(this.onActivate)
+// 		{
+// 			this.onActivate();
+// 		}
+// 	};
 	
-	// Ie requires height to 100% and overflow hidden or else you can scroll down past the lightbox
-	this.prepareIE = function(height, overflow) {
-		var body = $('body');
-		body.css('height', height);
-		body.css('overflow', overflow);
+// 	// Ie requires height to 100% and overflow hidden or else you can scroll down past the lightbox
+// 	this.prepareIE = function(height, overflow) {
+// 		var body = $('body');
+// 		body.css('height', height);
+// 		body.css('overflow', overflow);
   
-		var html = $('html');
-		html.css('height', height);
-		html.css('overflow', overflow);
-	};
+// 		var html = $('html');
+// 		html.css('height', height);
+// 		html.css('overflow', overflow);
+// 	};
 	
-	// In IE, select elements hover on top of the lightbox
-	this.hideSelects = function(visibility) {
-		$('select').css('visibility', visibility);
-	};
+// 	// In IE, select elements hover on top of the lightbox
+// 	this.hideSelects = function(visibility) {
+// 		$('select').css('visibility', visibility);
+// 	};
 	
-	// Taken from lightbox implementation found at http://www.huddletogether.com/projects/lightbox/
-	this.getScroll = function() {
-		if (self.pageYOffset) {
-			this.yPos = self.pageYOffset;
-		} else if (document.documentElement && document.documentElement.scrollTop) {
-			this.yPos = document.documentElement.scrollTop; 
-		} else if (document.body) {
-			this.yPos = document.body.scrollTop;
-		}
-	};
+// 	// Taken from lightbox implementation found at http://www.huddletogether.com/projects/lightbox/
+// 	this.getScroll = function() {
+// 		if (self.pageYOffset) {
+// 			this.yPos = self.pageYOffset;
+// 		} else if (document.documentElement && document.documentElement.scrollTop) {
+// 			this.yPos = document.documentElement.scrollTop; 
+// 		} else if (document.body) {
+// 			this.yPos = document.body.scrollTop;
+// 		}
+// 	};
 	
-	this.setScroll = function(x, y) {
-		window.scrollTo(x, y); 
-	};
+// 	this.setScroll = function(x, y) {
+// 		window.scrollTo(x, y); 
+// 	};
 	
-	this.displayLightbox = function(display) {
-		var that = this;
+// 	this.displayLightbox = function(display) {
+// 		var that = this;
 		
-		// get the inner div
-		var lightbox = this.contentElement.children(":first");
+// 		// get the inner div
+// 		var lightbox = this.contentElement.children(":first");
 		
-		// set the overlay display mode
-		$('#overlay').css('display', display);
+// 		// set the overlay display mode
+// 		$('#overlay').css('display', display);
 		
-		// click on the overlay should close the lightbox
-		if(display != 'none') {
-			$('#overlay').click(function() {
-				that.deactivate();
-			});
-		}
-		else {
-			$('#overlay').off('click');
-		}
+// 		// click on the overlay should close the lightbox
+// 		if(display != 'none') {
+// 			$('#overlay').click(function() {
+// 				that.deactivate();
+// 			});
+// 		}
+// 		else {
+// 			$('#overlay').off('click');
+// 		}
 
-		// center the lightbox based on it's size
-		var width = lightbox.width();
-		var height = lightbox.height();
-		if(width == 0)
-		{
-			width = parseInt(lightbox.css('width'));
-			height = parseInt(lightbox.css('height'));
-		}
-		lightbox.css('left', (-width / 2) + "px");
-		lightbox.css('top', (-height / 2) + "px");
+// 		// center the lightbox based on it's size
+// 		var width = lightbox.width();
+// 		var height = lightbox.height();
+// 		if(width == 0)
+// 		{
+// 			width = parseInt(lightbox.css('width'));
+// 			height = parseInt(lightbox.css('height'));
+// 		}
+// 		lightbox.css('left', (-width / 2) + "px");
+// 		lightbox.css('top', (-height / 2) + "px");
 
-		// set the lightbox display mode
-		this.contentElement.css('display', display);
+// 		// set the lightbox display mode
+// 		this.contentElement.css('display', display);
 
-		// bind actions
-		if(display != 'none') {
-			this.actions();
-		}
-	};
+// 		// bind actions
+// 		if(display != 'none') {
+// 			this.actions();
+// 		}
+// 	};
 	
-	// Search through new links within the lightbox, and attach click event
-	this.actions = function() {
-		var lbActions = $('.lbAction');
+// 	// Search through new links within the lightbox, and attach click event
+// 	this.actions = function() {
+// 		var lbActions = $('.lbAction');
 
-		var that = this;
-		lbActions.each( function(index) {
-			var lbAction = $(this);
-			lbAction.off('click');
-			lbAction.click(function() {
-				that[lbAction.attr('rel')]();
-				return false;
-			});
-		});
+// 		var that = this;
+// 		lbActions.each( function(index) {
+// 			var lbAction = $(this);
+// 			lbAction.off('click');
+// 			lbAction.click(function() {
+// 				that[lbAction.attr('rel')]();
+// 				return false;
+// 			});
+// 		});
 
-	};
+// 	};
 	
-	// Deactivate the lightbox
-	this.deactivate = function() {
-		if (this.isIE()) {
-			this.setScroll(0,this.yPos);
-			this.prepareIE("auto", "auto");
-			this.hideSelects("visible");
-		}
+// 	// Deactivate the lightbox
+// 	this.deactivate = function() {
+// 		if (this.isIE()) {
+// 			this.setScroll(0,this.yPos);
+// 			this.prepareIE("auto", "auto");
+// 			this.hideSelects("visible");
+// 		}
 		
-		this.displayLightbox("none");
+// 		this.displayLightbox("none");
 
-		if(this.content)
-		{
-			this.contentElement.html('');
-		}
+// 		if(this.content)
+// 		{
+// 			this.contentElement.html('');
+// 		}
 		
-		if(this.onDeactivate)
-		{
-			this.onDeactivate();
-		}
-	};
+// 		if(this.onDeactivate)
+// 		{
+// 			this.onDeactivate();
+// 		}
+// 	};
 
 	
 	
-	// add the overlay div if missing
-	if($('#overlay').length == 0)
-	{
-		var overlay = $('<div id="overlay"></div>');
-		var body = $('body');
-		body.append(overlay);
-	}
+// 	// add the overlay div if missing
+// 	if($('#overlay').length == 0)
+// 	{
+// 		var overlay = $('<div id="overlay"></div>');
+// 		var body = $('body');
+// 		body.append(overlay);
+// 	}
 	
-	this.contentElement = $('<div></div>');
-	this.contentElement.addClass('lightbox');
-	var body = $('body');
-	body.append(this.contentElement);
+// 	this.contentElement = $('<div></div>');
+// 	this.contentElement.addClass('lightbox');
+// 	var body = $('body');
+// 	body.append(this.contentElement);
 	
-	if(onActivate)
-	{
-		this.onActivate = onActivate;
-	}
-	if(onDeactivate)
-	{
-		this.onActivate = onDeactivate;
-	}
+// 	if(onActivate)
+// 	{
+// 		this.onActivate = onActivate;
+// 	}
+// 	if(onDeactivate)
+// 	{
+// 		this.onActivate = onDeactivate;
+// 	}
 	
-	this.content = content;
+// 	this.content = content;
 
-	var that = this;
-	ctrl.off('click');
-	ctrl.click(function (){ 
-		that.activate();
-		return false;
-	});
-};
+// 	var that = this;
+// 	ctrl.off('click');
+// 	ctrl.click(function (){ 
+// 		that.activate();
+// 		return false;
+// 	});
+// };
 
-/* ---------- End Lightbox ---------- */
+// /* ---------- End Lightbox ---------- */
 
-mdbg.createCrAdLightbox = function(ctrl, sourceId)
-{
-	var content = '<div style="width: 640px; height: 400px">';
-	content += '	<iframe style="background-color: #bbb" width="640" height="360" src="//www.youtube.com/embed/6RtMX1Hf-KI?autohide=1&amp;autoplay=1&amp;controls=0&amp;hd=1&amp;iv_load_policy=3&amp;rel=0&amp;showsearch=0" frameborder="0" allowfullscreen></iframe>';
-	content += '	<div style="padding-top: 5px">';
-	content += '		<button onclick="trackExitLink(\'mdbg.loqu8.com\', \'' + sourceId + '-lb_download\'); window.location = \'https://mdbg.loqu8.com/installing.htm\'">Download</button>';	
-	content += '		<button onclick="trackExitLink(\'mdbg.loqu8.com\', \'' + sourceId + '-lb_moreinfo\'); window.location = \'https://mdbg.loqu8.com/\'">Learn more</button>';
-	content += '	</div>';
-	content += '	<div style="position: absolute; bottom: 30px; right: 10px">';
-	content += '		<a href="#" class="lbAction" rel="deactivate">Close</a>';
-	content += '	</div>';
-	content += '	<div style="position: absolute; bottom: 10px; right: 10px">';
-	content += '		<a href="dictionary?page=contact&amp;meelcommentabout=chinesereader&amp;meelcommentaboutversion=trial">Unable to install? Please contact us.</a>';
-	content += '	</div>';
-	content += '	<div style="position: absolute; bottom: -1px; left: 10px">';
-	content += '		<iframe width="1" height="1" frameborder="0" style="background-color: #b8b8b8" src="https://mdbg.loqu8.com/installing.htm"></iframe>';
-	content += '	</div>';
-	content += '</div>';
+// mdbg.createCrAdLightbox = function(ctrl, sourceId)
+// {
+// 	var content = '<div style="width: 640px; height: 400px">';
+// 	content += '	<iframe style="background-color: #bbb" width="640" height="360" src="//www.youtube.com/embed/6RtMX1Hf-KI?autohide=1&amp;autoplay=1&amp;controls=0&amp;hd=1&amp;iv_load_policy=3&amp;rel=0&amp;showsearch=0" frameborder="0" allowfullscreen></iframe>';
+// 	content += '	<div style="padding-top: 5px">';
+// 	content += '		<button onclick="trackExitLink(\'mdbg.loqu8.com\', \'' + sourceId + '-lb_download\'); window.location = \'https://mdbg.loqu8.com/installing.htm\'">Download</button>';	
+// 	content += '		<button onclick="trackExitLink(\'mdbg.loqu8.com\', \'' + sourceId + '-lb_moreinfo\'); window.location = \'https://mdbg.loqu8.com/\'">Learn more</button>';
+// 	content += '	</div>';
+// 	content += '	<div style="position: absolute; bottom: 30px; right: 10px">';
+// 	content += '		<a href="#" class="lbAction" rel="deactivate">Close</a>';
+// 	content += '	</div>';
+// 	content += '	<div style="position: absolute; bottom: 10px; right: 10px">';
+// 	content += '		<a href="dictionary?page=contact&amp;meelcommentabout=chinesereader&amp;meelcommentaboutversion=trial">Unable to install? Please contact us.</a>';
+// 	content += '	</div>';
+// 	content += '	<div style="position: absolute; bottom: -1px; left: 10px">';
+// 	content += '		<iframe width="1" height="1" frameborder="0" style="background-color: #b8b8b8" src="https://mdbg.loqu8.com/installing.htm"></iframe>';
+// 	content += '	</div>';
+// 	content += '</div>';
 
-	new mdbg.lightbox(ctrl, content, function() { trackExitLink('mdbg.loqu8.com', sourceId + '-lb_open'); } );
-}
+// 	new mdbg.lightbox(ctrl, content, function() { trackExitLink('mdbg.loqu8.com', sourceId + '-lb_open'); } );
+// }
 
 
-mdbg.createCrAdLightboxCn = function(ctrl, sourceId)
-{
-	var content = '<div style="width: 640px; height: 440px">';
-	content += '	<embed src="//static.youku.com/v/swf/qplayer.swf?VideoIDS=XMzM0NTEyNzE2=&isAutoPlay=true&isShowRelatedVideo=false&embedid=-&showAd=0" quality="high" width="640" height="400" allowScriptAccess="sameDomain" type="application/x-shockwave-flash"></embed>';
-	content += '	<div style="padding-top: 5px">';
-	content += '		<button onclick="trackExitLink(\'mdbg.loqu8.com\', \'' + sourceId + '-lb_download-cn\'); window.location = \'https://mdbg.loqu8.com/installing.htm\'">Download</button>';	
-	content += '		<button onclick="trackExitLink(\'mdbg.loqu8.com\', \'' + sourceId + '-lb_moreinfo-cn\'); window.location = \'https://mdbg.loqu8.com/\'">Learn more</button>';
-	content += '	</div>';
-	content += '	<div style="position: absolute; bottom: 30px; right: 10px">';
-	content += '		<a href="#" class="lbAction" rel="deactivate">Close</a>';
-	content += '	</div>';
-	content += '	<div style="position: absolute; bottom: 10px; right: 10px">';
-	content += '		<a href="dictionary?page=contact&amp;meelcommentabout=chinesereader&amp;meelcommentaboutversion=trial">Unable to install? Please contact us.</a>';
-	content += '	</div>';
-	content += '	<div style="position: absolute; bottom: -1px; left: 10px">';
-	content += '		<iframe width="1" height="1" frameborder="0" style="background-color: #b8b8b8" src="https://mdbg.loqu8.com/installing.htm"></iframe>';
-	content += '	</div>';
-	content += '</div>';
+// mdbg.createCrAdLightboxCn = function(ctrl, sourceId)
+// {
+// 	var content = '<div style="width: 640px; height: 440px">';
+// 	content += '	<embed src="//static.youku.com/v/swf/qplayer.swf?VideoIDS=XMzM0NTEyNzE2=&isAutoPlay=true&isShowRelatedVideo=false&embedid=-&showAd=0" quality="high" width="640" height="400" allowScriptAccess="sameDomain" type="application/x-shockwave-flash"></embed>';
+// 	content += '	<div style="padding-top: 5px">';
+// 	content += '		<button onclick="trackExitLink(\'mdbg.loqu8.com\', \'' + sourceId + '-lb_download-cn\'); window.location = \'https://mdbg.loqu8.com/installing.htm\'">Download</button>';	
+// 	content += '		<button onclick="trackExitLink(\'mdbg.loqu8.com\', \'' + sourceId + '-lb_moreinfo-cn\'); window.location = \'https://mdbg.loqu8.com/\'">Learn more</button>';
+// 	content += '	</div>';
+// 	content += '	<div style="position: absolute; bottom: 30px; right: 10px">';
+// 	content += '		<a href="#" class="lbAction" rel="deactivate">Close</a>';
+// 	content += '	</div>';
+// 	content += '	<div style="position: absolute; bottom: 10px; right: 10px">';
+// 	content += '		<a href="dictionary?page=contact&amp;meelcommentabout=chinesereader&amp;meelcommentaboutversion=trial">Unable to install? Please contact us.</a>';
+// 	content += '	</div>';
+// 	content += '	<div style="position: absolute; bottom: -1px; left: 10px">';
+// 	content += '		<iframe width="1" height="1" frameborder="0" style="background-color: #b8b8b8" src="https://mdbg.loqu8.com/installing.htm"></iframe>';
+// 	content += '	</div>';
+// 	content += '</div>';
 	
-	new mdbg.lightbox(ctrl, content, function() { trackExitLink('mdbg.loqu8.com', sourceId + '-lb_open-cn'); } );
-}
+// 	new mdbg.lightbox(ctrl, content, function() { trackExitLink('mdbg.loqu8.com', sourceId + '-lb_open-cn'); } );
+// }
 
 
-// source: http://lions-mark.com/jquery/scrollTo/
-$.fn.scrollTo = function( target, options, callback ){
-	  if(typeof options == 'function' && arguments.length == 2){ callback = options; options = target; }
-	  var settings = $.extend({
-	    scrollTarget  : target,
-	    offsetTop     : 50,
-	    duration      : 500,
-	    easing        : 'swing'
-	  }, options);
-	  return this.each(function(){
-	    var scrollPane = $(this);
-	    var scrollTarget = (typeof settings.scrollTarget == "number") ? settings.scrollTarget : $(settings.scrollTarget);
-	    var scrollY = (typeof scrollTarget == "number") ? scrollTarget : scrollTarget.offset().top + scrollPane.scrollTop() - parseInt(settings.offsetTop);
-	    scrollPane.animate({scrollTop : scrollY }, parseInt(settings.duration), settings.easing, function(){
-	      if (typeof callback == 'function') { callback.call(this); }
-	    });
-	  });
-	}
+// // source: http://lions-mark.com/jquery/scrollTo/
+// $.fn.scrollTo = function( target, options, callback ){
+// 	  if(typeof options == 'function' && arguments.length == 2){ callback = options; options = target; }
+// 	  var settings = $.extend({
+// 	    scrollTarget  : target,
+// 	    offsetTop     : 50,
+// 	    duration      : 500,
+// 	    easing        : 'swing'
+// 	  }, options);
+// 	  return this.each(function(){
+// 	    var scrollPane = $(this);
+// 	    var scrollTarget = (typeof settings.scrollTarget == "number") ? settings.scrollTarget : $(settings.scrollTarget);
+// 	    var scrollY = (typeof scrollTarget == "number") ? scrollTarget : scrollTarget.offset().top + scrollPane.scrollTop() - parseInt(settings.offsetTop);
+// 	    scrollPane.animate({scrollTop : scrollY }, parseInt(settings.duration), settings.easing, function(){
+// 	      if (typeof callback == 'function') { callback.call(this); }
+// 	    });
+// 	  });
+// 	}

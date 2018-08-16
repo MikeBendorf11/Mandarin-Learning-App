@@ -47,14 +47,12 @@ function MdbgHwIme(element, serverUrl, onCharSelected, onClose) {
 		'		<div class="mdbghwime-next-page-button mdbghwime-button ion-arrow-down-b" title="Next page"></div>' +
 		'	</div>' +
 		'	<div class="mdbghwime-result">' +
-		'		<span class="mdbghwime-close-button"><img src="rsc/img/close2.gif" /></span>' +
 		'		<span class="mdbghwime-loading-indicator"><span class="ion-loop"></span></span>' +
 		'		<span class="mdbghwime-error-indicator"><span class="ion-alert"></span></span>' +
 		'		<div></div>' +
 		'	</div>' +
 		'</div>' +
-		'<div style="clear: both"></div>' +
-		'<div class="mdbghwime-hint">Please pay attention to the <a target="_blank" href="dictionary?page=bihua">stroke order</a></div>';
+		'<div style="clear: both"></div>';
 	
 	element.html(html);
 	
@@ -592,8 +590,8 @@ MdbgHwIme.prototype.resultCallback = function(reply) {
 
 			var tdDef = $('<td />');
 			row.append(tdDef);
-			var divDef = $('<div class="def" />');
-			tdDef.append(divDef);
+			// var divDef = $('<div class="def" />');
+			// tdDef.append(divDef);
 
 			var dictionaryMatch = reply.dictionaryMatches[match];
 			if (dictionaryMatch) {
@@ -605,8 +603,8 @@ MdbgHwIme.prototype.resultCallback = function(reply) {
 				}
 				
 				if (dictionaryMatch.d != null) {
-					divDef.text(dictionaryMatch.d);
-					divDef.prop('title', dictionaryMatch.d);
+					// divDef.text(dictionaryMatch.d);
+					// divDef.prop('title', dictionaryMatch.d);
 				}
 			}
 			else {
