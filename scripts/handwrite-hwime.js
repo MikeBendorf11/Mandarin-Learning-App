@@ -37,8 +37,7 @@ function MdbgHwIme(element, serverUrl, onCharSelected, onClose) {
 		'	<div class="mdbghwime-button-bar">' +
 //		'		<div class="mdbghwime-simptrad-button mdbghwime-button" title="Simplified / Traditional Chinese"><div class="simp">simp</div><div class="trad">trad</div></div>' +
 		'		<div class="mdbghwime-back-line-button mdbghwime-button ion-ios-undo" title="Undo last stroke"></div>' +
-		'		<div class="mdbghwime-clear-button mdbghwime-button ion-backspace" title="Clear all"></div>' +
-		'		<div class="mdbghwime-show-numbers-button mdbghwime-button" title="Show / hide stroke numbers"><span></span><div class="ion-paintbrush"></div></div>' +
+		'		<div class="mdbghwime-clear-button mdbghwime-button ion-backspace" title="Clear all"></div>'  +
 		'		<br />' +
 		'		<br />' +
 		'		<br />' +
@@ -590,8 +589,8 @@ MdbgHwIme.prototype.resultCallback = function(reply) {
 
 			var tdDef = $('<td />');
 			row.append(tdDef);
-			// var divDef = $('<div class="def" />');
-			// tdDef.append(divDef);
+			var divDef = $('<div class="def" />');
+			tdDef.append(divDef);
 
 			var dictionaryMatch = reply.dictionaryMatches[match];
 			if (dictionaryMatch) {
@@ -603,8 +602,8 @@ MdbgHwIme.prototype.resultCallback = function(reply) {
 				}
 				
 				if (dictionaryMatch.d != null) {
-					// divDef.text(dictionaryMatch.d);
-					// divDef.prop('title', dictionaryMatch.d);
+					divDef.text(dictionaryMatch.d);
+					divDef.prop('title', dictionaryMatch.d);
 				}
 			}
 			else {
@@ -648,15 +647,19 @@ MdbgHwImeGrid.prototype.clear = function() {
 	this.color = "#c0c0c0";
 	this.lineWidth = 0.7;
 
-	this.startLine(0, 0);
-	this.drawLine(this.size, this.size);
-	this.startLine(0, this.size);
-	this.drawLine(this.size, 0);
+	// this.startLine(0, 0);
+	// this.drawLine(this.size, this.size);
+	// this.startLine(0, this.size);
+	// this.drawLine(this.size, 0);
 
 	this.startLine(0, (this.size) / 2.0);
 	this.drawLine(this.size, (this.size) / 2.0);
 	this.startLine((this.size) / 2.0, 0);
 	this.drawLine((this.size) / 2.0, this.size);
+	this.startLine((this.size )/4.0, (this.size)/4.0)
+	this.drawLine((this.size)*3/4.0, (this.size)/4.0)
+	this.startLine((this.size )/4.0, (this.size)*3/4.0)
+	this.drawLine((this.size)*3/4.0, (this.size)*3/4.0)
 };
 MdbgHwImeGrid.prototype.startLine = function(x, y) {
 	this.context.strokeStyle = this.color;
@@ -667,6 +670,7 @@ MdbgHwImeGrid.prototype.startLine = function(x, y) {
 	this.context.moveTo(x, y);
 };
 MdbgHwImeGrid.prototype.drawLine = function(x, y) {
+	this.context.setLineDash([5, 3])
 	this.context.lineTo(x, y);
 	this.context.stroke();
 };

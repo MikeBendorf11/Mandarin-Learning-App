@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Handwriting Tool</title>
+  <!-- start handwriting tool -->
+  <script type="text/javascript" src="./scripts/jquery-1.11.2.min.js"></script>
+  <script type="text/javascript" src="./scripts/handwrite-chindict.js"></script>
+  <script type="text/javascript" src="./scripts/handwrite-hwime.js"></script>
+  <script>window.onload = () => {
+      enableHWIme('txt_word')
+    }
+  </script>
+  <link rel="stylesheet" href="./scripts/handwrite-style.css" type="text/css">
+  <!-- end handwriting tool -->
+  
+</head>
+
+<body>
+  <div id="ime_word">
+    <div id="hwime_txt_word"></div>
+  </div>
+</body>
+
+</html>
