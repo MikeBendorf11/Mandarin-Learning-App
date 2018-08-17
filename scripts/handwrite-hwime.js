@@ -34,25 +34,25 @@ function MdbgHwIme(element, serverUrl, onCharSelected, onClose) {
 		'	<div class="mdbghwime-canvas-bar">' +
 		'		<canvas class="mdbghwime-canvas" width="256" height="256"></canvas>' +
 		'	</div>' +
-		'	<div class="mdbghwime-button-bar">' +
-//		'		<div class="mdbghwime-simptrad-button mdbghwime-button" title="Simplified / Traditional Chinese"><div class="simp">simp</div><div class="trad">trad</div></div>' +
-		'		<div class="mdbghwime-back-line-button mdbghwime-button ion-ios-undo" title="Undo last stroke"></div>' +
-		'		<div class="mdbghwime-clear-button mdbghwime-button ion-backspace" title="Clear all"></div>'  +
-		'		<br />' +
-		'		<br />' +
-		'		<br />' +
-		'		<div class="mdbghwime-previous-page-button mdbghwime-button ion-arrow-up-b" title="Previous page"></div>' +
-		'		<div class="mdbghwime-page-label"></div>' +
-		'		<div class="mdbghwime-next-page-button mdbghwime-button ion-arrow-down-b" title="Next page"></div>' +
-		'	</div>' +
+// 		'	<div class="mdbghwime-button-bar">' +
+// //		'		<div class="mdbghwime-simptrad-button mdbghwime-button" title="Simplified / Traditional Chinese"><div class="simp">simp</div><div class="trad">trad</div></div>' +
+// 		'		<div class="mdbghwime-back-line-button mdbghwime-button ion-ios-undo" title="Undo last stroke"></div>' +
+// 		'		<div class="mdbghwime-clear-button mdbghwime-button ion-backspace" title="Clear all"></div>'  +
+// 		'		<br />' +
+// 		'		<br />' +
+// 		'		<br />' +
+// 		'		<div class="mdbghwime-previous-page-button mdbghwime-button ion-arrow-up-b" title="Previous page"></div>' +
+// 		'		<div class="mdbghwime-page-label"></div>' +
+// 		'		<div class="mdbghwime-next-page-button mdbghwime-button ion-arrow-down-b" title="Next page"></div>' +
+// 		'	</div>' +
 		'	<div class="mdbghwime-result">' +
 		'		<span class="mdbghwime-loading-indicator"><span class="ion-loop"></span></span>' +
 		'		<span class="mdbghwime-error-indicator"><span class="ion-alert"></span></span>' +
 		'		<div></div>' +
 		'	</div>' +
 		'</div>' +
-		'<div style="clear: both"></div>';
-	
+		'<div style="clear: both"></div><br>';
+	//TODO: Ifresult if within first 10 options, copy to 
 	element.html(html);
 	
 	var canvasElement = element.find(".mdbghwime-canvas")[0];
@@ -112,12 +112,14 @@ function MdbgHwIme(element, serverUrl, onCharSelected, onClose) {
 		self.touchEnd(event);
 	}
 
-	var clearButton = element.find(".mdbghwime-clear-button");
+	//var clearButton = element.find(".mdbghwime-clear-button");
+	var clearButton = $("#btnClear");
 	clearButton.click(function(event) {
 		self.clearAll();
 	});
 	
-	var backButton = element.find(".mdbghwime-back-line-button");
+	//var backButton = element.find(".mdbghwime-back-line-button");
+	var backButton = $("#btnBack");
 	backButton.click(function(event) {
 		self.undoStroke();
 	});

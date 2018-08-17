@@ -7,21 +7,47 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Handwriting Tool</title>
   <!-- start handwriting tool -->
-  <script type="text/javascript" src="./scripts/jquery-1.11.2.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script type="text/javascript" src="./scripts/handwrite-chindict.js"></script>
   <script type="text/javascript" src="./scripts/handwrite-hwime.js"></script>
-  <script>window.onload = () => {
-      enableHWIme('txt_word')
-    }
+  <script>
   </script>
-  <link rel="stylesheet" href="./scripts/handwrite-style.css" type="text/css">
+  <script src="./scripts/bootstrap.js"></script>
+  <script src="./scripts/myScripts.js"></script>
+  <link rel="stylesheet" href="./css/bootstrap.css">
+  <link rel="stylesheet" href="./css/handwrite-style.css" type="text/css">
+  <link rel="stylesheet" href="./css/myCss.css">
   <!-- end handwriting tool -->
-  
+
 </head>
 
 <body>
+  <h1>Handwriting</h1>
   <div id="ime_word">
     <div id="hwime_txt_word"></div>
+    <button class="btn btn-outline-primary ion-ios-undo" id="btnBack"> Back</button>
+    <button class="btn btn-outline-primary ion-backspace" id="btnClear"> Clear</button>
+  </div>
+  <h1>Review</h1>
+  <div id="pinReviewCont">
+    <p id="pinyin" class="display-4">&nbsp;</p>
+    <button class="btn btn-outline-primary" id="btnNext">Next</button>
+    <select id="" class="form-control-sm">
+      <option value="all">all</option>
+      <option value="new">new</option>
+      <option value="1">level 1</option>
+      <option value="2">level 2</option>
+      <option value="3">level 3</option>
+    </select>
+    <button class="btn btn-outline-primary" id="btnHintCh">Hint</button> <br>
+    <p id="pCharDef">&nbsp;</p>
+
+    <p><b>Combinations:</b></p>
+    <button class="btn btn-outline-primary" id="btnCombS">Short</button>
+    <button class="btn btn-outline-primary" id="btnCombL">Long</button>
+    <button class="btn btn-outline-primary" id="btnCombH">Hint</button>
+    <p>&nbsp;</p>
+    <input id="iptComb" type="text" class="form-control-sm">
   </div>
 </body>
 

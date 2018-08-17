@@ -1,0 +1,73 @@
+
+
+
+Query String directly to ichacha
+http://www.ichacha.net/search.aspx?q=%E4%B8%8D%E8%A6%81&p=2&l=en
+q - chinese chars, p = page
+all matches go to db
+sort out sentences with unknown to date chars
+except with 20% unknown of the 2000 goal
+priority 1 - all known characters
+priority 2 and up - 1 2 chars away from knowledge
+further priority is based on how far the unknow char is from the 2000 goal
+
+
+API Google Translate
+Sentences (called See Also).- become part of sentence/expression db
+words.- derived from pinyin become link to internal or external translation
+pronuntiation audio.- maybe this is the source for reviews and learning
+word type( noun, verb, adj).- used during learning
+
+**Browser storage, storage APIs and the Geolocation API, web socket
+web workers work on sorting algorithms, store it locally during use time, send in batches to server using web socket
+
+Interface
+
+Gif chars
+	https://github.com/nmarley/chinese-char-animations
+
+JS based hand written recognition
+	https://www.mdbg.net/chinese/rsc/js/hwime.js?v1487583607
+	Original pulls from db 10 matches by 10 pages
+
+********* REVIEW SECTION ***********
+TYPES
+All known
+   - Collection of chars ordered by difficulty, 
+   - individual selection takes to char display mode
+   - selected char is in search box
+
+sentence - 
+   - similar to all known
+   - API pinyin separated words links
+   - If word not in db and not within 2000, show online translation and separated db trans
+
+one at a time - 
+
+MODES
+Contain optional clues, audio, sentences, translation
+	Char
+	   - Pinyin and sentence hidden
+	   - clue: first letter, sentence
+	pinyin
+	   - Char drawing shows match underneath
+	   - clue: one trace at a time, pinyin words
+   
+LEVELS
+	Difficulty one
+	Difficulty two
+	New
+
+********* LEARNING SECTION ***********
+Auto
+	next in sequence
+
+Table char
+	show noun, verb, adjective categories 
+Sentence
+	shows char, meaning and sentence
+	selection is next most common unknown char from mined sentences priority 2 and down (3,4)
+	
+	
+	
+

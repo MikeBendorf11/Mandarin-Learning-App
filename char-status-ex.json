@@ -1,0 +1,11 @@
+
+{
+  "id": 30,
+  "learnedId": 30,
+  "level":{
+    "easy": true,
+    "medium": false,
+    "new": false
+  },
+  "askAbout": false
+}

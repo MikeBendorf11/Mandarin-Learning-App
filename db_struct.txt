@@ -1,0 +1,20 @@
+learning units
+	unit
+		id
+		combination
+			short
+			long
+		pronunciation
+		definition
+			single
+			short
+			long
+	
+	status
+		id
+		LearnedId
+		level
+			easy
+			medium
+			new
+		askAbout
