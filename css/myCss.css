@@ -1,4 +1,10 @@
+button{
+  margin: 0 2px 16px; 
+}
 #pinReviewCont{
-  width: 30%;
+  width: 100%;
   text-align: center
+}
+p{
+  background-color: azure
 }

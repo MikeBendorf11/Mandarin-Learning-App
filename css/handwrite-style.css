@@ -1807,12 +1807,8 @@ div.lightbox > div a:hover {
 	background-color: #c0d0ff;
 	color: black;
 }
-
-
-
-
 .mdbghwime-result {
-	width: 290px;
+	width: 258px;
 	overflow: hidden;
 	background-color: white;
 }
@@ -1848,7 +1844,7 @@ div.lightbox > div a:hover {
 }
 
 .mdbghwime-result .pron {
-	width: 80px;
+	width: 45px;
 	white-space: nowrap;
 	font-size: 14px;
 	overflow: hidden;
