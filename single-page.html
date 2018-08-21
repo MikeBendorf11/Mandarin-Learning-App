@@ -17,35 +17,50 @@
   <link rel="stylesheet" href="./css/bootstrap.css">
   <link rel="stylesheet" href="./css/handwrite-style.css" type="text/css">
   <link rel="stylesheet" href="./css/myCss.css">
+  
   <!-- end handwriting tool -->
 
 </head>
 
 <body>
-  <h1>Handwriting</h1>
+  <hr>
   <div id="ime_word">
     <div id="hwime_txt_word"></div>
-    <button class="btn btn-outline-primary ion-ios-undo" id="btnBack"> Back</button>
-    <button class="btn btn-outline-primary ion-backspace" id="btnClear"> Clear</button>
+    <button class="btn btn-outline-primary" id="btnBack">Back <span class="ion ion-back"></span></button>
+    <button class="btn btn-outline-primary" id="btnClear"> Clear <span class="ion ion-clear"></span></button>
+    <button class="btn btn-outline-primary" id="btnHintDraw">Hint <span class="ion ion-hint"></span> </button>
   </div>
-  <h1>Review</h1>
+  <hr>
   <div id="pinReviewCont">
-    <p id="pinyin" class="display-4">&nbsp;</p>
-    <button class="btn btn-outline-primary" id="btnNext">Next</button>
-    <select id="" class="form-control-sm">
-      <option value="all">all</option>
-      <option value="new">new</option>
-      <option value="1">level 1</option>
-      <option value="2">level 2</option>
-      <option value="3">level 3</option>
-    </select>
-    <button class="btn btn-outline-primary" id="btnHintCh">Hint</button> <br>
+      <div>
+          <span>LEVEL: </span><br>
+          <select id="" class="form-control-sm">
+              <option value="0"> </option>
+              <option value="1"> 1 </option>
+              <option value="2"> 2 </option>
+              <option value="3"> 3 </option>
+            </select>
+      </div>
+    <div>
+        <span>REVIEW: </span><br>
+        <select id="" class="form-control-sm">
+            <option value="0">all levels</option>
+            <option value="1">level 1</option>
+            <option value="2">level 2</option>
+            <option value="3">level 3</option>
+          </select>
+    </div>
+    
+    <h1 id="pinyin">&nbsp;</h1>
+    <button class="btn btn-outline-primary" id="btnNext">Next <span class="ion ion-next"></span></button>
+
+    <button class="btn btn-outline-primary" id="btnHintCh">Hint <span class="ion ion-hint"></span></button> <br>
     <p id="pDefNchar">&nbsp;</p>
 
-    <p><b>Combinations:</b></p>
-    <button class="btn btn-outline-primary" id="btnCombS">Short</button>
-    <button class="btn btn-outline-primary" id="btnCombL">Long</button>
-    <button class="btn btn-outline-primary" id="btnCombH">Hint</button>
+    <span id="combTitle">COMBINATIONS:</span><br>
+    <button class="btn btn-outline-primary" id="btnCombS">Short <span class="ion ion-short"></span></button>
+    <button class="btn btn-outline-primary" id="btnCombL">Long <span class="ion ion-long"></span></button>
+    <button class="btn btn-outline-primary" id="btnCombH">Hint <span class="ion ion-hint"></span></button>
     <p id="pComb">&nbsp;</p>
     <p id="pHint">&nbsp;</p>
   </div>

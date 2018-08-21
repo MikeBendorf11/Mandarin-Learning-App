@@ -1659,7 +1659,7 @@ div.lightbox > div a:hover {
 	font-style: normal;
 }
 
-.ion-arrow-up-b:before, .ion-arrow-down-b:before, .ion-ios-undo:before, .ion-backspace:before, .ion-paintbrush:before, .ion-loop:before, .ion-alert:before {
+.ion {
 	display: inline-block;
 	font-family: "Ionicons";
 	speak: none;
@@ -1691,8 +1691,29 @@ div.lightbox > div a:hover {
 .ion-loop:before {
 	content: "\f201";
 }
-.ion-alert:before {
+.ion-hint:before {
 	content: "\f101";
+}
+/* single-page icons */
+.ion-back:before{
+	content: "\f107";
+	/* or ion-arrow-left-b */
+}
+.ion-next:before{
+	content: "\f10a"
+	/* ion-arrow-right-b */
+}
+.ion-clear:before{
+	content:"\f4a1";
+	/* ion-ios-rewind */
+}
+.ion-short:before{
+	content: "\f470";
+	/* ion-ios-nutrition */
+}
+.ion-long:before{
+	content: "\f2a8";
+	/* ion-pizza */
 }
 
 .mdbghwime {

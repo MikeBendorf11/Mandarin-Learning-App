@@ -67,7 +67,20 @@ Table char
 Sentence
 	shows char, meaning and sentence
 	selection is next most common unknown char from mined sentences priority 2 and down (3,4)
+
 	
-	
+************************************
+DB
+character - get rid of . _ 
+			*	one
+			**	difficulty tow
+			$	new
+combinations
+	short		
+		h.	add char to head	
+		t.	add char to tail
+		abcense of h. and t. means already combined
+		,	next combination of same category
+		/	similar meaning
 	
 
