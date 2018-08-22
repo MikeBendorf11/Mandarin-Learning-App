@@ -1,3 +1,6 @@
+  //Char Units Object Collection
+  var units = []
+  
 window.onload = () => {
   //todo: load char automatically, now next bttn has to be pressed
   var buttons = [btnHintCh, btnCombS, btnCombL, btnCombH]
@@ -14,9 +17,14 @@ window.onload = () => {
   hwimeResult.setAttribute('style', 'display:none');
 
   //load csv parser
-  var script = document.createElement("script"); // Make a script DOM node
+  var script = document.createElement("script"); 
   script.src = "./scripts/parse.js"
   document.head.appendChild(script); 
+
+  //load idexedDB script
+  script = document.createElement('script');
+  script.src = './scripts/storage.js';
+  document.head.appendChild(script);
 
   //handwriting panel events
   btnHintDraw.onclick = function(){

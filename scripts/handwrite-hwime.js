@@ -136,7 +136,7 @@ function MdbgHwIme(element, serverUrl, onCharSelected, onClose) {
 		self.nextPage();
 	});
 
-	this.simpTrad = getCookie('mdbghwime-simptrad', 0) == '1';
+	//this.simpTrad = getCookie('mdbghwime-simptrad', 0) == '1';
 	this.simpTradButton = element.find(".mdbghwime-simptrad-button");
 	if (this.simpTrad) {
 		this.simpTradButton.addClass('selected');
@@ -145,7 +145,7 @@ function MdbgHwIme(element, serverUrl, onCharSelected, onClose) {
 		self.toggleSimpTrad();
 	});
 
-	this.showNumbers = getCookie('mdbghwime-show-numbers', 1) == '1';
+	//this.showNumbers = getCookie('mdbghwime-show-numbers', 1) == '1';
 	this.showNumbersButton = element.find(".mdbghwime-show-numbers-button");
 	if (this.showNumbers) {
 		this.showNumbersButton.addClass('selected');
@@ -482,7 +482,7 @@ MdbgHwIme.prototype.toggleSimpTrad = function() {
 	else {
 		this.simpTradButton.removeClass('selected');
 	}
-	setCookie('mdbghwime-simptrad', this.simpTrad ? '1' : '0');
+	//setCookie('mdbghwime-simptrad', this.simpTrad ? '1' : '0');
 	this.sendStrokesToServer();
 }
 MdbgHwIme.prototype.toggleShowNumbers = function() {
@@ -494,7 +494,7 @@ MdbgHwIme.prototype.toggleShowNumbers = function() {
 		this.showNumbersButton.removeClass('selected');
 	}
 	//TODO: set cookie
-	setCookie('mdbghwime-show-numbers', this.showNumbers ? '1' : '0');
+	//setCookie('mdbghwime-show-numbers', this.showNumbers ? '1' : '0');
 	this.mdbgHwImeGrid.clear();
 	this.drawAll();
 }
@@ -722,18 +722,18 @@ function getPosition(event) {
 }
 
 
-function getCookie(name, defaultValue) {
-	defaultValue = (typeof defaultValue === 'undefined') ? null : defaultValue;
-	var re = new RegExp(name + "=([^;]+)");
-	var value = re.exec(document.cookie);
-	return (value != null) ? unescape(value[1]) : defaultValue;
-}
+// function getCookie(name, defaultValue) {
+// 	defaultValue = (typeof defaultValue === 'undefined') ? null : defaultValue;
+// 	var re = new RegExp(name + "=([^;]+)");
+// 	var value = re.exec(document.cookie);
+// 	return (value != null) ? unescape(value[1]) : defaultValue;
+// }
 
-function setCookie(name, value) {
-	var date = new Date();
-	date.setTime((new Date()).getTime() + 1000 * 60 * 60 * 24 * 365);
-	document.cookie = escape(name) + '=' + escape(value) + ';expires=' + date.toGMTString();
-}
+// function setCookie(name, value) {
+// 	var date = new Date();
+// 	date.setTime((new Date()).getTime() + 1000 * 60 * 60 * 24 * 365);
+// 	document.cookie = escape(name) + '=' + escape(value) + ';expires=' + date.toGMTString();
+// }
 
 
 /*
