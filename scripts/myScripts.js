@@ -1,7 +1,20 @@
   //Char Units Object Collection
-  var units = []
+  var units = [];
+
+  function getCookie(name, defaultValue) {
+    defaultValue = (typeof defaultValue === 'undefined') ? null : defaultValue;
+    var re = new RegExp(name + "=([^;]+)"); // the () is capture group
+    var value = re.exec(document.cookie);
+    return (value != null) ? unescape(value[1]) : defaultValue;
+  }
   
-window.onload = () => {
+  function setCookie(name, value) {
+    var date = new Date();
+    date.setTime((new Date()).getTime() + 1000 * 60 * 60 * 24 * 365);
+    document.cookie = escape(name) + '=' + escape(value) + ';expires=' + date.toGMTString();
+  }
+
+window.onload = function(){
   //todo: load char automatically, now next bttn has to be pressed
   var buttons = [btnHintCh, btnCombS, btnCombL, btnCombH]
   toggleButtons(buttons); 
@@ -16,42 +29,70 @@ window.onload = () => {
   var hwimeResult = document.querySelector('.mdbghwime-result');
   hwimeResult.setAttribute('style', 'display:none');
 
-  //load csv parser
-  var script = document.createElement("script"); 
-  script.src = "./scripts/parse.js"
-  document.head.appendChild(script); 
+  //There is no dbStorage for this browser, create a new priority db 
+  function waitForScript(script){
+    return new Promise(resolve => {
+      script.onload = () => resolve();
+    });
+  }; 
+  if (!getCookie('dbRecurrenceCreated')) {
+    //load csv parser
+    var script = document.createElement("script");
+    script.src = "./scripts/parseCSV.js"
+    document.head.appendChild(script);
 
-  //load idexedDB script
-  script = document.createElement('script');
-  script.src = './scripts/storage.js';
-  document.head.appendChild(script);
+    //create idexedDB script
+    script = document.createElement('script');
+    script.src = './scripts/storageFromBlank.js';
+    document.head.appendChild(script);
+  } else {
+    var script = document.createElement('script');
+    script.src = './scripts/storageFunctions.js'
+    document.head.appendChild(script)
+    waitForScript(script)
+    .then(() => loadFromIndexedDB()
+    .then(result => {
+        units = result;
+        console.log(units);
+        //TODO:
+        //aDefNchar has to be set to null for evety char
+        //create cookies for last char reviewed on levels 0 => 4 and consult
+        //create new db index for learnedId display
+        //create checkbox for unit.consult
+        //add search box and use char index on it, search on db instead?
+        toggleButtons(buttons)
+      })
+    )
+  }
+
+
 
   //handwriting panel events
   btnHintDraw.onclick = function(){
     toggleDiv(hwimeResult);
   }
 
-  //review panel events
+  //review tab events
   pinReviewCont.onclick = function (event) {
     let prevTarget = target;
     target = event.target;
 
     if (target.id == 'btnNext') {
-      $.getJSON('char-data-ex.json', function (data) {
-        unit.id = data.id;
-        unit.char = data.char;
-        unit.pronunciation = data.pronunciation;
-        unit.combinations.short = data.combinations.short;
-        unit.combinations.long = data.combinations.long;
-        unit.definitions.single = data.definitions.single;
-        unit.definitions.short = data.definitions.short;
-        unit.definitions.long = data.definitions.long;
-        aDefNchar.push(unit.char);
-        aDefNchar.push(unit.definitions.single);
-        $("#pinyin").html(unit.pronunciation);
-      });
-      //loaded data: enable the rest of the buttons
-      toggleButtons(buttons)
+      // $.getJSON('char-data-ex.json', function (data) {
+      //   unit.id = data.id;
+      //   unit.char = data.char;
+      //   unit.pronunciation = data.pronunciation;
+      //   unit.combinations.short = data.combinations.short;
+      //   unit.combinations.long = data.combinations.long;
+      //   unit.definitions.single = data.definitions.single;
+      //   unit.definitions.short = data.definitions.short;
+      //   unit.definitions.long = data.definitions.long;
+      //   aDefNchar.push(unit.char);
+      //   aDefNchar.push(unit.definitions.single);
+      //   $("#pinyin").html(unit.pronunciation);
+      // });
+      // //loaded data: enable the rest of the buttons
+      // toggleButtons(buttons)
     }
 
     //buttons pressed
