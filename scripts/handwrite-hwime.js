@@ -117,12 +117,14 @@ function MdbgHwIme(element, serverUrl, onCharSelected, onClose) {
 	clearButton.click(function(event) {
 		self.clearAll();
 	});
+	ionDrawClear.click(()=>self.clearAll());
 	
 	//var backButton = element.find(".mdbghwime-back-line-button");
 	var backButton = $("#btnBack");
 	backButton.click(function(event) {
 		self.undoStroke();
 	});
+	ionDrawBack.click(()=>self.undoStroke());
 
 	this.previousPageButton = element.find(".mdbghwime-previous-page-button");
 	this.previousPageButton.click(function(event) {
@@ -187,29 +189,29 @@ MdbgHwIme.prototype.resetPaging = function() {
 	this.updatePagers();
 }
 MdbgHwIme.prototype.updatePagers = function() {
-	var hasPrevious = this.start > 0;
-	var hasNext = this.start + this.limit < this.total;
-	if (hasPrevious) {
-		this.previousPageButton.css('visibility', 'visible');
-	}
-	else {
-		this.previousPageButton.css('visibility', 'hidden');
-	}
+	// var hasPrevious = this.start > 0;
+	// var hasNext = this.start + this.limit < this.total;
+	// if (hasPrevious) {
+	// 	this.previousPageButton.css('visibility', 'visible');
+	// }
+	// else {
+	// 	this.previousPageButton.css('visibility', 'hidden');
+	// }
 
-	this.pageLabel.text('' + (Math.round(this.start / this.limit) + 1) + '/' + (Math.round(this.total / this.limit)));
-	if (hasPrevious || hasNext) {
-		this.pageLabel.css('visibility', 'visible');
-	}
-	else {
-		this.pageLabel.css('visibility', 'hidden');
-	}
+	// this.pageLabel.text('' + (Math.round(this.start / this.limit) + 1) + '/' + (Math.round(this.total / this.limit)));
+	// if (hasPrevious || hasNext) {
+	// 	this.pageLabel.css('visibility', 'visible');
+	// }
+	// else {
+	// 	this.pageLabel.css('visibility', 'hidden');
+	// }
 	
-	if (hasNext) {
-		this.nextPageButton.css('visibility', 'visible');
-	}
-	else {
-		this.nextPageButton.css('visibility', 'hidden');
-	}
+	// if (hasNext) {
+	// 	this.nextPageButton.css('visibility', 'visible');
+	// }
+	// else {
+	// 	this.nextPageButton.css('visibility', 'hidden');
+	// }
 }
 MdbgHwIme.prototype.getStrokeColor = function() {
 	var hue = (this.colorHue + this.strokeNum * this.colorHueIncrement) % 360;

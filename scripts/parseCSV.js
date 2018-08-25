@@ -17,7 +17,7 @@ function csvToArray(text) {
 };
 function parseCSVfile() {
 
-  const pchar = 0, pCsho = 1, pClon = 2, pPron = 3, pSing = 4, pDsho = 5, pDlon = 6;
+  const pChar = 0, pCsho = 1, pClon = 2, pPron = 3, pSing = 4, pDsho = 5, pDlon = 6;
   var learnedId = 0;
   $.ajax({
     method: 'GET',
@@ -36,15 +36,16 @@ function parseCSVfile() {
         parsed[i][pDlon].includes('#');
 
       //divide further into arrays
+      parsed[i][pSing] = parsed[i][pSing].split(';');
       parsed[i][pCsho] = parsed[i][pCsho].split(',');
       parsed[i][pClon] = parsed[i][pClon].split('。');
       parsed[i][pDsho] = parsed[i][pDsho].split(',');
       parsed[i][pDlon] = parsed[i][pDlon].split(',');
 
       unit.id = i;
-      unit.char = parsed[i][pchar];
+      unit.char = parsed[i][pChar];
 
-      if (parsed[i][pSing].trim().length === 0) { //char hasn't been learned yet
+      if (parsed[i][pPron].trim().length === 0) { //char hasn't been learned yet
         units.push(unit);
         continue;
       }
@@ -53,14 +54,17 @@ function parseCSVfile() {
       //char level assignment and cleanup
       if (unit.char.includes('*') && !unit.char.includes('**')) {
         unit.char = unit.char.replace(/\*/g, '');
+        //console.log(unit.char);
         unit.level = 1;
       }
       else if (unit.char.includes('**')) {
         unit.char = unit.char.replace(/\**/g, '');
+       // console.log(unit.char);
         unit.level = 2;
       }
       else if (unit.char.includes('$')) {
         unit.char = unit.char.replace(/\$/g, '');
+        // console.log(unit.char);
         unit.level = 3;
       } else {
         unit.level = 0;

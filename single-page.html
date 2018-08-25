@@ -26,43 +26,47 @@
   <hr>
   <div id="ime_word">
     <div id="hwime_txt_word"></div>
-    <button class="btn btn-outline-primary" id="btnBack">Back <span class="ion ion-back"></span></button>
-    <button class="btn btn-outline-primary" id="btnClear"> Clear <span class="ion ion-clear"></span></button>
-    <button class="btn btn-outline-primary" id="btnHintDraw">Hint <span class="ion ion-hint"></span> </button>
+    <button class="btn btn-outline-primary" id="btnBack">Back <span id="ionDrawBack" class="ion ion-back"></span> </button>
+    <button class="btn btn-outline-primary" id="btnClear"> Clear <span id="ionDrawClear" class="ion ion-clear"></span> </button>
+    <button class="btn btn-outline-primary" id="btnHintDraw">Hint <span id="ionDrawHint" class="ion ion-hint"></span> </button>
   </div>
   <hr>
   <div id="pinReviewCont">
-      <div>
+      <div id="dvConsult">
+          <span>Consult </span><br><input type="checkbox" name="consult" value="true">       
+      </div>
+      <div id="dvLevel">
           <span>LEVEL: </span><br>
-          <select id="" class="form-control-sm">
-              <option value="0"> </option>
-              <option value="1"> 1 </option>
-              <option value="2"> 2 </option>
-              <option value="3"> 3 </option>
+          <select id="sLevel" class="form-control-sm">
+              <option id="oLevel0" value="0"> </option>
+              <option id="oLevel1" value="1"> 1 </option>
+              <option id="oLevel2" value="2"> 2 </option>
+              <option id="oLevel3" value="3"> 3 </option>
             </select>
       </div>
-    <div>
+    <div id="dvReview">
         <span>REVIEW: </span><br>
-        <select id="" class="form-control-sm">
-            <option value="0">all levels</option>
+        <select id="rLevel" class="form-control-sm">
+            <option value="0">all </option>
             <option value="1">level 1</option>
             <option value="2">level 2</option>
             <option value="3">level 3</option>
+            <option value="4"> consult </option>
           </select>
     </div>
     
     <h2 id="pinyin">&nbsp;</h2>
-    <button class="btn btn-outline-primary" id="btnNext">Next <span class="ion ion-next"></span></button>
+    <button class="btn btn-outline-primary" id="btnNext">Next <span id="ionNext" class="ion ion-next"></span></button>
 
-    <button class="btn btn-outline-primary" id="btnHintCh">Hint <span class="ion ion-hint"></span></button> <br>
+    <button id="btnHint" class="btn btn-outline-primary">Hint <span id="ionHint" class="ion ion-hint"></span></button> <br>
     <p id="pDefNchar">&nbsp;</p>
 
     <span id="combTitle">COMBINATIONS:</span><br>
-    <button class="btn btn-outline-primary" id="btnCombS">Short <span class="ion ion-short"></span></button>
-    <button class="btn btn-outline-primary" id="btnCombL">Long <span class="ion ion-long"></span></button>
-    <button class="btn btn-outline-primary" id="btnCombH">Hint <span class="ion ion-hint"></span></button>
-    <p id="pComb">&nbsp;</p>
-    <p id="pHint">&nbsp;</p>
+    <button class="btn btn-outline-primary" id="btnCombS">Short <span id="ionCombShort" class="ion ion-short"></span></button>
+    <button class="btn btn-outline-primary" id="btnCombL">Long <span id="ionCombLong" class="ion ion-long"></span></button>
+    <button class="btn btn-outline-primary" id="btnCombH">Hint <span id="ionCombHint" class="ion ion-hint"></span></button>
+    <p id="pComb" contenteditable="true">&nbsp;</p>
+    <div id="dvPcombHint"><p id="pHint" contenteditable="true">&nbsp;</p></div><br>
   </div>
 </body>
 

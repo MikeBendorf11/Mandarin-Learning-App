@@ -36,7 +36,8 @@ request.onsuccess = function (e) {
       },
       definitions: {
         short: unit.definitions.short,
-        long: unit.definitions.long
+        long: unit.definitions.long,
+        single: unit.definitions.single
       }
     });
   });

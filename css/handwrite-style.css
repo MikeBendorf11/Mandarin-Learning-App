@@ -1659,62 +1659,6 @@ div.lightbox > div a:hover {
 	font-style: normal;
 }
 
-.ion {
-	display: inline-block;
-	font-family: "Ionicons";
-	speak: none;
-	font-style: normal;
-	font-weight: normal;
-	font-variant: normal;
-	text-transform: none;
-	text-rendering: auto;
-	line-height: 1;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-}
-
-.ion-arrow-up-b:before {
-	content: "\f10d";
-}
-.ion-arrow-down-b:before {
-	content: "\f104";
-}
-.ion-ios-undo:before {
-	content: "\f4c7";
-}
-.ion-backspace:before {
-	content: "\f3bf";
-}
-.ion-paintbrush:before {
-	content: "\f4d5";
-}
-.ion-loop:before {
-	content: "\f201";
-}
-.ion-hint:before {
-	content: "\f101";
-}
-/* single-page icons */
-.ion-back:before{
-	content: "\f107";
-	/* or ion-arrow-left-b */
-}
-.ion-next:before{
-	content: "\f10a"
-	/* ion-arrow-right-b */
-}
-.ion-clear:before{
-	content:"\f4a1";
-	/* ion-ios-rewind */
-}
-.ion-short:before{
-	content: "\f470";
-	/* ion-ios-nutrition */
-}
-.ion-long:before{
-	content: "\f2a8";
-	/* ion-pizza */
-}
 
 .mdbghwime {
 	margin: 1px 0 0 1px;
