@@ -1,4 +1,6 @@
 var units = []; //the collection
+const nLvlAll = 0, nLvlEas = 1, nLvlMed = 2, nLvlNew = 3, nLvlCons = 4;
+var dbName = 'priorityDb';
 
 function getCookie(name, defaultValue) {
   defaultValue = (typeof defaultValue === 'undefined') ? null : defaultValue;
@@ -19,8 +21,6 @@ window.onload = function () {
   var index = { defNChar: 0, shortComb: 0, longComb: 0 }
   var aDefNchar = []; //mix def and char for hints
   var target;
-  var mapLongDef = new Map(); //used by Hint bttn long-short comb-def
-  var mapShortDef = new Map();
 
   //load handwriting tool and hide the result box
   enableHWIme('txt_word');
@@ -33,39 +33,50 @@ window.onload = function () {
       script.onload = () => resolve();
     });
   };
-  if (!getCookie('dbRecurrenceCreated')) {
-    //load csv parser
-    var script = document.createElement("script");
-    script.src = "./scripts/parseCSV.js"
-    document.head.appendChild(script);
 
-    //create idexedDB script
-    script = document.createElement('script');
-    script.src = './scripts/storageFromBlank.js';
-    document.head.appendChild(script);
-  } else {
-    var script = document.createElement('script');
-    script.src = './scripts/storageFunctions.js'
-    document.head.appendChild(script)
-    waitForScript(script)
-      .then(() => loadFromIndexedDB()
+  //TODO: check actual access to DB determines first run
+  //object 1st and second run
+  function AppState() {
+    this.charId, this.level;
+    self = this;
+    checkDbExists(dbName)
+      .then(result => {
+        if (result) { //db exists
+          self.level = parseInt(getCookie('rLevel'))
+          self.charId = parseInt(getCookie('rLevel' + self.level + 'Id'))
+        } else {
+          self.charId = 0;
+          self.level = 0;
+        }
+        return self;
+      })
+  }
+  checkDbExists(dbName).then(result => {
+    if (!result) {
+      parseCSV();
+      storageFromBlank();
+    } else {
+      console.log('here');
+      loadFromIndexedDB()
         .then(result => {
           units = result;
           //console.log(units[0].definitions.single);
           loadChar(95)
+          var appState = new AppState();
+          console.log(appState);
           /**Process:
            * remember last level reviewed
            * 
            */
           //TODO:
-          //prevTarget issue: clicking on any part of pinReviewCont messes up with hint dipplay. Solution: keep track of active definition and create a map for combination definition match. Prototypes candidates?????
-          //Db from scratch: Remove # after assigning consult
           //create index for learnedId(review all), 
           //create cookies for last char reviewed on levels 0 => 4 and consult
           //add search box and use char index on it, search on db instead?
         })
-      )
-  }
+
+    }
+  })
+
 
   //changes the view for specific char
   function setConsultAndLevel(id) {
@@ -121,7 +132,7 @@ window.onload = function () {
     }
     //buttons pressed
     else if (target.id == 'btnNext') {
-      
+
       var lv = $("#rLevel").val();
       //use current id to start search of next char of same level
       for (i = nextIdx(unit.id, units); i < units.length; i++)
@@ -147,9 +158,9 @@ window.onload = function () {
     }
     else if (target.id == 'btnCombL') {
       showCombDef(
-        unit.combinations.long[index.longComb], 
-        unit.definitions.long[index.longComb],  
-        pComb, 
+        unit.combinations.long[index.longComb],
+        unit.definitions.long[index.longComb],
+        pComb,
         pHint
       )
       index.longComb = nextIdx(index.longComb, unit.combinations.long);
@@ -157,36 +168,36 @@ window.onload = function () {
     else if (target.id == 'btnCombH') {
       pHint.style.visibility = 'visible';
     }//end of btnCombH
-    
+
     //Ion icon to container button event chaining
-    target.id == 'ionNext' ? btnNext.click(): null;
-    target.id == 'ionHint' ? btnHint.click(): null;
-    target.id == 'ionCombShort' ? btnCombS.click(): null;
-    target.id == 'ionCombLong' ? btnCombL.click(): null;
-    target.id == 'ionCombHint' ? btnCombH.click(): null;
-    
+    target.id == 'ionNext' ? btnNext.click() : null;
+    target.id == 'ionHint' ? btnHint.click() : null;
+    target.id == 'ionCombShort' ? btnCombS.click() : null;
+    target.id == 'ionCombLong' ? btnCombL.click() : null;
+    target.id == 'ionCombHint' ? btnCombH.click() : null;
+
   }
 
 
-  function showCombDef(combination, definition, display1, display2){
+  function showCombDef(combination, definition, display1, display2) {
     console.log(combination);
     console.log(definition);
 
     //display the combination if any
-    if(!combination || combination.trim =='') {
+    if (!combination || combination.trim == '') {
       display1.innerHTML = 'add content ...';
       display2.innerHTML = '&nbsp;';
       return;
     }
     else display1.innerHTML = combination;
-    
+
     //call google translate or display db def
-    if(!definition || combination.trim =='')
-      gTranslate(combination.trim()).then(data=>display2.innerHTML=data);
+    if (!definition || combination.trim == '')
+      gTranslate(combination.trim()).then(data => display2.innerHTML = data);
     else display2.innerHTML = definition;
 
     //set ready to show with hint button
-    display2.style.visibility = 'hidden'; 
+    display2.style.visibility = 'hidden';
   }
   async function gTranslate(phrase) {
     var url = 'https://translation.googleapis.com/language/translate/v2' + '?q=' + encodeURIComponent(phrase) + '&target=EN' + '&key=AIzaSyA8Hupp7Bd9QuzN5yMOoWJfD_hTZQDvrPo'

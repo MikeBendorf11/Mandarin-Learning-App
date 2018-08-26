@@ -15,7 +15,7 @@ function csvToArray(text) {
   }
   return ret;
 };
-function parseCSVfile() {
+function parseCSV() {
 
   const pChar = 0, pCsho = 1, pClon = 2, pPron = 3, pSing = 4, pDsho = 5, pDlon = 6;
   var learnedId = 0;
