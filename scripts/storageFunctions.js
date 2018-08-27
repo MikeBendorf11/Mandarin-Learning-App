@@ -4,34 +4,26 @@ var request,
     store, 
     index;
 
-// request.onerror = (e) => { console.log(e); }
-// request.onsuccess = function (e) {
-  
-//   db = request.result;
-//   transaction = db.transaction('unitsByRecurrence', 'readwrite');
-//   store = transaction.objectStore('unitsByRecurrence');
-//   index = store.index('char');
-//   console.log(store.getAll());
-  
-// }
-
-function loadFromIndexedDB(){
+function loadFromIndexedDB(dbName){
   return new Promise(
     function(resolve, reject) {
-      var dbRequest = indexedDB.open('priorityDb');
-
-      
+      var dbRequest = indexedDB.open(dbName);
 
       dbRequest.onsuccess = function(event) {
         var database      = event.target.result;
-        var transaction   = database.transaction(['unitsByRecurrence']);
-        var objectStore   = transaction.objectStore('unitsByRecurrence');
+        var transaction   = database.transaction([dbName]);
+        var objectStore   = transaction.objectStore(dbName);
         var objectRequest = objectStore.getAll();
 
-        
+        dbRequest.onerror = function(event) {
+          reject(Error("Problem while loading from exitent db"));
+        }
 
         objectRequest.onsuccess = function(event) {
-          if (objectRequest.result) resolve(objectRequest.result);
+          if (objectRequest.result){
+            database.close();
+            resolve(objectRequest.result);
+          } 
           else reject(Error('object not found'));
         };
       };
@@ -48,45 +40,12 @@ function checkDbExists(storeName){
         resolve(false);
       }
       dbRequest.onerror = function(event) {
-        reject(Error("Error text"));
+        reject(Error("Problem while checking if db exists"));
       }
       dbRequest.onsuccess = function(event) {
         resolve(true)
       }
     });
-}
-function loadFromIndexedDBOriginal(storeName, id){
-  return new Promise(
-    function(resolve, reject) {
-      var dbRequest = indexedDB.open(storeName);
-
-      dbRequest.onerror = function(event) {
-        reject(Error("Error text"));
-      };
-
-      dbRequest.onupgradeneeded = function(event) {
-        // Objectstore does not exist. Nothing to load
-        event.target.transaction.abort();
-        reject(Error('Not found'));
-      };
-
-      dbRequest.onsuccess = function(event) {
-        var database      = event.target.result;
-        var transaction   = database.transaction([storeName]);
-        var objectStore   = transaction.objectStore(storeName);
-        var objectRequest = objectStore.get(id);
-
-        objectRequest.onerror = function(event) {
-          reject(Error('Error text'));
-        };
-
-        objectRequest.onsuccess = function(event) {
-          if (objectRequest.result) resolve(objectRequest.result);
-          else reject(Error('object not found'));
-        };
-      };
-    }
-  );
 }
 
 function saveToIndexedDB(storeName, object){

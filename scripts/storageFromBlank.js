@@ -1,8 +1,7 @@
 
-
-//There is no dbStorage for this browser, create a new priority db from 
-function storageFromBlank() {
-  var request = window.indexedDB.open('priorityDb', 1),
+function storageFromBlank(dbName) {
+  //There is no dbStorage for this browser, create a new priority db from 
+  var request = window.indexedDB.open(dbName, 1),
     db,
     transaction,
     store,
@@ -11,15 +10,18 @@ function storageFromBlank() {
   request.onload = () => console.log('loaded');
   request.onupgradeneeded = function () {
     let db = request.result;
-    store = db.createObjectStore('unitsByRecurrence', { keyPath: 'id' });
+    store = db.createObjectStore(dbName, { keyPath: 'id' });
     //index characters for later search
     index = store.createIndex('char', 'char', { unique: false });
   }
-  request.onerror = (e) => { console.log(e); }
+  request.onerror = (e) => { 
+    console.log(e); 
+    setCookie('dbRecurrenceCreated', false);
+  }
   request.onsuccess = function (e) {
     db = request.result;
-    transaction = db.transaction('unitsByRecurrence', 'readwrite');
-    store = transaction.objectStore('unitsByRecurrence');
+    transaction = db.transaction(dbName, 'readwrite');
+    store = transaction.objectStore(dbName);
     index = store.index('char')
     units.forEach(unit => {
       console.log('adding DB from scratch ...');
@@ -47,9 +49,9 @@ function storageFromBlank() {
   request.oncomplete = function () {
     db.close;
   }
+
+
+
+
+
 }
-
-
-
-
-

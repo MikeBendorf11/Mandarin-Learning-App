@@ -1,6 +1,4 @@
 var units = []; //the collection
-const nLvlAll = 0, nLvlEas = 1, nLvlMed = 2, nLvlNew = 3, nLvlCons = 4;
-var dbName = 'priorityDb';
 
 function getCookie(name, defaultValue) {
   defaultValue = (typeof defaultValue === 'undefined') ? null : defaultValue;
@@ -21,82 +19,51 @@ window.onload = function () {
   var index = { defNChar: 0, shortComb: 0, longComb: 0 }
   var aDefNchar = []; //mix def and char for hints
   var target;
+  var dbName = 'priorityDb';
 
   //load handwriting tool and hide the result box
   enableHWIme('txt_word');
   var hwimeResult = document.querySelector('.mdbghwime-result');
   hwimeResult.setAttribute('style', 'display:none');
 
-  //There is no dbStorage for this browser, create a new priority db 
-  function waitForScript(script) {
-    return new Promise(resolve => {
-      script.onload = () => resolve();
-    });
-  };
-
   //TODO: check actual access to DB determines first run
   //object 1st and second run
-  function AppState() {
-    this.charId, this.level;
+  function AppState(dbStatus) {
     self = this;
-    checkDbExists(dbName)
-      .then(result => {
-        if (result) { //db exists
-          self.level = parseInt(getCookie('rLevel'))
-          self.charId = parseInt(getCookie('rLevel' + self.level + 'Id'))
+    this.get = function () {
+      return new Promise(resolve => {
+        if (dbStatus) { //db exists
+          self.rLevel = parseInt(getCookie('rLevel'))
+          self.charId = parseInt(getCookie('rLevel' + self.rLevel + 'Id'))
         } else {
+          parseCSV();
+          storageFromBlank(dbName);
           self.charId = 0;
           self.level = 0;
+          setCookie('rLevel', self.rLevel);
+          setCookie('rLevel0Id', 0)
+          setCookie('rLevel1Id', 0)
+          setCookie('rLevel2Id', 0)
+          setCookie('rLevel3Id', 0)
+          setCookie('rLevel4Id', 0)
         }
-        return self;
-      })
-  }
-  checkDbExists(dbName).then(result => {
-    if (!result) {
-      parseCSV();
-      storageFromBlank();
-    } else {
-      console.log('here');
-      loadFromIndexedDB()
-        .then(result => {
-          units = result;
-          //console.log(units[0].definitions.single);
-          loadChar(95)
-          var appState = new AppState();
-          console.log(appState);
-          /**Process:
-           * remember last level reviewed
-           * 
-           */
-          //TODO:
-          //create index for learnedId(review all), 
-          //create cookies for last char reviewed on levels 0 => 4 and consult
-          //add search box and use char index on it, search on db instead?
+        loadFromIndexedDB(dbName).then(db => {
+          units = db;
+          resolve(self)
         })
-
+      })
     }
+  }
+  checkDbExists(dbName).then(res => {
+    var appState = new AppState(res);
+    return appState.get()
+  }).then(state => {
+    loadChar(state.charId, state.rLevel)
   })
 
-
-  //changes the view for specific char
-  function setConsultAndLevel(id) {
-    var checkbox = document.querySelector("#pinReviewCont input");
-
-    if (units[id].consult == true)
-      checkbox.setAttribute('checked', '');
-    else
-      checkbox.removeAttribute('checked');
-    var level = units[id].level;
-    for (let i = 0; i < 4; i++) {
-      var select = document.querySelector('#oLevel' + i);
-      if (level != i)
-        select.removeAttribute('selected');
-      else
-        select.setAttribute('selected', '');
-    }
-  }
-
-  function loadChar(id) {
+  //TODO:
+  //add search box and use char index on it, search on db instead?
+  function loadChar(id, reviewLevel) {
     unit.id = units[id].id;
     unit.char = units[id].char;
     unit.pronunciation = units[id].pronunciation;
@@ -105,7 +72,32 @@ window.onload = function () {
     unit.definitions.single = units[id].definitions.single;
     unit.definitions.short = units[id].definitions.short;
     unit.definitions.long = units[id].definitions.long;
-    setConsultAndLevel(id);
+
+    var checkbox = document.querySelector("#pinReviewCont input");
+
+    if (units[id].consult == true)
+      checkbox.setAttribute('checked', '');
+    else
+      checkbox.removeAttribute('checked');
+    
+    //set character level
+    for (let i = 0; i < 4; i++) {
+      var sLevel = document.querySelector('#sLevel' + i);     
+      if(units[id].level != i) 
+        sLevel.removeAttribute('selected');    
+      else
+        sLevel.setAttribute('selected', '');     
+    }
+    
+    //set review level
+    for (let i = 0; i < 5; i++) {
+      rLevel = document.querySelector('#rLevel' + i);
+      if(i != reviewLevel)
+        rLevel.removeAttribute('selected');
+      else
+        rLevel.setAttribute('selected','');
+    }
+
     //for btnHint
     aDefNchar = [];
     aDefNchar.push('char: ' + unit.char);
@@ -121,27 +113,93 @@ window.onload = function () {
     toggleDiv(hwimeResult);
   }
 
+  function currentChar(level) {
+    var cookieId = parseInt(getCookie('rLevel' + level + 'Id'))
+    //not first load 
+    if (level == 4 && units[cookieId].consult) {
+      loadChar(cookieId, level)
+    }
+    //should be first load (ex. all levels zeroed)
+    else if (level == 4 && !units[cookieId].consult) {
+      for (let i = cookieId, j = 0; j <= units.length * 2; i = nextIdx(i, units)) {
+        if (units[i].consult) {
+          loadChar(i, level)
+          setCookie('rLevel' + level + 'Id', i);
+          break;
+        }
+        if (j == units.length * 2) {
+          alert('No character assigned to level' + level);
+          break;
+        }
+      }
+    }
+    //non consult chars
+    //not first load 
+    else if (level != 4 && units[cookieId].level == level){
+      loadChar(cookieId, level)
+    }
+    //should be first load (ex. all levels zeroed)
+    else{
+      for (let i = cookieId, j = 0; j <= units.length * 2; i = nextIdx(i, units)) {
+        if (units[i].level == level) {
+          loadChar(i, level)
+          setCookie('rLevel' + level + 'Id', i);
+          break;
+        }
+        if (j == units.length * 2) {
+          alert('No character assigned to level' + level);
+          break;
+        }
+      }
+    }
+  }
+  function getNextChar(level){
+    var cookieId = parseInt(getCookie('rLevel' + level + 'Id'))
+    if (level == 4) {
+      let i = cookieId+1, j = 0;
+      while(i< units.length, j <= units.length * 2){
+        if (units[i].consult) {
+          loadChar(i, level)
+          setCookie('rLevel' + level + 'Id', i);
+          break;
+        }
+        if (j == units.length * 2) {
+          alert('No character assigned to level' + level);
+          break;
+        }
+        i = nextIdx(i, units)
+      }
+    } else {
+      for (let i = cookieId+1, j = 0; i< units.length, j <= units.length * 2; i = nextIdx(i, units)) {
+        if (units[i].level == level) {
+          loadChar(i, level)
+          setCookie('rLevel' + level + 'Id', i);
+          break;
+        }
+        if (j == units.length * 2) {
+          alert('No character assigned to level' + level);
+          break;
+        }
+      }
+    }
+    
+
+  }
   //review tab events
   pinReviewCont.onclick = function (event) {
-    target = event.target;
+    var target = event.target;
 
     if (target.id == 'rLevel') {
       var lv = $("#rLevel").val();
       setCookie('rLevel', lv)
-      //jump onto next char of level using rLevelId cookies
+      currentChar(lv);
     }
     //buttons pressed
     else if (target.id == 'btnNext') {
 
       var lv = $("#rLevel").val();
-      //use current id to start search of next char of same level
-      for (i = nextIdx(unit.id, units); i < units.length; i++)
-        if (units[i].level == lv) {
-          loadChar(i);
-          setCookie('rLevel' + lv + 'Id', i);
-          console.log(unit.id);
-          break;
-        }
+      getNextChar(lv);
+      
     }
     else if (target.id == 'btnHint') {
       pDefNchar.innerHTML = aDefNchar[index.defNChar];
