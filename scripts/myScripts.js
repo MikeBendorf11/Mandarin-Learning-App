@@ -1,4 +1,5 @@
 var units = []; //the collection
+var unit = { combinations: [], definitions: [] };
 
 function getCookie(name, defaultValue) {
   defaultValue = (typeof defaultValue === 'undefined') ? null : defaultValue;
@@ -12,22 +13,66 @@ function setCookie(name, value) {
   date.setTime((new Date()).getTime() + 1000 * 60 * 60 * 24 * 365);
   document.cookie = escape(name) + '=' + escape(value) + ';expires=' + date.toGMTString();
 }
-
+var unitState;
+function UnitState() {}
+UnitState.prototype.locate = function (element, index, target) {
+  this.char = this.sing0 = this.sing1 = false; 
+  if(element.id == 'pDefNchar'){
+    switch(index){
+      case 0: 
+      this.char = true; break;
+      case 1: 
+      this.sing0 = true; break;
+      case 2: 
+      this.sing1 = true; break;   
+    }
+  }
+}
+UnitState.prototype.update = function(content){
+  var result;
+  if(this.char)
+    result = unit.char;
+  if(this.sing0)
+    result = unit.definitions.single[0]
+  if(this.sing1)
+    result = unit.definitions.single[1]
+  
+  //delete html double or single spaces
+  var match = new RegExp('(&nbsp;)').exec(content)
+  
+  if(match){
+    match.forEach(element =>content = content.replace(element, ''));
+    match.forEach(element =>content = content.replace(element, ''));
+  }
+    
+  console.log(result +' vs ' + content );
+  if(result.trim() != content.trim()){
+    console.log('push to db');
+    return true;
+  }
+  else{
+    console.log('do nothing');
+    return false;
+  }
+}
 window.onload = function () {
-  var unit = { combinations: [], definitions: [] };
+  
   //to be send to nextIdx by event handler
   var index = { defNChar: 0, shortComb: 0, longComb: 0 }
   var aDefNchar = []; //mix def and char for hints
-  var target;
   var dbName = 'priorityDb';
 
   //load handwriting tool and hide the result box
   enableHWIme('txt_word');
   var hwimeResult = document.querySelector('.mdbghwime-result');
   hwimeResult.setAttribute('style', 'display:none');
+  //handwriting panel events
+  btnHintDraw.onclick = function () {
+    toggleDiv(hwimeResult);
+  }
 
-  //TODO: check actual access to DB determines first run
-  //object 1st and second run
+  //determines db existence and creation
+  //starts from id 0 or checks cookies for last review level and id
   function AppState(dbStatus) {
     self = this;
     this.get = function () {
@@ -39,7 +84,7 @@ window.onload = function () {
           parseCSV();
           storageFromBlank(dbName);
           self.charId = 0;
-          self.level = 0;
+          self.rLevel = 0;
           setCookie('rLevel', self.rLevel);
           setCookie('rLevel0Id', 0)
           setCookie('rLevel1Id', 0)
@@ -59,7 +104,9 @@ window.onload = function () {
     return appState.get()
   }).then(state => {
     loadChar(state.charId, state.rLevel)
+    unitState = new UnitState();
   })
+
 
   //TODO:
   //add search box and use char index on it, search on db instead?
@@ -79,38 +126,33 @@ window.onload = function () {
       checkbox.setAttribute('checked', '');
     else
       checkbox.removeAttribute('checked');
-    
+
     //set character level
     for (let i = 0; i < 4; i++) {
-      var sLevel = document.querySelector('#sLevel' + i);     
-      if(units[id].level != i) 
-        sLevel.removeAttribute('selected');    
+      var sLevel = document.querySelector('#sLevel' + i);
+      if (units[id].level != i)
+        sLevel.removeAttribute('selected');
       else
-        sLevel.setAttribute('selected', '');     
+        sLevel.setAttribute('selected', '');
     }
-    
+
     //set review level
     for (let i = 0; i < 5; i++) {
       rLevel = document.querySelector('#rLevel' + i);
-      if(i != reviewLevel)
+      if (i != reviewLevel)
         rLevel.removeAttribute('selected');
       else
-        rLevel.setAttribute('selected','');
+        rLevel.setAttribute('selected', '');
     }
 
     //for btnHint
     aDefNchar = [];
-    aDefNchar.push('char: ' + unit.char);
+    aDefNchar.push(unit.char);
     aDefNchar = aDefNchar.concat(unit.definitions.single);
     $("#pinyin").html(unit.pronunciation);
     pDefNchar.innerHTML = '&nbsp;';
     pComb.innerHTML = '&nbsp;';
     pHint.innerHTML = '&nbsp;';
-  }
-
-  //handwriting panel events
-  btnHintDraw.onclick = function () {
-    toggleDiv(hwimeResult);
   }
 
   function currentChar(level) {
@@ -135,11 +177,11 @@ window.onload = function () {
     }
     //non consult chars
     //not first load 
-    else if (level != 4 && units[cookieId].level == level){
+    else if (level != 4 && units[cookieId].level == level) {
       loadChar(cookieId, level)
     }
     //should be first load (ex. all levels zeroed)
-    else{
+    else {
       for (let i = cookieId, j = 0; j <= units.length * 2; i = nextIdx(i, units)) {
         if (units[i].level == level) {
           loadChar(i, level)
@@ -153,11 +195,11 @@ window.onload = function () {
       }
     }
   }
-  function getNextChar(level){
+  function getNextChar(level) {
     var cookieId = parseInt(getCookie('rLevel' + level + 'Id'))
     if (level == 4) {
-      let i = cookieId+1, j = 0;
-      while(i< units.length, j <= units.length * 2){
+      let i = cookieId + 1, j = 0;
+      while (i < units.length, j <= units.length * 2) {
         if (units[i].consult) {
           loadChar(i, level)
           setCookie('rLevel' + level + 'Id', i);
@@ -170,7 +212,7 @@ window.onload = function () {
         i = nextIdx(i, units)
       }
     } else {
-      for (let i = cookieId+1, j = 0; i< units.length, j <= units.length * 2; i = nextIdx(i, units)) {
+      for (let i = cookieId + 1, j = 0; i < units.length, j <= units.length * 2; i = nextIdx(i, units)) {
         if (units[i].level == level) {
           loadChar(i, level)
           setCookie('rLevel' + level + 'Id', i);
@@ -182,9 +224,14 @@ window.onload = function () {
         }
       }
     }
-    
+
 
   }
+
+  //initiated under loadChar()
+  
+
+
   //review tab events
   pinReviewCont.onclick = function (event) {
     var target = event.target;
@@ -196,16 +243,21 @@ window.onload = function () {
     }
     //buttons pressed
     else if (target.id == 'btnNext') {
-
       var lv = $("#rLevel").val();
       getNextChar(lv);
-      
+      pDefNchar.setAttribute('contenteditable', 'false')
     }
     else if (target.id == 'btnHint') {
+      if(aDefNchar[index.defNChar]) 
+        pDefNchar.setAttribute('contenteditable', 'true')
+      
       pDefNchar.innerHTML = aDefNchar[index.defNChar];
+      unitState.locate(pDefNchar, index.defNChar);
       index.defNChar = nextIdx(index.defNChar, aDefNchar);
+      
     }
     else if (target.id == 'btnCombS') {
+      //unitState.locate(
       showCombDef(
         unit.combinations.short[index.shortComb],
         unit.definitions.short[index.shortComb],
@@ -225,8 +277,11 @@ window.onload = function () {
     }
     else if (target.id == 'btnCombH') {
       pHint.style.visibility = 'visible';
-    }//end of btnCombH
-
+    }
+    else if (target.id == 'pComb') {
+      if (target.innerHTML == 'add content ...')
+        target.innerHTML = "&nbsp;"
+    }
     //Ion icon to container button event chaining
     target.id == 'ionNext' ? btnNext.click() : null;
     target.id == 'ionHint' ? btnHint.click() : null;
@@ -236,11 +291,65 @@ window.onload = function () {
 
   }
 
+  //content change/save events
+  /**
+   * save to changes to units
+   * set an app state for remote saving on interval?
+   * push to localDb
+   */
+ 
+  pComb.onfocusout = function () {
+
+    //make sure there is always space convention
+    if (pComb.innerHTML == '')
+      this.innerHTML = '&nbsp;'
+
+    //content has changed
+    if (pComb.innerHTML.length > 3) {
+      console.log('here');
+      //units[unit.id].combinations.
+
+    }
+    // console.log(index.defNChar);
+    // console.log(index.longComb);
+    // console.log(index.shortComb);
+    // console.log(unit.id);
+
+  }
+  
+  
+  //clear space for easier editing
+  pDefNchar.onfocus = function(){
+    if (this.innerHTML == "&nbsp;")
+      this.innerHTML = '';
+  }
+  pComb.onfocus = function () {
+    if (pComb.innerHTML == "&nbsp;")
+      this.innerHTML = '';
+  }
+  pHint.onfocus = function(){
+    if (this.innerHTML == "&nbsp;")
+      this.innerHTML = '';
+  }
+  
+  pDefNchar.onfocusout = function () {
+    unitState.update(this.innerHTML)
+    if (this.innerHTML == '')
+      this.innerHTML = '&nbsp;'
+  }
+  pComb.onfocusout = function () {
+    if (this.innerHTML == '')
+      this.innerHTML = '&nbsp;'
+  }
+  pHint.onfocusout = function () {
+    if (this.innerHTML == '')
+      this.innerHTML = '&nbsp;'
+  }
+  
+
+
 
   function showCombDef(combination, definition, display1, display2) {
-    console.log(combination);
-    console.log(definition);
-
     //display the combination if any
     if (!combination || combination.trim == '') {
       display1.innerHTML = 'add content ...';
@@ -290,17 +399,5 @@ window.onload = function () {
       element.style.display = 'none';
   }
 }
-/*
 
-{
-  "data": {
-    "translations": [
-      {
-        "translatedText": "An ideal",
-        "detectedSourceLanguage": "zh-CN"
-      }
-    ]
-  }
-}
-*/
 
