@@ -13,9 +13,15 @@ function setCookie(name, value) {
   date.setTime((new Date()).getTime() + 1000 * 60 * 60 * 24 * 365);
   document.cookie = escape(name) + '=' + escape(value) + ';expires=' + date.toGMTString();
 }
+/**
+ * todo: 
+ * state for consult and level
+ * display completion of roulette of chars (end fo review)
+ * and button (back) to navigate chars
+ */
 var unitState;
 function UnitState() {}
-UnitState.prototype.locate = function (element, index, target) {
+UnitState.prototype.locate = function (element, index) {
   this.char = this.sing0 = this.sing1 = false; 
   if(element.id == 'pDefNchar'){
     switch(index){
@@ -27,26 +33,62 @@ UnitState.prototype.locate = function (element, index, target) {
       this.sing1 = true; break;   
     }
   }
+  else if(element.id == 'btnCombS'){
+    this.sCombIdx = index;
+    this.lCombIdx = null;
+  }
+  else if(element.id == 'btnCombL'){
+    console.log('here');
+    this.lCombIdx = index;
+    this.sCombIdx = null;
+  }
+  console.log('sCombIdx: ' + this.sCombIdx + ', lCombIdx:' + this.lCombIdx);
 }
-UnitState.prototype.update = function(content){
-  var result;
-  if(this.char)
-    result = unit.char;
-  if(this.sing0)
-    result = unit.definitions.single[0]
-  if(this.sing1)
-    result = unit.definitions.single[1]
+UnitState.prototype.update = function(element){
+  var content = element.innerHTML;
+  var unitMember;
   
+  if(element.id == 'pDefNchar'){
+    if (this.char){
+      unitMember = unit.char;
+    }
+    else if (this.sing0){
+      unitMember = unit.definitions.single[0]
+    }
+    else if (this.sing1)
+      unitMember = unit.definitions.single[1]  
+  }
+  else if(element.id == 'pComb'){
+    if(this.sCombIdx!=null){ 
+      unitMember = unit.combinations.short[this.sCombIdx];
+    } 
+    else if(this.lCombIdx!=null){
+      unitMember = unit.combinations.long[this.lCombIdx];
+    } 
+  }
+  else if(element.id == 'pHint'){
+    if(this.sCombIdx!=null) {
+      unitMember = unit.definitions.short[this.sCombIdx];
+    }
+    else if(this.lCombIdx!=null){
+      unitMember = unit.definitions.long[this.lCombIdx];
+    }
+  }
+//  console.log(unitMember +' vs ' + content );
+  this.compare(content, unitMember);
+  
+}
+UnitState.prototype.compare = function(content, unitMember){
   //delete html double or single spaces
-  var match = new RegExp('(&nbsp;)').exec(content)
+  var matches = new RegExp('(&nbsp;)').exec(content)
   
-  if(match){
-    match.forEach(element =>content = content.replace(element, ''));
-    match.forEach(element =>content = content.replace(element, ''));
+  if(matches){
+    matches.forEach(match =>content = content.replace(match, ''));
+    matches.forEach(match =>content = content.replace(match, ''));
   }
     
-  console.log(result +' vs ' + content );
-  if(result.trim() != content.trim()){
+  console.log(unitMember +' vs ' + content );
+  if(unitMember.trim() != content.trim()){
     console.log('push to db');
     return true;
   }
@@ -119,6 +161,22 @@ window.onload = function () {
     unit.definitions.single = units[id].definitions.single;
     unit.definitions.short = units[id].definitions.short;
     unit.definitions.long = units[id].definitions.long;
+
+    //balancing comb->def empty array size
+    var lenCs =unit.combinations.short.length;
+    var lenCl =unit.combinations.long.length;
+    if(lenCs > 0 && unit.definitions.short ==''){
+      let a = [];
+      for(let i=0; i<lenCs; i++)
+        a.push('')
+      unit.definitions.short = a;
+    }
+    if(lenCl > 0 && unit.definitions.long ==''){
+      let a = [];
+      for(let i=0; i<lenCl; i++)
+        a.push('')
+      unit.definitions.long = a;
+    }
 
     var checkbox = document.querySelector("#pinReviewCont input");
 
@@ -235,7 +293,6 @@ window.onload = function () {
   //review tab events
   pinReviewCont.onclick = function (event) {
     var target = event.target;
-
     if (target.id == 'rLevel') {
       var lv = $("#rLevel").val();
       setCookie('rLevel', lv)
@@ -245,7 +302,9 @@ window.onload = function () {
     else if (target.id == 'btnNext') {
       var lv = $("#rLevel").val();
       getNextChar(lv);
-      pDefNchar.setAttribute('contenteditable', 'false')
+      pDefNchar.setAttribute('contenteditable', 'false');
+      pComb.setAttribute('contenteditable', 'false');
+      pHint.setAttribute('contenteditable', 'false')
     }
     else if (target.id == 'btnHint') {
       if(aDefNchar[index.defNChar]) 
@@ -257,30 +316,39 @@ window.onload = function () {
       
     }
     else if (target.id == 'btnCombS') {
-      //unitState.locate(
+      unitState.locate(btnCombS, index.shortComb);
+      pComb.setAttribute('contenteditable', 'true');
+      pHint.setAttribute('contenteditable', 'false');
       showCombDef(
         unit.combinations.short[index.shortComb],
         unit.definitions.short[index.shortComb],
         pComb,
         pHint
-      )
+      );
       index.shortComb = nextIdx(index.shortComb, unit.combinations.short);
     }
     else if (target.id == 'btnCombL') {
+      unitState.locate(btnCombL, index.longComb);
+      pComb.setAttribute('contenteditable', 'true');
+      pHint.setAttribute('contenteditable', 'false');
       showCombDef(
         unit.combinations.long[index.longComb],
         unit.definitions.long[index.longComb],
         pComb,
         pHint
-      )
+      );
       index.longComb = nextIdx(index.longComb, unit.combinations.long);
     }
     else if (target.id == 'btnCombH') {
       pHint.style.visibility = 'visible';
+      pHint.setAttribute('contenteditable', true);
     }
     else if (target.id == 'pComb') {
       if (target.innerHTML == 'add content ...')
         target.innerHTML = "&nbsp;"
+    }
+    else if (target.id == 'pHint'){
+      target.innerHTML = target.innerHTML.replace(/(<.*>)/, '')
     }
     //Ion icon to container button event chaining
     target.id == 'ionNext' ? btnNext.click() : null;
@@ -298,26 +366,6 @@ window.onload = function () {
    * push to localDb
    */
  
-  pComb.onfocusout = function () {
-
-    //make sure there is always space convention
-    if (pComb.innerHTML == '')
-      this.innerHTML = '&nbsp;'
-
-    //content has changed
-    if (pComb.innerHTML.length > 3) {
-      console.log('here');
-      //units[unit.id].combinations.
-
-    }
-    // console.log(index.defNChar);
-    // console.log(index.longComb);
-    // console.log(index.shortComb);
-    // console.log(unit.id);
-
-  }
-  
-  
   //clear space for easier editing
   pDefNchar.onfocus = function(){
     if (this.innerHTML == "&nbsp;")
@@ -333,15 +381,17 @@ window.onload = function () {
   }
   
   pDefNchar.onfocusout = function () {
-    unitState.update(this.innerHTML)
+    unitState.update(this);
     if (this.innerHTML == '')
       this.innerHTML = '&nbsp;'
   }
   pComb.onfocusout = function () {
+    unitState.update(this);
     if (this.innerHTML == '')
       this.innerHTML = '&nbsp;'
   }
   pHint.onfocusout = function () {
+    unitState.update(this);
     if (this.innerHTML == '')
       this.innerHTML = '&nbsp;'
   }
@@ -351,7 +401,7 @@ window.onload = function () {
 
   function showCombDef(combination, definition, display1, display2) {
     //display the combination if any
-    if (!combination || combination.trim == '') {
+    if (!combination || combination.trim() == '') {
       display1.innerHTML = 'add content ...';
       display2.innerHTML = '&nbsp;';
       return;
