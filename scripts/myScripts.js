@@ -1,5 +1,7 @@
 var units = []; //the collection
 var unit = { combinations: [], definitions: [] };
+var aDefNchar = []; //mix def and char for hints
+var dbName = 'priorityDb';
 
 function getCookie(name, defaultValue) {
   defaultValue = (typeof defaultValue === 'undefined') ? null : defaultValue;
@@ -15,94 +17,124 @@ function setCookie(name, value) {
 }
 /**
  * todo: 
- * state for consult and level
+ * remove pop up when clicking on next
  * display completion of roulette of chars (end fo review)
  * and button (back) to navigate chars
  */
 var unitState;
-function UnitState() {}
+function UnitState() { }
+/**Finds the paragraph related to unit member 
+ * used by the app buttons on every click
+*/
 UnitState.prototype.locate = function (element, index) {
-  this.char = this.sing0 = this.sing1 = false; 
-  if(element.id == 'pDefNchar'){
-    switch(index){
-      case 0: 
-      this.char = true; break;
-      case 1: 
-      this.sing0 = true; break;
-      case 2: 
-      this.sing1 = true; break;   
+  this.char = this.sing0 = this.sing1 = false;
+  if (element.id == 'pDefNchar') {
+    switch (index) {
+      case 0:
+        this.char = true; break;
+      case 1:
+        this.sing0 = true; break;
+      case 2:
+        this.sing1 = true; break;
     }
   }
-  else if(element.id == 'btnCombS'){
+  else if (element.id == 'btnCombS') {
     this.sCombIdx = index;
     this.lCombIdx = null;
   }
-  else if(element.id == 'btnCombL'){
-    console.log('here');
+  else if (element.id == 'btnCombL') {
     this.lCombIdx = index;
     this.sCombIdx = null;
   }
-  console.log('sCombIdx: ' + this.sCombIdx + ', lCombIdx:' + this.lCombIdx);
+  // console.log('sCombIdx: ' + this.sCombIdx + ', lCombIdx:' + this.lCombIdx);
 }
-UnitState.prototype.update = function(element){
+/**After comparing the content with the unit member, updates 
+ * the unit, local db and remote db. 
+ * Uses the mapping from locate(), 
+ */
+UnitState.prototype.update = function (element) {
   var content = element.innerHTML;
   var unitMember;
-  
-  if(element.id == 'pDefNchar'){
-    if (this.char){
+
+  if (element.id == 'pDefNchar') {
+    if (this.char) {
       unitMember = unit.char;
+      if (this.compare(content, unitMember)) {
+        console.log('here');
+        unit.char = content;
+      }
     }
-    else if (this.sing0){
-      unitMember = unit.definitions.single[0]
+    else if (this.sing0) {
+      unitMember = unit.definitions.single[0];
+      if (this.compare(content, unitMember)) {
+        unit.definitions.single[0] = content;
+      }
     }
-    else if (this.sing1)
-      unitMember = unit.definitions.single[1]  
+    else if (this.sing1) {
+      unitMember = unit.definitions.single[1];
+      if (this.compare(content, unitMember)) {
+        unit.definitions.single[1] = content;
+      }
+    }
+    //update display array
+    aDefNchar = [];
+    aDefNchar.push(unit.char);
+    aDefNchar = aDefNchar.concat(unit.definitions.single);
   }
-  else if(element.id == 'pComb'){
-    if(this.sCombIdx!=null){ 
+  else if (element.id == 'pComb') {
+    if (this.sCombIdx != null) {
       unitMember = unit.combinations.short[this.sCombIdx];
-    } 
-    else if(this.lCombIdx!=null){
+      if (this.compare(content, unitMember)) {
+        unit.combinations.short[this.sCombIdx] = content;
+      }
+    }
+    else if (this.lCombIdx != null) {
       unitMember = unit.combinations.long[this.lCombIdx];
-    } 
+      if (this.compare(content, unitMember)) {
+        unit.combinations.long[this.lCombIdx] = content;
+      }
+    }
   }
-  else if(element.id == 'pHint'){
-    if(this.sCombIdx!=null) {
+  else if (element.id == 'pHint') {
+    if (this.sCombIdx != null) {
       unitMember = unit.definitions.short[this.sCombIdx];
+      if (this.compare(content, unitMember)) {
+        unit.definitions.short[this.sCombIdx] = content;
+      }
     }
-    else if(this.lCombIdx!=null){
+    else if (this.lCombIdx != null) {
       unitMember = unit.definitions.long[this.lCombIdx];
+      if (this.compare(content, unitMember)) {
+        unit.definitions.long[this.lCombIdx] = content;
+      }
     }
   }
-//  console.log(unitMember +' vs ' + content );
-  this.compare(content, unitMember);
-  
+  saveToIndexedDB(dbName, unit)
 }
-UnitState.prototype.compare = function(content, unitMember){
+UnitState.prototype.compare = function (content, unitMember) {
   //delete html double or single spaces
   var matches = new RegExp('(&nbsp;)').exec(content)
-  
-  if(matches){
-    matches.forEach(match =>content = content.replace(match, ''));
-    matches.forEach(match =>content = content.replace(match, ''));
+
+  if (matches) {
+    matches.forEach(match => content = content.replace(match, ''));
+    matches.forEach(match => content = content.replace(match, ''));
   }
-    
-  console.log(unitMember +' vs ' + content );
-  if(unitMember.trim() != content.trim()){
+
+  console.log(unitMember + ' vs ' + content);
+  if (unitMember.trim() != content.trim()) {
     console.log('push to db');
     return true;
   }
-  else{
+  else {
     console.log('do nothing');
     return false;
   }
 }
+
 window.onload = function () {
-  
+
   //to be send to nextIdx by event handler
   var index = { defNChar: 0, shortComb: 0, longComb: 0 }
-  var aDefNchar = []; //mix def and char for hints
-  var dbName = 'priorityDb';
 
   //load handwriting tool and hide the result box
   enableHWIme('txt_word');
@@ -163,22 +195,63 @@ window.onload = function () {
     unit.definitions.long = units[id].definitions.long;
 
     //balancing comb->def empty array size
-    var lenCs =unit.combinations.short.length;
-    var lenCl =unit.combinations.long.length;
-    if(lenCs > 0 && unit.definitions.short ==''){
+    var lenCs = unit.combinations.short.length;
+    var lenCl = unit.combinations.long.length;
+    if (lenCs > 0 && unit.definitions.short == '') {
       let a = [];
-      for(let i=0; i<lenCs; i++)
+      for (let i = 0; i < lenCs; i++)
         a.push('')
       unit.definitions.short = a;
     }
-    if(lenCl > 0 && unit.definitions.long ==''){
+    if (lenCl > 0 && unit.definitions.long == '') {
       let a = [];
-      for(let i=0; i<lenCl; i++)
+      for (let i = 0; i < lenCl; i++)
         a.push('')
       unit.definitions.long = a;
     }
 
-    var checkbox = document.querySelector("#pinReviewCont input");
+    //Level select and child option elements
+    var sLevel = document.createElement('select');
+    sLevel.setAttribute('id', 'sLevel');
+    sLevel.classList.add('form-control-sm')
+    for(let i=0; i<4; i++){
+      var option = document.createElement('option');
+      option.setAttribute('value', i)
+      if (units[id].level != i){
+        option.removeAttribute('selected');
+      }else{
+        option.setAttribute('selected', '');
+      }   
+      option.innerHTML = i;
+      sLevel.appendChild(option);
+    }
+     
+    //checkbox creation and attrs
+    var cbConsult = document.createElement('input');
+    cbConsult.setAttribute('id', 'cbConsult');
+    cbConsult.setAttribute('type', 'checkbox');
+    if (units[id].consult == true){
+      cbConsult.setAttribute('checked', '')
+    } else {
+      cbConsult.removeAttribute('checked');
+    }
+    Object.assign(cbConsult.style, {
+      width: '20px',
+      height: '20px',
+      position: 'relative',
+      top: '5px'
+    });
+    
+    //add to popover
+    pinyin.setAttribute('data-content', 
+      '<span>Level: </span>' +
+      sLevel.outerHTML + 
+      '<span>&nbsp;&nbsp;&nbsp; Consult: </span>' +
+      cbConsult.outerHTML 
+    )
+
+    /*
+    var checkbox = document.querySelector("#pinReviewCont input"); // cbConsult
 
     if (units[id].consult == true)
       checkbox.setAttribute('checked', '');
@@ -192,7 +265,7 @@ window.onload = function () {
         sLevel.removeAttribute('selected');
       else
         sLevel.setAttribute('selected', '');
-    }
+    }*/
 
     //set review level
     for (let i = 0; i < 5; i++) {
@@ -287,17 +360,28 @@ window.onload = function () {
   }
 
   //initiated under loadChar()
-  
+
 
 
   //review tab events
   pinReviewCont.onclick = function (event) {
     var target = event.target;
+
     if (target.id == 'rLevel') {
       var lv = $("#rLevel").val();
       setCookie('rLevel', lv)
       currentChar(lv);
     }
+    // else if(target.id == 'sLevel'){
+    //   var lv = $('#sLevel').val();
+    //   unit.level = lv;
+    //   saveToIndexedDB(dbName, unit);
+    // }
+    // else if(target.id== 'cbConsult'){
+    //   var vl = cbConsult.checked;
+    //   unit.consult = vl;
+    //   saveToIndexedDB(dbName, unit);
+    // }
     //buttons pressed
     else if (target.id == 'btnNext') {
       var lv = $("#rLevel").val();
@@ -307,13 +391,13 @@ window.onload = function () {
       pHint.setAttribute('contenteditable', 'false')
     }
     else if (target.id == 'btnHint') {
-      if(aDefNchar[index.defNChar]) 
+      if (aDefNchar[index.defNChar])
         pDefNchar.setAttribute('contenteditable', 'true')
-      
+
       pDefNchar.innerHTML = aDefNchar[index.defNChar];
       unitState.locate(pDefNchar, index.defNChar);
       index.defNChar = nextIdx(index.defNChar, aDefNchar);
-      
+
     }
     else if (target.id == 'btnCombS') {
       unitState.locate(btnCombS, index.shortComb);
@@ -347,8 +431,9 @@ window.onload = function () {
       if (target.innerHTML == 'add content ...')
         target.innerHTML = "&nbsp;"
     }
-    else if (target.id == 'pHint'){
-      target.innerHTML = target.innerHTML.replace(/(<.*>)/, '')
+    else if (target.id == 'pHint') {
+      if (target.innerHTML.includes('<'))
+        target.innerHTML = target.innerHTML.replace(/(<.*>)/, '')
     }
     //Ion icon to container button event chaining
     target.id == 'ionNext' ? btnNext.click() : null;
@@ -358,6 +443,17 @@ window.onload = function () {
     target.id == 'ionCombHint' ? btnCombH.click() : null;
 
   }
+  $(document.body).on('click', '#sLevel', function () {
+    var lv = $('#sLevel').val();
+    console.log(lv);
+    unit.level = lv;
+    saveToIndexedDB(dbName, unit);
+  })
+  $(document.body).on('click', '#cbConsult', function () {
+    var vl = cbConsult.checked;
+    unit.consult = vl;
+    saveToIndexedDB(dbName, unit);
+  })
 
   //content change/save events
   /**
@@ -365,9 +461,9 @@ window.onload = function () {
    * set an app state for remote saving on interval?
    * push to localDb
    */
- 
+
   //clear space for easier editing
-  pDefNchar.onfocus = function(){
+  pDefNchar.onfocus = function () {
     if (this.innerHTML == "&nbsp;")
       this.innerHTML = '';
   }
@@ -375,11 +471,11 @@ window.onload = function () {
     if (pComb.innerHTML == "&nbsp;")
       this.innerHTML = '';
   }
-  pHint.onfocus = function(){
+  pHint.onfocus = function () {
     if (this.innerHTML == "&nbsp;")
       this.innerHTML = '';
   }
-  
+
   pDefNchar.onfocusout = function () {
     unitState.update(this);
     if (this.innerHTML == '')
@@ -395,7 +491,7 @@ window.onload = function () {
     if (this.innerHTML == '')
       this.innerHTML = '&nbsp;'
   }
-  
+
 
 
 
@@ -417,8 +513,9 @@ window.onload = function () {
     display2.style.visibility = 'hidden';
   }
   async function gTranslate(phrase) {
+    phrase = phrase.replace('#', '')//google doesn't like #
     var url = 'https://translation.googleapis.com/language/translate/v2' + '?q=' + encodeURIComponent(phrase) + '&target=EN' + '&key=AIzaSyA8Hupp7Bd9QuzN5yMOoWJfD_hTZQDvrPo'
-    console.log(url);
+
     var xhr = new XMLHttpRequest();
     return new Promise((resolve, reject) => {
       xhr.open('POST', url);
@@ -426,6 +523,7 @@ window.onload = function () {
         if (this.status == 200) {
           data = JSON.parse(this.responseText);
           var img = '<img src="./images/GoogleTranslate1.png" width="30" height="25"/>';
+          console.log(data.data.translations[0].translatedText);
           resolve(img + data.data.translations[0].translatedText);
         }
       }

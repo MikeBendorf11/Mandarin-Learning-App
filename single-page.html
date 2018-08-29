@@ -7,25 +7,54 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Handwriting Tool</title>
   <!-- start handwriting tool -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  
   <script type="text/javascript" src="./scripts/handwrite-chindict.js"></script>
   <script type="text/javascript" src="./scripts/handwrite-hwime.js"></script>
-  <script>
-  </script>
-  <script src="./scripts/bootstrap.js"></script>
   <script src="./scripts/myScripts.js"></script>
   <script src="./scripts/storageFunctions.js"></script>
   <script src="./scripts/parseCSV.js"></script>
   <script src="./scripts/storageFromBlank.js"></script>
+  <script src="./scripts/jquery.min.js"></script>
+  <script src="./scripts/popper.min.js"></script>
+  <script src="./scripts/bootstrap.js"></script>
   <link rel="stylesheet" href="./css/bootstrap.css">
   <link rel="stylesheet" href="./css/handwrite-style.css" type="text/css">
   <link rel="stylesheet" href="./css/myCss.css">
   
-  <!-- end handwriting tool -->
-
+  <script>
+    $(document).ready(function(){
+    $('[data-toggle="popover"]').popover();   
+    });
+  </script>
 </head>
 
 <body>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link active" data-toggle="tab" href="#home">Review</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#menu1">Draw</a>
+          <!-- ime_word.parentNode.removeChild(ime_word) -->
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#menu2">About</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+          <div id="Review" class="container tab-pane active"><br>
+            <h3>HOME</h3>
+            <p>0000000000Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          </div>
+          <div id="Draw" class="container tab-pane fade"><br>
+            <h3>Menu 1</h3>
+            <p>U1111111t enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          </div>
+          <div id="About" class="container tab-pane fade"><br>
+            <h3>Menu 2</h3>
+            <p>S2222222222ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+          </div>
+        </div>
   <hr>
   <div id="ime_word">
     <div id="hwime_txt_word"></div>
@@ -35,33 +64,37 @@
   </div>
   <hr>
   <div id="pinReviewCont">
-      <div id="dvConsult">
-          <span>Consult </span><br><input type="checkbox" name="consult" value="true">       
-      </div>
-      <div id="dvLevel">
-          <span>LEVEL: </span><br>
-          <select id="sLevel" class="form-control-sm">
-              <option id="sLevel0" value="0"> </option>
-              <option id="sLevel1" value="1"> 1 </option>
-              <option id="sLevel2" value="2"> 2 </option>
-              <option id="sLevel3" value="3"> 3 </option>
-            </select>
-      </div>
+    <h1>Review :</h1>
     <div id="dvReview">
-        <span>REVIEW: </span><br>
-        <select id="rLevel" class="form-control-sm">
-            <option id="rLevel0" value="0">all </option>
-            <option id="rLevel1" value="1">level 1</option>
-            <option id="rLevel2" value="2">level 2</option>
-            <option id="rLevel3" value="3">level 3</option>
-            <option id="rLevel4" value="4"> consult </option>
-          </select>
-    </div>
-    
-    <h2 id="pinyin">&nbsp;</h2>
+      
+      <select id="rLevel" class="form-control-sm">
+        <option id="rLevel0" value="0">Level 0 </option>
+        <option id="rLevel1" value="1">Level 1</option>
+        <option id="rLevel2" value="2">Level 2</option>
+        <option id="rLevel3" value="3">Level 3</option>
+        <option id="rLevel4" value="4">Consult </option>
+      </select>
+    </div><br>
+    <button class="btn btn-outline-primary" id="btnNext">Prev <span id="ionNext" class="ion ion-next"></span></button>
     <button class="btn btn-outline-primary" id="btnNext">Next <span id="ionNext" class="ion ion-next"></span></button>
-
     <button id="btnHint" class="btn btn-outline-primary">Hint <span id="ionHint" class="ion ion-hint"></span></button> <br>
+    <h2 id="pinyin" data-toggle="popover" title="<p align='center'>Edit this entry:</p>" data-html="true" data-placement="bottom" >&nbsp;</h2>
+    <!-- <div id="dvLevel">
+      <span>LEVEL: </span><br>
+      <select id="sLevel" class="form-control-sm">
+        <option id="sLevel0" value="0"> 0 </option>
+        <option id="sLevel1" value="1"> 1 </option>
+        <option id="sLevel2" value="2"> 2 </option>
+        <option id="sLevel3" value="3"> 3 </option>
+      </select>
+    </div>
+    <div id="dvConsult">
+      <span>CONSULT: </span><br><input id="cbConsult" type="checkbox" name="consult">
+    </div> -->
+    
+
+   
+    
     <p id="pDefNchar">&nbsp;</p>
 
     <span id="combTitle">COMBINATIONS:</span><br>
@@ -69,7 +102,9 @@
     <button class="btn btn-outline-primary" id="btnCombL">Long <span id="ionCombLong" class="ion ion-long"></span></button>
     <button class="btn btn-outline-primary" id="btnCombH">Hint <span id="ionCombHint" class="ion ion-hint"></span></button>
     <p id="pComb">&nbsp;</p>
-    <div id="dvPcombHint"><p id="pHint">&nbsp;</p></div><br>
+    <div id="dvPcombHint">
+      <p id="pHint">&nbsp;</p>
+    </div><br>
   </div>
 </body>
 

@@ -1,8 +1,12 @@
-body{
-  
+
+h1{
+  font-size: 1.8rem;
+  font-style: italic;
+  margin: 0px 30px 20px 0;
+  display: inline-block;
 }
 h2{
-  font-size: 28px;
+  font-size: 1.9rem;
   margin: 15px
 }
 @font-face{
@@ -12,7 +16,6 @@ h2{
 .ion {
 	display: inline-block;
 	font-family: "Ionicons";
-	speak: none;
 	font-style: normal;
 	font-weight: normal;
 	font-variant: normal;
@@ -70,14 +73,13 @@ select{
   background-color: rgb(255, 255, 255, 0.4);
   padding-bottom: 10px;
 }
-h1{
-  margin: 15px 0
-}
+
 #pinReviewCont{
-  width: 100%;
+  width: 280px;
   text-align: center;
+  
   background-image: url("../images/bg1.jpg");
-  background-size: 100vw;
+  background-size: 100%;
   background-repeat: no-repeat;
   background-position: 0px 12px
 }
@@ -85,21 +87,40 @@ h1{
   font-family: 'fnt_pronunciation';
   
 }
-#dvLevel, #dvReview, #combTitle{
+#dvLevel, #dvConsult span, #dvReview, #combTitle{
   display: inline-block;
   font-size: 0.7em;
   font-weight: 750;
   color: rgb(95, 95, 95);
   background-color: rgb(255, 255, 255, 0.3);
 }
+
+/* #dvConsult input{
+  width:20px;
+  height:20px;
+  position: relative;
+  top: 5px;
+
+} */
 /* preserves bgcolor when hidding def*/
 #dvPcombHint{
   height: 25px;
   overflow: hidden;
   background-color: rgb(255, 255, 255, 0.3);
 }
+#rLevel{
+  margin-bottom: -4px;
+  position: relative;
+  top: -4px
+}
 #pinReviewCont #dvConsult{
-  float: right;  
-  top: 0;
-  right: 0;
+  display: inline-block;
+}
+#pinReviewCont #dvReview{
+    /* position: relative;  
+  top: -20px;
+  right: -50px; */
+}
+.nav, .tab-content{
+  display: none
 }
