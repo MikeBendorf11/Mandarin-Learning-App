@@ -21,7 +21,7 @@ function parseCSV() {
   var learnedId = 0;
   $.ajax({
     method: 'GET',
-    url: './chinese_chars2.csv',
+    url: './chinese_chars3_accents.csv',
   }).done(function (data) {
     var parsed = csvToArray(data);
 

@@ -1,4 +1,30 @@
-
+#container{
+  background: rgb(252,229,148);
+background: linear-gradient(350deg, rgba(252,229,148,1) 58%, rgba(255,255,255,1) 79%);
+  display: flex;
+  justify-content: space-around;
+  
+  width: 60%;
+  margin: 10% auto;
+  /* transform: scale(1.2) */
+}
+#ime_word{ 
+  text-align: center;
+  box-sizing: border-box;
+}
+#ime_wrapper{
+  width: 258px;
+}
+#pinReviewCont{
+  box-sizing: border-box;
+  width: 280px;
+  /* margin: 90px 90px 90px 90px; */
+  text-align: center;
+  background-image: url("../images/bg1.png");
+  background-size: 280px;
+  background-repeat: no-repeat;
+  background-position: 0px 12px;
+}
 h1{
   font-size: 1.8rem;
   font-style: italic;
@@ -7,8 +33,12 @@ h1{
 }
 h2{
   font-size: 1.9rem;
-  margin: 15px
+  
+  display: inline-block;
+  margin: 0px 0 10px 0 0;
+
 }
+
 @font-face{
   font-family: 'fnt_pronunciation';
   src: url(../font/Chonburi-Regular.ttf)
@@ -55,18 +85,32 @@ h2{
 }
 
 button{
-  margin: 0 2px 16px; 
-  
+  margin: 0 2px 16px;  
 }
-.btn-outline-primary{
+.btn-outline-dark{
   background-color: rgb(255, 255, 255, 0.25);
   font-weight: 450
 }
-
+#btnPrev, #btnNext, #btnHint{
+  margin-bottom: 5px;
+}
+#btnPrev span, #btnNext span{
+  font-size: 35px;
+}
+p{
+  text-overflow: ellipsis; 
+}
+#idDisplay{
+  font-size: 12px;
+  padding: 0 1px;
+  top: -17px;
+}
 p:not(#pHint){
   background-color: rgb(255, 255, 255, 0.3);
+  color: #007bff;
   margin-bottom: 10px;
-  font-weight: 560
+  font-weight: 560;
+  
 }
 
 select{
@@ -74,15 +118,7 @@ select{
   padding-bottom: 10px;
 }
 
-#pinReviewCont{
-  width: 280px;
-  text-align: center;
-  
-  background-image: url("../images/bg1.jpg");
-  background-size: 100%;
-  background-repeat: no-repeat;
-  background-position: 0px 12px
-}
+
 #pinReviewCont #pinyin{
   font-family: 'fnt_pronunciation';
   
@@ -95,13 +131,6 @@ select{
   background-color: rgb(255, 255, 255, 0.3);
 }
 
-/* #dvConsult input{
-  width:20px;
-  height:20px;
-  position: relative;
-  top: 5px;
-
-} */
 /* preserves bgcolor when hidding def*/
 #dvPcombHint{
   height: 25px;
@@ -116,11 +145,7 @@ select{
 #pinReviewCont #dvConsult{
   display: inline-block;
 }
-#pinReviewCont #dvReview{
-    /* position: relative;  
-  top: -20px;
-  right: -50px; */
-}
+
 .nav, .tab-content{
   display: none
 }

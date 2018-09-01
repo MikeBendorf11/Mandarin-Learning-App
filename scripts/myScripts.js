@@ -17,9 +17,7 @@ function setCookie(name, value) {
 }
 /**
  * todo: 
- * remove pop up when clicking on next
  * display completion of roulette of chars (end fo review)
- * and button (back) to navigate chars
  */
 var unitState;
 function UnitState() { }
@@ -86,12 +84,22 @@ UnitState.prototype.update = function (element) {
       unitMember = unit.combinations.short[this.sCombIdx];
       if (this.compare(content, unitMember)) {
         unit.combinations.short[this.sCombIdx] = content;
+        if(this.sCombIdx == unit.combinations.short.length-1){
+          unit.combinations.short.push('');
+          unit.definitions.short.push('');
+          console.log('incremented comb and def short');
+        }
       }
     }
     else if (this.lCombIdx != null) {
       unitMember = unit.combinations.long[this.lCombIdx];
       if (this.compare(content, unitMember)) {
         unit.combinations.long[this.lCombIdx] = content;
+        if(this.lCombIdx == unit.combinations.long.length -1 ){
+          unit.combinations.long.push('');
+          unit.definitions.long.push('');
+          console.log('incremented comb and def long');
+        }
       }
     }
   }
@@ -100,16 +108,26 @@ UnitState.prototype.update = function (element) {
       unitMember = unit.definitions.short[this.sCombIdx];
       if (this.compare(content, unitMember)) {
         unit.definitions.short[this.sCombIdx] = content;
+        if(this.sCombIdx == unit.combinations.short.length-1){
+          unit.combinations.short.push('');
+          unit.definitions.short.push('');
+          console.log('incremented comb and def short');
+        }
       }
     }
     else if (this.lCombIdx != null) {
       unitMember = unit.definitions.long[this.lCombIdx];
       if (this.compare(content, unitMember)) {
         unit.definitions.long[this.lCombIdx] = content;
+        if(this.lCombIdx == unit.combinations.long.length -1 ){
+          unit.combinations.long.push('');
+          unit.definitions.long.push('');
+          console.log('incremented comb and def long');
+        }
       }
     }
   }
-  saveToIndexedDB(dbName, unit)
+  saveToIndexedDB(dbName, unit);
 }
 UnitState.prototype.compare = function (content, unitMember) {
   //delete html double or single spaces
@@ -139,7 +157,7 @@ window.onload = function () {
   //load handwriting tool and hide the result box
   enableHWIme('txt_word');
   var hwimeResult = document.querySelector('.mdbghwime-result');
-  hwimeResult.setAttribute('style', 'display:none');
+  //hwimeResult.setAttribute('style', 'visibility: hidden');
   //handwriting panel events
   btnHintDraw.onclick = function () {
     toggleDiv(hwimeResult);
@@ -243,29 +261,13 @@ window.onload = function () {
     });
     
     //add to popover
+    $(pinyin).popover();
     pinyin.setAttribute('data-content', 
       '<span>Level: </span>' +
       sLevel.outerHTML + 
       '<span>&nbsp;&nbsp;&nbsp; Consult: </span>' +
       cbConsult.outerHTML 
     )
-
-    /*
-    var checkbox = document.querySelector("#pinReviewCont input"); // cbConsult
-
-    if (units[id].consult == true)
-      checkbox.setAttribute('checked', '');
-    else
-      checkbox.removeAttribute('checked');
-
-    //set character level
-    for (let i = 0; i < 4; i++) {
-      var sLevel = document.querySelector('#sLevel' + i);
-      if (units[id].level != i)
-        sLevel.removeAttribute('selected');
-      else
-        sLevel.setAttribute('selected', '');
-    }*/
 
     //set review level
     for (let i = 0; i < 5; i++) {
@@ -280,10 +282,13 @@ window.onload = function () {
     aDefNchar = [];
     aDefNchar.push(unit.char);
     aDefNchar = aDefNchar.concat(unit.definitions.single);
+    pinyin.style.color = 'transparent';
     $("#pinyin").html(unit.pronunciation);
+    $(pinyin).animate({color: 'black'},1000);
     pDefNchar.innerHTML = '&nbsp;';
     pComb.innerHTML = '&nbsp;';
     pHint.innerHTML = '&nbsp;';
+    idDisplay.innerHTML = unit.id;
   }
 
   function currentChar(level) {
@@ -329,7 +334,7 @@ window.onload = function () {
   function getNextChar(level) {
     var cookieId = parseInt(getCookie('rLevel' + level + 'Id'))
     if (level == 4) {
-      let i = cookieId + 1, j = 0;
+      let i = nextIdx(cookieId, units), j = 0;
       while (i < units.length, j <= units.length * 2) {
         if (units[i].consult) {
           loadChar(i, level)
@@ -340,10 +345,11 @@ window.onload = function () {
           alert('No character assigned to level' + level);
           break;
         }
-        i = nextIdx(i, units)
+        i = nextIdx(i, units);
+        j++;
       }
     } else {
-      for (let i = cookieId + 1, j = 0; i < units.length, j <= units.length * 2; i = nextIdx(i, units)) {
+      for (let i = nextIdx(cookieId, units), j = 0; i < units.length, j <= units.length * 2; i = nextIdx(i, units), j++) {
         if (units[i].level == level) {
           loadChar(i, level)
           setCookie('rLevel' + level + 'Id', i);
@@ -355,54 +361,86 @@ window.onload = function () {
         }
       }
     }
-
-
+  }
+  function getPrevChar(level) {
+    var cookieId = parseInt(getCookie('rLevel' + level + 'Id'))
+    if (level == 4) {
+      let i = prevIdx(cookieId, units), j = 0;
+      while (i >0, j <= units.length * 2) {
+        if (units[i].consult) {
+          loadChar(i, level)
+          setCookie('rLevel' + level + 'Id', i);
+          break;
+        }
+        if (j == units.length * 2) {
+          alert('No character assigned to level' + level);
+          break;
+        }
+        i = prevIdx(i, units);
+        j++;
+      }
+    } else {
+      for (let i = prevIdx(cookieId, units), j = 0; i >0, j <= units.length * 2; i = prevIdx(i, units), j++) {
+        if (units[i].level == level) {
+          loadChar(i, level)
+          setCookie('rLevel' + level + 'Id', i);
+          break;
+        }
+        if (j == units.length * 2) {
+          alert('No character assigned to level' + level);
+          break;
+        }
+      }
+    }
   }
 
-  //initiated under loadChar()
+  
 
 
 
   //review tab events
   pinReviewCont.onclick = function (event) {
     var target = event.target;
-
+// console.log(target);
+    
     if (target.id == 'rLevel') {
+      $(pinyin).popover('hide');
       var lv = $("#rLevel").val();
       setCookie('rLevel', lv)
       currentChar(lv);
     }
-    // else if(target.id == 'sLevel'){
-    //   var lv = $('#sLevel').val();
-    //   unit.level = lv;
-    //   saveToIndexedDB(dbName, unit);
-    // }
-    // else if(target.id== 'cbConsult'){
-    //   var vl = cbConsult.checked;
-    //   unit.consult = vl;
-    //   saveToIndexedDB(dbName, unit);
-    // }
     //buttons pressed
     else if (target.id == 'btnNext') {
+      $(pinyin).popover('hide');
       var lv = $("#rLevel").val();
       getNextChar(lv);
       pDefNchar.setAttribute('contenteditable', 'false');
       pComb.setAttribute('contenteditable', 'false');
       pHint.setAttribute('contenteditable', 'false')
     }
+    else if(target.id == 'btnPrev'){
+      $(pinyin).popover('hide');
+      var lv = $("#rLevel").val();
+      getPrevChar(lv);
+      pDefNchar.setAttribute('contenteditable', 'false');
+      pComb.setAttribute('contenteditable', 'false');
+      pHint.setAttribute('contenteditable', 'false')
+    }
     else if (target.id == 'btnHint') {
+      $(pinyin).popover('hide');
       if (aDefNchar[index.defNChar])
         pDefNchar.setAttribute('contenteditable', 'true')
-
+      pDefNchar.style.color = 'transparent'
       pDefNchar.innerHTML = aDefNchar[index.defNChar];
+      $(pDefNchar).animate({color: '#007bff'},1000);
       unitState.locate(pDefNchar, index.defNChar);
       index.defNChar = nextIdx(index.defNChar, aDefNchar);
 
     }
     else if (target.id == 'btnCombS') {
+      $(pinyin).popover('hide');
       unitState.locate(btnCombS, index.shortComb);
       pComb.setAttribute('contenteditable', 'true');
-      pHint.setAttribute('contenteditable', 'false');
       showCombDef(
         unit.combinations.short[index.shortComb],
         unit.definitions.short[index.shortComb],
@@ -412,6 +450,7 @@ window.onload = function () {
       index.shortComb = nextIdx(index.shortComb, unit.combinations.short);
     }
     else if (target.id == 'btnCombL') {
+      $(pinyin).popover('hide');
       unitState.locate(btnCombL, index.longComb);
       pComb.setAttribute('contenteditable', 'true');
       pHint.setAttribute('contenteditable', 'false');
@@ -424,12 +463,17 @@ window.onload = function () {
       index.longComb = nextIdx(index.longComb, unit.combinations.long);
     }
     else if (target.id == 'btnCombH') {
+      $(pinyin).popover('hide');
+      pHint.style.color = 'transparent';
       pHint.style.visibility = 'visible';
+      $(pHint).animate({color: '#212529'},1000);
       pHint.setAttribute('contenteditable', true);
     }
     else if (target.id == 'pComb') {
       if (target.innerHTML == 'add content ...')
         target.innerHTML = "&nbsp;"
+      if (target.innerHTML.includes('<'))
+        target.innerHTML = target.innerHTML.replace(/(<.*>)/, '')
     }
     else if (target.id == 'pHint') {
       if (target.innerHTML.includes('<'))
@@ -438,6 +482,7 @@ window.onload = function () {
     //Ion icon to container button event chaining
     target.id == 'ionNext' ? btnNext.click() : null;
     target.id == 'ionHint' ? btnHint.click() : null;
+    target.id == 'ionPrev' ? btnPrev.click() : null;
     target.id == 'ionCombShort' ? btnCombS.click() : null;
     target.id == 'ionCombLong' ? btnCombL.click() : null;
     target.id == 'ionCombHint' ? btnCombH.click() : null;
@@ -445,7 +490,6 @@ window.onload = function () {
   }
   $(document.body).on('click', '#sLevel', function () {
     var lv = $('#sLevel').val();
-    console.log(lv);
     unit.level = lv;
     saveToIndexedDB(dbName, unit);
   })
@@ -456,14 +500,8 @@ window.onload = function () {
   })
 
   //content change/save events
-  /**
-   * save to changes to units
-   * set an app state for remote saving on interval?
-   * push to localDb
-   */
-
-  //clear space for easier editing
   pDefNchar.onfocus = function () {
+    //clear space for easier editing
     if (this.innerHTML == "&nbsp;")
       this.innerHTML = '';
   }
@@ -475,9 +513,19 @@ window.onload = function () {
     if (this.innerHTML == "&nbsp;")
       this.innerHTML = '';
   }
+  // function clearSpaces(element) {
+  //   var content = element.innerHTML;
+  //   var matches = new RegExp('(&nbsp;)').exec(content)
 
+  //   if (matches) {
+  //     matches.forEach(match => content = content.replace(match, ''));
+  //     matches.forEach(match => content = content.replace(match, ''));
+  //   }
+  // }
   pDefNchar.onfocusout = function () {
+    //check for changes and update
     unitState.update(this);
+    //reinsert space for design (if empty)
     if (this.innerHTML == '')
       this.innerHTML = '&nbsp;'
   }
@@ -497,8 +545,10 @@ window.onload = function () {
 
   function showCombDef(combination, definition, display1, display2) {
     //display the combination if any
+    display1.style.color = 'transparent';
     if (!combination || combination.trim() == '') {
       display1.innerHTML = 'add content ...';
+      $(display1).animate({color: '#007bff'}, 1000);
       display2.innerHTML = '&nbsp;';
       return;
     }
@@ -511,6 +561,7 @@ window.onload = function () {
 
     //set ready to show with hint button
     display2.style.visibility = 'hidden';
+    $(display1).animate({color: '#007bff'}, 1000);
   }
   async function gTranslate(phrase) {
     phrase = phrase.replace('#', '')//google doesn't like #
@@ -539,12 +590,16 @@ window.onload = function () {
     if (index + 1 > array.length - 1) return 0;
     else return index + 1;
   }
+  function prevIdx(index, array){
+    if (index -1 < 0) return array.length -1;
+    else return index -1;
+  }
   //hides element if display property is already set
   function toggleDiv(element) {
-    if (element.style.display == 'none')
-      element.style.display = 'block';
+    if (element.style.visibility == 'hidden')
+      element.style.visibility = 'visible';
     else
-      element.style.display = 'none';
+      element.style.visibility = 'hidden';
   }
 }
 

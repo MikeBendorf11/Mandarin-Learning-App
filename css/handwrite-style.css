@@ -1662,11 +1662,6 @@ div.lightbox > div a:hover {
 
 .mdbghwime {
 	margin: 1px 0 0 1px;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 }
 .mdbghwime > div {
@@ -1713,7 +1708,6 @@ div.lightbox > div a:hover {
 	background-color: white;
 }
 .mdbghwime-canvas {
-	-moz-user-select: none;
 	touch-action: none;
 }
 

@@ -15,17 +15,14 @@
   <script src="./scripts/parseCSV.js"></script>
   <script src="./scripts/storageFromBlank.js"></script>
   <script src="./scripts/jquery.min.js"></script>
+  <script src="./scripts/jquery-ui.js"></script>
   <script src="./scripts/popper.min.js"></script>
   <script src="./scripts/bootstrap.js"></script>
   <link rel="stylesheet" href="./css/bootstrap.css">
   <link rel="stylesheet" href="./css/handwrite-style.css" type="text/css">
   <link rel="stylesheet" href="./css/myCss.css">
   
-  <script>
-    $(document).ready(function(){
-    $('[data-toggle="popover"]').popover();   
-    });
-  </script>
+ 
 </head>
 
 <body>
@@ -55,57 +52,53 @@
             <p>S2222222222ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
           </div>
         </div>
-  <hr>
-  <div id="ime_word">
-    <div id="hwime_txt_word"></div>
-    <button class="btn btn-outline-primary" id="btnBack">Back <span id="ionDrawBack" class="ion ion-back"></span> </button>
-    <button class="btn btn-outline-primary" id="btnClear"> Clear <span id="ionDrawClear" class="ion ion-clear"></span> </button>
-    <button class="btn btn-outline-primary" id="btnHintDraw">Hint <span id="ionDrawHint" class="ion ion-hint"></span> </button>
-  </div>
-  <hr>
-  <div id="pinReviewCont">
-    <h1>Review :</h1>
-    <div id="dvReview">
+ 
+  <div id="container">
+      <div id="pinReviewCont">
+          <h1>Review :</h1>
+          <div id="dvReview">
+            
+            <select id="rLevel" class="form-control-sm">
+              <option id="rLevel0" value="0">Level 0 </option>
+              <option id="rLevel1" value="1">Level 1</option>
+              <option id="rLevel2" value="2">Level 2</option>
+              <option id="rLevel3" value="3">Level 3</option>
+              <option id="rLevel4" value="4">Consult </option>
+            </select>
+          </div><br>
+          <button class="btn btn-outline-dark" id="btnPrev"><span id="ionPrev" class="ion ion-back"></span></button>
+          <button id="btnHint" class="btn btn-outline-dark">Hint <span id="ionHint" class="ion ion-hint"></span></button> 
+          <button class="btn btn-outline-dark" id="btnNext"><span id="ionNext" class="ion ion-next"></span></button>
+          <br>
+          <br>
+          <h2 id="pinyin" data-toggle="popover" title="<p align='center'>Edit this entry:</p>" data-html="true" data-placement="bottom" >&nbsp;</h2><sup id="idDisplay"></sup>
+          
+          <p id="pDefNchar">&nbsp;</p>
       
-      <select id="rLevel" class="form-control-sm">
-        <option id="rLevel0" value="0">Level 0 </option>
-        <option id="rLevel1" value="1">Level 1</option>
-        <option id="rLevel2" value="2">Level 2</option>
-        <option id="rLevel3" value="3">Level 3</option>
-        <option id="rLevel4" value="4">Consult </option>
-      </select>
-    </div><br>
-    <button class="btn btn-outline-primary" id="btnNext">Prev <span id="ionNext" class="ion ion-next"></span></button>
-    <button class="btn btn-outline-primary" id="btnNext">Next <span id="ionNext" class="ion ion-next"></span></button>
-    <button id="btnHint" class="btn btn-outline-primary">Hint <span id="ionHint" class="ion ion-hint"></span></button> <br>
-    <h2 id="pinyin" data-toggle="popover" title="<p align='center'>Edit this entry:</p>" data-html="true" data-placement="bottom" >&nbsp;</h2>
-    <!-- <div id="dvLevel">
-      <span>LEVEL: </span><br>
-      <select id="sLevel" class="form-control-sm">
-        <option id="sLevel0" value="0"> 0 </option>
-        <option id="sLevel1" value="1"> 1 </option>
-        <option id="sLevel2" value="2"> 2 </option>
-        <option id="sLevel3" value="3"> 3 </option>
-      </select>
+          <span id="combTitle">COMBINATIONS:</span><br>
+          <button class="btn btn-outline-dark" id="btnCombS">Short <span id="ionCombShort" class="ion ion-short"></span></button>
+          <button class="btn btn-outline-dark" id="btnCombL">Long <span id="ionCombLong" class="ion ion-long"></span></button>
+          <button class="btn btn-outline-dark" id="btnCombH">Hint <span id="ionCombHint" class="ion ion-hint"></span></button>
+          <p id="pComb">&nbsp;</p>
+          <div id="dvPcombHint">
+            <p id="pHint">&nbsp;</p>
+          </div><br>
+        </div>
+    <div id="ime_wrapper">
+      <div id="ime_word">
+        <div id="hwime_txt_word">
+          
+        </div>
+        <!-- <button class="btn btn-outline-dark" id="btnBack">Back <span id="ionDrawBack" class="ion ion-back"></span> </button>
+        <button class="btn btn-outline-dark" id="btnClear"> Clear <span id="ionDrawClear" class="ion ion-clear"></span> </button>
+        <button class="btn btn-outline-dark" id="btnHintDraw">Hint <span id="ionDrawHint" class="ion ion-hint"></span> </button> -->
+      </div>
     </div>
-    <div id="dvConsult">
-      <span>CONSULT: </span><br><input id="cbConsult" type="checkbox" name="consult">
-    </div> -->
-    
-
    
-    
-    <p id="pDefNchar">&nbsp;</p>
+   
 
-    <span id="combTitle">COMBINATIONS:</span><br>
-    <button class="btn btn-outline-primary" id="btnCombS">Short <span id="ionCombShort" class="ion ion-short"></span></button>
-    <button class="btn btn-outline-primary" id="btnCombL">Long <span id="ionCombLong" class="ion ion-long"></span></button>
-    <button class="btn btn-outline-primary" id="btnCombH">Hint <span id="ionCombHint" class="ion ion-hint"></span></button>
-    <p id="pComb">&nbsp;</p>
-    <div id="dvPcombHint">
-      <p id="pHint">&nbsp;</p>
-    </div><br>
   </div>
+  
 </body>
 
 </html>

@@ -29,6 +29,9 @@ function MdbgHwIme(element, serverUrl, onCharSelected, onClose) {
 	this.element = $(element);
 	
 	var html = 
+	'<button class="btn btn-outline-dark" id="btnBack">Back <span id="ionDrawBack" class="ion ion-back"></span> </button>'+
+	'<button class="btn btn-outline-dark" id="btnClear"> Clear <span id="ionDrawClear" class="ion ion-clear"></span> </button>'+
+	'<button class="btn btn-outline-dark" id="btnHintDraw">Hint <span id="ionDrawHint" class="ion ion-hint"></span> </button>'+
 		'<div style="clear: both"></div>' +
 		'<div class="mdbghwime">' +
 		'	<div class="mdbghwime-canvas-bar">' +
@@ -48,6 +51,7 @@ function MdbgHwIme(element, serverUrl, onCharSelected, onClose) {
 		'	<div class="mdbghwime-result">' +
 		'		<span class="mdbghwime-loading-indicator"><span class="ion-loop"></span></span>' +
 		'		<span class="mdbghwime-error-indicator"><span class="ion-alert"></span></span>' +
+		
 		'		<div></div>' +
 		'	</div>' +
 		'</div>' +
@@ -163,8 +167,8 @@ function MdbgHwIme(element, serverUrl, onCharSelected, onClose) {
 	
 	window.onresize = function() {
 		self.adjustMdbgHwImeGridOffsets();
-		this.mdbgHwImeGrid.clear();
-		this.drawAll();
+		//this.mdbgHwImeGrid.clear();
+	//	this.drawAll();
 	}
 
 	this.colors = new Array();
