@@ -84,7 +84,7 @@ UnitState.prototype.update = function (element) {
       unitMember = unit.combinations.short[this.sCombIdx];
       if (this.compare(content, unitMember)) {
         unit.combinations.short[this.sCombIdx] = content;
-        if(this.sCombIdx == unit.combinations.short.length-1){
+        if (this.sCombIdx == unit.combinations.short.length - 1) {
           unit.combinations.short.push('');
           unit.definitions.short.push('');
           console.log('incremented comb and def short');
@@ -95,7 +95,7 @@ UnitState.prototype.update = function (element) {
       unitMember = unit.combinations.long[this.lCombIdx];
       if (this.compare(content, unitMember)) {
         unit.combinations.long[this.lCombIdx] = content;
-        if(this.lCombIdx == unit.combinations.long.length -1 ){
+        if (this.lCombIdx == unit.combinations.long.length - 1) {
           unit.combinations.long.push('');
           unit.definitions.long.push('');
           console.log('incremented comb and def long');
@@ -108,7 +108,7 @@ UnitState.prototype.update = function (element) {
       unitMember = unit.definitions.short[this.sCombIdx];
       if (this.compare(content, unitMember)) {
         unit.definitions.short[this.sCombIdx] = content;
-        if(this.sCombIdx == unit.combinations.short.length-1){
+        if (this.sCombIdx == unit.combinations.short.length - 1) {
           unit.combinations.short.push('');
           unit.definitions.short.push('');
           console.log('incremented comb and def short');
@@ -119,7 +119,7 @@ UnitState.prototype.update = function (element) {
       unitMember = unit.definitions.long[this.lCombIdx];
       if (this.compare(content, unitMember)) {
         unit.definitions.long[this.lCombIdx] = content;
-        if(this.lCombIdx == unit.combinations.long.length -1 ){
+        if (this.lCombIdx == unit.combinations.long.length - 1) {
           unit.combinations.long.push('');
           unit.definitions.long.push('');
           console.log('incremented comb and def long');
@@ -148,7 +148,34 @@ UnitState.prototype.compare = function (content, unitMember) {
     return false;
   }
 }
-
+//determines db existence and creation
+//starts from id 0 or checks cookies for last review level and id
+function AppState(dbStatus) {
+  self = this;
+  this.get = function () {
+    return new Promise(resolve => {
+      if (dbStatus) { //db exists
+        self.rLevel = parseInt(getCookie('rLevel'))
+        self.charId = parseInt(getCookie('rLevel' + self.rLevel + 'Id'))
+      } else {
+        parseCSV();
+        storageFromBlank(dbName);
+        self.charId = 0;
+        self.rLevel = 0;
+        setCookie('rLevel', self.rLevel);
+        setCookie('rLevel0Id', 0)
+        setCookie('rLevel1Id', 0)
+        setCookie('rLevel2Id', 0)
+        setCookie('rLevel3Id', 0)
+        setCookie('rLevel4Id', 0)
+      }
+      loadFromIndexedDB(dbName).then(db => {
+        units = db;
+        resolve(self)
+      })
+    })
+  }
+}
 window.onload = function () {
 
   //to be send to nextIdx by event handler
@@ -156,41 +183,17 @@ window.onload = function () {
 
   //load handwriting tool and hide the result box
   enableHWIme('txt_word');
-  var hwimeResult = document.querySelector('.mdbghwime-result');
-  //hwimeResult.setAttribute('style', 'visibility: hidden');
-  //handwriting panel events
-  btnHintDraw.onclick = function () {
-    toggleDiv(hwimeResult);
-  }
 
-  //determines db existence and creation
-  //starts from id 0 or checks cookies for last review level and id
-  function AppState(dbStatus) {
-    self = this;
-    this.get = function () {
-      return new Promise(resolve => {
-        if (dbStatus) { //db exists
-          self.rLevel = parseInt(getCookie('rLevel'))
-          self.charId = parseInt(getCookie('rLevel' + self.rLevel + 'Id'))
-        } else {
-          parseCSV();
-          storageFromBlank(dbName);
-          self.charId = 0;
-          self.rLevel = 0;
-          setCookie('rLevel', self.rLevel);
-          setCookie('rLevel0Id', 0)
-          setCookie('rLevel1Id', 0)
-          setCookie('rLevel2Id', 0)
-          setCookie('rLevel3Id', 0)
-          setCookie('rLevel4Id', 0)
-        }
-        loadFromIndexedDB(dbName).then(db => {
-          units = db;
-          resolve(self)
-        })
-      })
-    }
-  }
+  
+
+  //handwriting panel events
+  $(document.body).on('click', '#btnHintDraw', function () {
+    hwimeResult = document.querySelector('.mdbghwime-result');
+
+    toggleDiv(hwimeResult);
+
+  })
+
   checkDbExists(dbName).then(res => {
     var appState = new AppState(res);
     return appState.get()
@@ -198,8 +201,6 @@ window.onload = function () {
     loadChar(state.charId, state.rLevel)
     unitState = new UnitState();
   })
-
-
   //TODO:
   //add search box and use char index on it, search on db instead?
   function loadChar(id, reviewLevel) {
@@ -232,23 +233,23 @@ window.onload = function () {
     var sLevel = document.createElement('select');
     sLevel.setAttribute('id', 'sLevel');
     sLevel.classList.add('form-control-sm')
-    for(let i=0; i<4; i++){
+    for (let i = 0; i < 4; i++) {
       var option = document.createElement('option');
       option.setAttribute('value', i)
-      if (units[id].level != i){
+      if (units[id].level != i) {
         option.removeAttribute('selected');
-      }else{
+      } else {
         option.setAttribute('selected', '');
-      }   
+      }
       option.innerHTML = i;
       sLevel.appendChild(option);
     }
-     
+
     //checkbox creation and attrs
     var cbConsult = document.createElement('input');
     cbConsult.setAttribute('id', 'cbConsult');
     cbConsult.setAttribute('type', 'checkbox');
-    if (units[id].consult == true){
+    if (units[id].consult == true) {
       cbConsult.setAttribute('checked', '')
     } else {
       cbConsult.removeAttribute('checked');
@@ -259,14 +260,14 @@ window.onload = function () {
       position: 'relative',
       top: '5px'
     });
-    
+
     //add to popover
     $(pinyin).popover();
-    pinyin.setAttribute('data-content', 
+    pinyin.setAttribute('data-content',
       '<span>Level: </span>' +
-      sLevel.outerHTML + 
+      sLevel.outerHTML +
       '<span>&nbsp;&nbsp;&nbsp; Consult: </span>' +
-      cbConsult.outerHTML 
+      cbConsult.outerHTML
     )
 
     //set review level
@@ -284,10 +285,11 @@ window.onload = function () {
     aDefNchar = aDefNchar.concat(unit.definitions.single);
     pinyin.style.color = 'transparent';
     $("#pinyin").html(unit.pronunciation);
-    $(pinyin).animate({color: 'black'},1000);
+    $(pinyin).animate({ color: 'black' }, 1000);
     pDefNchar.innerHTML = '&nbsp;';
     pComb.innerHTML = '&nbsp;';
     pHint.innerHTML = '&nbsp;';
+
     idDisplay.innerHTML = unit.id;
   }
 
@@ -366,7 +368,7 @@ window.onload = function () {
     var cookieId = parseInt(getCookie('rLevel' + level + 'Id'))
     if (level == 4) {
       let i = prevIdx(cookieId, units), j = 0;
-      while (i >0, j <= units.length * 2) {
+      while (i > 0, j <= units.length * 2) {
         if (units[i].consult) {
           loadChar(i, level)
           setCookie('rLevel' + level + 'Id', i);
@@ -380,7 +382,7 @@ window.onload = function () {
         j++;
       }
     } else {
-      for (let i = prevIdx(cookieId, units), j = 0; i >0, j <= units.length * 2; i = prevIdx(i, units), j++) {
+      for (let i = prevIdx(cookieId, units), j = 0; i > 0, j <= units.length * 2; i = prevIdx(i, units), j++) {
         if (units[i].level == level) {
           loadChar(i, level)
           setCookie('rLevel' + level + 'Id', i);
@@ -394,23 +396,21 @@ window.onload = function () {
     }
   }
 
-  
 
-
+  rLevel.onchange = function(event){
+    console.log();
+    $(pinyin).popover('hide');
+    var lv = event.target.value;
+    setCookie('rLevel', lv)
+    currentChar(lv);
+  }
 
   //review tab events
-  pinReviewCont.onclick = function (event) {
+  pinReviewCont.onclick = function (event) {   
     var target = event.target;
-// console.log(target);
-    
-    if (target.id == 'rLevel') {
-      $(pinyin).popover('hide');
-      var lv = $("#rLevel").val();
-      setCookie('rLevel', lv)
-      currentChar(lv);
-    }
+     
     //buttons pressed
-    else if (target.id == 'btnNext') {
+    if (target.id == 'btnNext') {
       $(pinyin).popover('hide');
       var lv = $("#rLevel").val();
       getNextChar(lv);
@@ -418,7 +418,7 @@ window.onload = function () {
       pComb.setAttribute('contenteditable', 'false');
       pHint.setAttribute('contenteditable', 'false')
     }
-    else if(target.id == 'btnPrev'){
+    else if (target.id == 'btnPrev') {
       $(pinyin).popover('hide');
       var lv = $("#rLevel").val();
       getPrevChar(lv);
@@ -432,7 +432,7 @@ window.onload = function () {
         pDefNchar.setAttribute('contenteditable', 'true')
       pDefNchar.style.color = 'transparent'
       pDefNchar.innerHTML = aDefNchar[index.defNChar];
-      $(pDefNchar).animate({color: '#007bff'},1000);
+      $(pDefNchar).animate({ color: '#007bff' }, 1000);
       unitState.locate(pDefNchar, index.defNChar);
       index.defNChar = nextIdx(index.defNChar, aDefNchar);
 
@@ -466,7 +466,7 @@ window.onload = function () {
       $(pinyin).popover('hide');
       pHint.style.color = 'transparent';
       pHint.style.visibility = 'visible';
-      $(pHint).animate({color: '#212529'},1000);
+      $(pHint).animate({ color: '#212529' }, 1000);
       pHint.setAttribute('contenteditable', true);
     }
     else if (target.id == 'pComb') {
@@ -486,8 +486,9 @@ window.onload = function () {
     target.id == 'ionCombShort' ? btnCombS.click() : null;
     target.id == 'ionCombLong' ? btnCombL.click() : null;
     target.id == 'ionCombHint' ? btnCombH.click() : null;
-
+    
   }
+
   $(document.body).on('click', '#sLevel', function () {
     var lv = $('#sLevel').val();
     unit.level = lv;
@@ -513,15 +514,7 @@ window.onload = function () {
     if (this.innerHTML == "&nbsp;")
       this.innerHTML = '';
   }
-  // function clearSpaces(element) {
-  //   var content = element.innerHTML;
-  //   var matches = new RegExp('(&nbsp;)').exec(content)
 
-  //   if (matches) {
-  //     matches.forEach(match => content = content.replace(match, ''));
-  //     matches.forEach(match => content = content.replace(match, ''));
-  //   }
-  // }
   pDefNchar.onfocusout = function () {
     //check for changes and update
     unitState.update(this);
@@ -548,23 +541,29 @@ window.onload = function () {
     display1.style.color = 'transparent';
     if (!combination || combination.trim() == '') {
       display1.innerHTML = 'add content ...';
-      $(display1).animate({color: '#007bff'}, 1000);
+      $(display1).animate({ color: '#007bff' }, 1000);
       display2.innerHTML = '&nbsp;';
       return;
     }
     else display1.innerHTML = combination;
 
     //call google translate or display db def
-    if (!definition || combination.trim == '')
-      gTranslate(combination.trim()).then(data => display2.innerHTML = data);
+    if (!definition || combination.trim() == '' || definition.trim() == '') {
+      gTranslate(combination.trim())
+      .then(data => display2.innerHTML = data)
+      .catch(data => display2.innerHTML = data);
+      $('[data-toggle="tooltip"]').tooltip();
+    }
+
     else display2.innerHTML = definition;
 
     //set ready to show with hint button
     display2.style.visibility = 'hidden';
-    $(display1).animate({color: '#007bff'}, 1000);
+    $(display1).animate({ color: '#007bff' }, 1000);
   }
   async function gTranslate(phrase) {
     phrase = phrase.replace('#', '')//google doesn't like #
+    var img = '<img src="../images/GoogleTranslate1.png" width="30" height="25" alt="Google Translate" title="Google Translate"/>';
     var url = 'https://translation.googleapis.com/language/translate/v2' + '?q=' + encodeURIComponent(phrase) + '&target=EN' + '&key=AIzaSyA8Hupp7Bd9QuzN5yMOoWJfD_hTZQDvrPo'
 
     var xhr = new XMLHttpRequest();
@@ -573,14 +572,13 @@ window.onload = function () {
       xhr.onload = function () {
         if (this.status == 200) {
           data = JSON.parse(this.responseText);
-          var img = '<img src="./images/GoogleTranslate1.png" width="30" height="25"/>';
           console.log(data.data.translations[0].translatedText);
           resolve(img + data.data.translations[0].translatedText);
         }
       }
       xhr.onerror = function () {
         console.log('error: ' + this.status);
-        reject(img + 'you are offline!');
+        reject(img + 'you are offline...');
       }
       xhr.send();
     })
@@ -590,17 +588,62 @@ window.onload = function () {
     if (index + 1 > array.length - 1) return 0;
     else return index + 1;
   }
-  function prevIdx(index, array){
-    if (index -1 < 0) return array.length -1;
-    else return index -1;
+  function prevIdx(index, array) {
+    if (index - 1 < 0) return array.length - 1;
+    else return index - 1;
   }
-  //hides element if display property is already set
-  function toggleDiv(element) {
-    if (element.style.visibility == 'hidden')
-      element.style.visibility = 'visible';
-    else
-      element.style.visibility = 'hidden';
+
+
+  //window events
+
+
+  //same but runs on onload
+  if (window.innerWidth < 579) {
+    
+    container.classList.add('tab-content');
+    var hwimeResult = document.querySelector('.mdbghwime-result');
+    hwimeResult.style.display = 'none';
+  } else {
+    container.classList.remove('tab-content');
+  }
+
+  $(".nav-tabs a").click(function () {
+    $(this).tab('show');
+    //enableHWIme('txt_word');
+    mdbgHwIme.adjustMdbgHwImeGridOffsets()
+    setTimeout(()=> window.scrollTo(0, 0), 30);
+  });  
+  
+  //when maximizing from small window size
+  // $(window).bind('resize', function() {
+  //   enableHWIme('txt_word');
+  //   hwimeResult = document.querySelector('.mdbghwime-result');
+  //   hwimeResult.style.visibility = 'visible'
+  // })
+  width = window.innerWidth;
+  height = window.innerHeight;
+}
+var width, height;
+function toggleDiv(element){
+  if(element.style.display == ''){
+    element.style.display = 'none';
+  }
+  else if ( element.style.display == 'none'){
+    element.style.display = ''
+  } 
+}
+window.onresize = function () {
+  mdbgHwIme.adjustMdbgHwImeGridOffsets()
+  //android
+  if(width != window.width){
+    var hwimeResult = document.querySelector('.mdbghwime-result');
+    hwimeResult.style.display = 'none';
+  }
+  
+  if (window.innerWidth < 579) {
+    container.classList.add('tab-content');
+  } else {
+    container.classList.remove('tab-content');
   }
 }
-
 

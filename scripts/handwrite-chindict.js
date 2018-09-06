@@ -17,6 +17,7 @@
 // };
 
 var mdbg = {};
+var mdbgHwIme;
 
 function enableHWIme(inputElementId) {
 
@@ -29,7 +30,7 @@ function enableHWIme(inputElementId) {
 	var divHWIme = $('#hwime_' + inputElementId);
 	divHWIme.show();
 
-	var mdbgHwIme = new MdbgHwIme(divHWIme, "https://cors-anywhere.herokuapp.com/https://www.mdbg.net/chinese/dictionary-ajax?c=hwime", function(selectedChar) {
+	mdbgHwIme = new MdbgHwIme(divHWIme, ".https://cors-anywhere.herokuapp.com/https://www.mdbg.net/chinese/dictionary-ajax?c=hwime", function(selectedChar) {
 		var txbInput = $('#' + inputElementId);
 
 		if(txbInput.typeahead !== undefined && inputElementId == 'txt_word')
@@ -1110,7 +1111,7 @@ mdbg.PlaylistSoundPlayer = function(element) {
 // mdbg.createCrAdLightboxCn = function(ctrl, sourceId)
 // {
 // 	var content = '<div style="width: 640px; height: 440px">';
-// 	content += '	<embed src="//static.youku.com/v/swf/qplayer.swf?VideoIDS=XMzM0NTEyNzE2=&isAutoPlay=true&isShowRelatedVideo=false&embedid=-&showAd=0" quality="high" width="640" height="400" allowScriptAccess="sameDomain" type="application/x-shockwave-flash"></embed>';
+// 	content += '	<embed src="//static.youku.com/v/swf/qplayer.swf?VideoIDS=	zM0NTEyNzE2=&isAutoPlay=true&isShowRelatedVideo=false&embedid=-&showAd=0" quality="high" width="640" height="400" allowScriptAccess="sameDomain" type="application/x-shockwave-flash"></embed>';
 // 	content += '	<div style="padding-top: 5px">';
 // 	content += '		<button onclick="trackExitLink(\'mdbg.loqu8.com\', \'' + sourceId + '-lb_download-cn\'); window.location = \'https://mdbg.loqu8.com/installing.htm\'">Download</button>';	
 // 	content += '		<button onclick="trackExitLink(\'mdbg.loqu8.com\', \'' + sourceId + '-lb_moreinfo-cn\'); window.location = \'https://mdbg.loqu8.com/\'">Learn more</button>';

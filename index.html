@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Handwriting Tool</title>
+  <!-- start handwriting tool -->
+
+  <script type="text/javascript" src="scripts/handwrite-chindict.js"></script>
+  <script type="text/javascript" src="scripts/handwrite-hwime.js"></script>
+  <script src="scripts/myScripts.js"></script>
+  <script src="scripts/storageFunctions.js"></script>
+  <script src="scripts/parseCSV.js"></script>
+  <script src="scripts/storageFromBlank.js"></script>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/jquery-ui.js"></script>
+  <script src="scripts/popper.min.js"></script>
+  <script src="scripts/bootstrap.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="css/handwrite-style.css" type="text/css">
+  <link rel="stylesheet" href="css/myCss.css">
+
+
+</head>
+
+<body>
+
+  <h1 class="display-3">Chinese Learning Assistant</h1>
+  <div id="banner">
+    <span class="display-1">希望</span>
+  </div>
+  <!-- Nav tabs -->
+  <ul id="nav" class="nav nav-tabs nav-justified">
+    <li class="nav-item">
+      <a class="nav-link active" href="#pinReviewCont">Review</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#ime_wrapper">Draw</a>
+    </li>
+  </ul>
+  <div id="container">
+
+    <div id="pinReviewCont" class="tab-pane active">
+      <h1>Review :</h1>
+      <div id="dvReview">
+
+        <select id="rLevel" class="form-control-sm">
+          <option id="rLevel0" value="0">Level 0 </option>
+          <option id="rLevel1" value="1">Level 1</option>
+          <option id="rLevel2" value="2">Level 2</option>
+          <option id="rLevel3" value="3">Level 3</option>
+          <option id="rLevel4" value="4">Consult </option>
+        </select>
+      </div><br>
+      <button class="btn btn-outline-dark" id="btnPrev"><span id="ionPrev" class="ion ion-back"></span></button>
+      <button id="btnHint" class="btn btn-outline-dark">Hint <span id="ionHint" class="ion ion-hint"></span></button>
+      <button class="btn btn-outline-dark" id="btnNext"><span id="ionNext" class="ion ion-next"></span></button>
+      <br>
+      <br>
+      <h2 id="pinyin" data-toggle="popover" title="<p align='center'>Edit this entry:</p>" data-html="true" data-placement="bottom">&nbsp;</h2><sup
+        id="idDisplay"></sup>
+
+      <p id="pDefNchar">&nbsp;</p>
+
+      <span id="combTitle">COMBINATIONS:</span><br>
+      <button class="btn btn-outline-dark" id="btnCombS">Short <span id="ionCombShort" class="ion ion-short"></span></button>
+      <button class="btn btn-outline-dark" id="btnCombL">Long <span id="ionCombLong" class="ion ion-long"></span></button>
+      <button class="btn btn-outline-dark" id="btnCombH">Hint <span id="ionCombHint" class="ion ion-hint"></span></button>
+      <p id="pComb">&nbsp;</p>
+      <div id="dvPcombHint">
+        <p id="pHint">&nbsp;</p>
+      </div><br>
+      <footer>
+        <img id="git" alt="GitHub" title="GitHub" src="images/github.png" alt="GitHub">
+        <span>Project repository hosted at <br><a href="https://github.com/mikebendorf11">GitHub.com </a>&copy; 2018 MB</span><br>
+        <p></p>
+
+      </footer>
+    </div>
+    <div id="ime_wrapper" class="tab-pane">
+      <h1>Draw :</h1>
+      <div id="ime_word">
+        <div id="hwime_txt_word">
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+</body>
+
+</html>

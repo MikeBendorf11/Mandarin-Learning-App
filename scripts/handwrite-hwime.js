@@ -49,8 +49,8 @@ function MdbgHwIme(element, serverUrl, onCharSelected, onClose) {
 // 		'		<div class="mdbghwime-next-page-button mdbghwime-button ion-arrow-down-b" title="Next page"></div>' +
 // 		'	</div>' +
 		'	<div class="mdbghwime-result">' +
-		'		<span class="mdbghwime-loading-indicator"><span class="ion-loop"></span></span>' +
-		'		<span class="mdbghwime-error-indicator"><span class="ion-alert"></span></span>' +
+		'		<span class="mdbghwime-loading-indicator"><span class="ion ion-loop"></span></span>' +
+		'		<span class="mdbghwime-error-indicator"><span class="ion ion-alert"></span></span>' +
 		
 		'		<div></div>' +
 		'	</div>' +
@@ -165,11 +165,11 @@ function MdbgHwIme(element, serverUrl, onCharSelected, onClose) {
 		self.onClose();
 	});
 	
-	window.onresize = function() {
-		self.adjustMdbgHwImeGridOffsets();
-		//this.mdbgHwImeGrid.clear();
-	//	this.drawAll();
-	}
+	// window.onresize = function() {
+	// 	//self.adjustMdbgHwImeGridOffsets();
+	// 	//this.mdbgHwImeGrid.clear();
+	// //	this.drawAll();
+	// }
 
 	this.colors = new Array();
 	this.clearAll();
@@ -653,7 +653,7 @@ MdbgHwImeGrid.prototype.clear = function() {
 	this.context.clearRect(0, 0, this.size, this.size);
 
 	this.color = "#c0c0c0";
-	this.lineWidth = 0.7;
+	this.lineWidth = 2.5;
 
 	// this.startLine(0, 0);
 	// this.drawLine(this.size, this.size);

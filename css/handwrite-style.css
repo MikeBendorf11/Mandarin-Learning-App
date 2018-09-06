@@ -1688,7 +1688,7 @@ div.lightbox > div a:hover {
 }
 .mdbghwime-loading-indicator span {
 	position: absolute;
-	left: 78px;
+	left: -60px;
 	line-height: 256px;
 	font-size: 200px;
 	opacity: 0.15;
@@ -1697,7 +1697,7 @@ div.lightbox > div a:hover {
 .mdbghwime-error-indicator span {
 	color: red;
 	position: absolute;
-	left: 118px;
+	left: -25px;
 	line-height: 256px;
 	font-size: 200px;
 	opacity: 0.4;
