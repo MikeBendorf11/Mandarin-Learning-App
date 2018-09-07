@@ -15,10 +15,7 @@ function setCookie(name, value) {
   date.setTime((new Date()).getTime() + 1000 * 60 * 60 * 24 * 365);
   document.cookie = escape(name) + '=' + escape(value) + ';expires=' + date.toGMTString();
 }
-/**
- * todo: 
- * display completion of roulette of chars (end fo review)
- */
+
 var unitState;
 function UnitState() { }
 /**Finds the paragraph related to unit member 
@@ -58,7 +55,6 @@ UnitState.prototype.update = function (element) {
     if (this.char) {
       unitMember = unit.char;
       if (this.compare(content, unitMember)) {
-        console.log('here');
         unit.char = content;
       }
     }
@@ -128,6 +124,14 @@ UnitState.prototype.update = function (element) {
     }
   }
   saveToIndexedDB(dbName, unit);
+  //update units so we don't have to reload page or load units from db again
+  units[unit.id].char =unit.char ;
+  units[unit.id].pronunciation = unit.pronunciation;
+  units[unit.id].combinations.short = unit.combinations.short;
+  units[unit.id].combinations.long = unit.combinations.long;
+  units[unit.id].definitions.single = unit.definitions.single;
+  units[unit.id].definitions.short = unit.definitions.short;
+  units[unit.id].definitions.long = unit.definitions.long;
 }
 UnitState.prototype.compare = function (content, unitMember) {
   //delete html double or single spaces
@@ -148,8 +152,11 @@ UnitState.prototype.compare = function (content, unitMember) {
     return false;
   }
 }
-//determines db existence and creation
-//starts from id 0 or checks cookies for last review level and id
+
+/**
+ * determines db existence and creation, 
+ * starts from id 0 or checks cookies for last review level and id
+ */
 function AppState(dbStatus) {
   self = this;
   this.get = function () {
@@ -179,12 +186,12 @@ function AppState(dbStatus) {
 window.onload = function () {
 
   //to be send to nextIdx by event handler
-  var index = { defNChar: 0, shortComb: 0, longComb: 0 }
+  var index;
 
   //load handwriting tool and hide the result box
   enableHWIme('txt_word');
 
-  
+
 
   //handwriting panel events
   $(document.body).on('click', '#btnHintDraw', function () {
@@ -283,6 +290,8 @@ window.onload = function () {
     aDefNchar = [];
     aDefNchar.push(unit.char);
     aDefNchar = aDefNchar.concat(unit.definitions.single);
+    index = { defNChar: 0, shortComb: 0, longComb: 0 }
+    // console.log(aDefNchar);
     pinyin.style.color = 'transparent';
     $("#pinyin").html(unit.pronunciation);
     $(pinyin).animate({ color: 'black' }, 1000);
@@ -397,7 +406,7 @@ window.onload = function () {
   }
 
 
-  rLevel.onchange = function(event){
+  rLevel.onchange = function (event) {
     console.log();
     $(pinyin).popover('hide');
     var lv = event.target.value;
@@ -406,9 +415,9 @@ window.onload = function () {
   }
 
   //review tab events
-  pinReviewCont.onclick = function (event) {   
+  pinReviewCont.onclick = function (event) {
     var target = event.target;
-     
+
     //buttons pressed
     if (target.id == 'btnNext') {
       $(pinyin).popover('hide');
@@ -486,7 +495,7 @@ window.onload = function () {
     target.id == 'ionCombShort' ? btnCombS.click() : null;
     target.id == 'ionCombLong' ? btnCombL.click() : null;
     target.id == 'ionCombHint' ? btnCombH.click() : null;
-    
+
   }
 
   $(document.body).on('click', '#sLevel', function () {
@@ -550,8 +559,8 @@ window.onload = function () {
     //call google translate or display db def
     if (!definition || combination.trim() == '' || definition.trim() == '') {
       gTranslate(combination.trim())
-      .then(data => display2.innerHTML = data)
-      .catch(data => display2.innerHTML = data);
+        .then(data => display2.innerHTML = data)
+        .catch(data => display2.innerHTML = data);
       $('[data-toggle="tooltip"]').tooltip();
     }
 
@@ -598,8 +607,8 @@ window.onload = function () {
 
 
   //same but runs on onload
-  if (window.innerWidth < 579) {
-    
+  if (window.innerWidth < 651) {
+
     container.classList.add('tab-content');
     var hwimeResult = document.querySelector('.mdbghwime-result');
     hwimeResult.style.display = 'none';
@@ -611,9 +620,9 @@ window.onload = function () {
     $(this).tab('show');
     //enableHWIme('txt_word');
     mdbgHwIme.adjustMdbgHwImeGridOffsets()
-    setTimeout(()=> window.scrollTo(0, 0), 30);
-  });  
-  
+    setTimeout(() => window.scrollTo(0, 0), 30);
+  });
+
   //when maximizing from small window size
   // $(window).bind('resize', function() {
   //   enableHWIme('txt_word');
@@ -624,23 +633,23 @@ window.onload = function () {
   height = window.innerHeight;
 }
 var width, height;
-function toggleDiv(element){
-  if(element.style.display == ''){
+function toggleDiv(element) {
+  if (element.style.display == '') {
     element.style.display = 'none';
   }
-  else if ( element.style.display == 'none'){
+  else if (element.style.display == 'none') {
     element.style.display = ''
-  } 
+  }
 }
 window.onresize = function () {
   mdbgHwIme.adjustMdbgHwImeGridOffsets()
   //android
-  if(width != window.width){
+  if (width != window.width) {
     var hwimeResult = document.querySelector('.mdbghwime-result');
     hwimeResult.style.display = 'none';
   }
-  
-  if (window.innerWidth < 579) {
+
+  if (window.innerWidth < 651) {
     container.classList.add('tab-content');
   } else {
     container.classList.remove('tab-content');

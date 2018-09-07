@@ -30,7 +30,7 @@ function enableHWIme(inputElementId) {
 	var divHWIme = $('#hwime_' + inputElementId);
 	divHWIme.show();
 
-	mdbgHwIme = new MdbgHwIme(divHWIme, ".https://cors-anywhere.herokuapp.com/https://www.mdbg.net/chinese/dictionary-ajax?c=hwime", function(selectedChar) {
+	mdbgHwIme = new MdbgHwIme(divHWIme, "https://cors-anywhere.herokuapp.com/https://www.mdbg.net/chinese/dictionary-ajax?c=hwime", function(selectedChar) {
 		var txbInput = $('#' + inputElementId);
 
 		if(txbInput.typeahead !== undefined && inputElementId == 'txt_word')

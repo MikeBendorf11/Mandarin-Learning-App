@@ -148,7 +148,7 @@ button{
   margin: 0 2px 16px;  
 }
 .btn-outline-dark{
-  background-color: rgb(255, 255, 255, 0.25);
+  background-color: rgba(255, 255, 255, 0.25);
   font-weight: 450
 }
 .btn-outline-dark:hover{
@@ -161,6 +161,7 @@ button{
   font-size: 35px;
 }
 p{
+  background-color: rgba(255, 255, 255, 0.3);
   text-overflow: ellipsis; 
   z-index: 99;
 }
@@ -170,7 +171,7 @@ p{
   top: -17px;
 }
 p:not(#pHint){
-  background-color: rgb(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.3);
   color: #007bff;
   margin-bottom: 10px;
   font-weight: 560;
@@ -178,9 +179,10 @@ p:not(#pHint){
 }
 
 select{
-  background-color: rgb(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.4);
   padding-bottom: 10px;
 }
+
 
 
 #pinReviewCont #pinyin{
@@ -249,7 +251,7 @@ select{
     margin-top: 10%;
     width: 100%;
   }
-  #pinReviewCont footer{display: none}
+  #pinReviewCont footer{order: -1;}
   h1{
     font-size: 22.5px
   }
@@ -272,19 +274,30 @@ select{
 }
 @media screen and (max-width:640px){
   
-  body{
-    /* display: none; android landscape */
-  }
+
   .display-3{ 
     margin: 0; 
     left: 10px
   }
   #pinReviewCont{
-    min-height: 350px;
+    min-height: 450px;
+  }
+  .nav{
+    display: block;
+    margin-top: 55px;
+  }
+  .nav-item{
+    display: inline-block;
+    width: 45%
+  }
+  #banner{
+    display: none;
+    
   }
 }
 
 @media screen and (max-width:540px){
+  
   .display-3{
     font-size: 30px;
     margin: 10px;
@@ -315,24 +328,15 @@ select{
     font-size: 25px;
   }
   #pinReviewCont{ 
+    
     /* background-position: -20px -30px ; */
     background-size: 100%;
     /* margin: 0; */
-    margin-top: 30px; 
+    margin-top: -110px; 
     /* min-height: 70vh; */
   }
-  #banner{
-    display: none;
-    
-  }
-  .nav{
-    display: block;
-    margin-top: 55px;
-  }
-  .nav-item{
-    display: inline-block;
-    width: 45%
-  }
+
+
   #rLevel{
     left: 15px;
   }
