@@ -1,13 +1,17 @@
-### Chinese Learning Assistant
+## Chinese Learning Assistant
 
-[mb11.info/chapp/](http://mb11.info/chapp/)
+Hosted at: [mb11.info/chapp/](http://mb11.info/chapp/)
 
-- All it does is help you learn Chinese **online or offline**. 
-- Using the buttons, you can jump between different pronunciation difficulty **levels** while trying to guess the character(s) **combinations**.
-- You can also **add** sentences, definitions and test your **drawing** skills.
-- The next feature I want to add is external JSON storage, sentence and character review modes, and some fancy visual feedback for if you choose the correct answers.
-- Web Workers and sentence mining is definitely a must, because it will save me a lot of learning time. 
-- I created this project while studying for the [WebApp Microsoft Certification 70_480](https://www.microsoft.com/en-ca/learning/exam-70-480.aspx) 
+- It helps you learn Chinese online or offline. 
+- Using the buttons, you can jump between different pronunciation difficulty levels while trying to guess the character(s) combinations.
+- You can also add sentences, definitions and test your drawing skills.
+- I created this project while studying for the [WebApp Microsoft Certification 70_480](https://www.microsoft.com/en-ca/learning/exam-70-480.aspx).
+
+*Comming next...*
+
+- External JSON storage, sentence and character review modes, and some fancy visual feedback for if you choose the correct answers.
+- Web Workers and sentence mining is definitely a must.
+
 
 #### Back-end
 I used prototypes, Ajax calls, Google Translate API, IndexedDB API, cookies, event handling, delegation, and event bubbling.
