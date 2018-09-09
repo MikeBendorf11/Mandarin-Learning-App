@@ -1,7 +1,4 @@
-
-
 body{
-  overscroll-behavior: none;
   background: rgb(232,232,232);
 background: linear-gradient(10deg, rgba(232,232,202,1) 18%, rgba(255,255,255,1) 31%);
 }
@@ -56,7 +53,6 @@ background: linear-gradient(300deg,
 #ime_wrapper h1{
   transform: scale(1.1);
 }
-
 #pinReviewCont{
   flex: 50%;
   transform: scale(1.2);
@@ -70,12 +66,10 @@ background: linear-gradient(300deg,
   background-repeat: no-repeat;
   background-position: 0px 12px;
 }
-
 footer{
   transform: scale(0.8);
   text-align: left;
 }
-
 #git{
   float: left;
   width: 50px;
@@ -92,7 +86,6 @@ h2{
   display: inline-block;
   margin: 0px 0 10px 0 0;
 }
-
 @font-face{
   font-family: 'fnt_pronunciation';
   src: url(../font/Chonburi-Regular.ttf)
@@ -108,7 +101,6 @@ h2{
   line-height: 1;
   z-index: -99;
 }
-
 .ion-hint:before {
 	content: "\f101";
 }
@@ -144,7 +136,6 @@ h2{
 .ion-loop:before {
 	content: "\f201";
 }
-
 button{
   margin: 0 2px 16px;  
 }
@@ -176,16 +167,11 @@ p:not(#pHint){
   color: #007bff;
   margin-bottom: 10px;
   font-weight: 560;
-  
 }
-
 select{
   background-color: rgba(255, 255, 255, 0.4);
   padding-bottom: 10px;
 }
-
-
-
 #pinReviewCont #pinyin{
   font-family: 'fnt_pronunciation';
   
@@ -197,7 +183,6 @@ select{
   color: rgb(95, 95, 95);
   background-color: rgb(255, 255, 255, 0.3);
 }
-
 /* preserves bgcolor when hidding def*/
 #dvPcombHint{
   height: 25px;
@@ -212,20 +197,15 @@ select{
 #pinReviewCont #dvConsult{
   display: inline-block;
 }
-
 .nav{
   display: none;
 }
-
 .mdbghwime-result{
   /* visibility: hidden; */
 }
-
-
 @media screen and (max-width:1200px){
   h1{
     font-size: 2vw;
-    
   }
   .display-3{
     margin: 0 0 0 -5%;
@@ -246,13 +226,11 @@ select{
   }
 }
 @media screen and (max-width:760px){
-  
   #pinReviewCont{
     transform: scale(1);
     margin-top: 10%;
     width: 100%;
   }
-  
   h1{
     font-size: 22.5px
   }
@@ -270,12 +248,9 @@ select{
     height: 100%;
     width: 90%;
     margin: 5%;
-
   }
 }
 @media screen and (max-width:640px){
-  
-
   .display-3{ 
     margin: 0; 
     left: 10px
@@ -293,12 +268,10 @@ select{
   }
   #banner{
     display: none;
-    
   }
 }
 
 @media screen and (max-width:540px){
-  
   .display-3{
     font-size: 30px;
     margin: 10px;
@@ -307,6 +280,7 @@ select{
     background: none;
   }
   #container{
+    justify-content: flex-start;
     border-style: none;
     width: 100%; 
     height: 660px;
@@ -318,31 +292,24 @@ select{
     rgba(252,229,148,.95) 28%,
     rgba(255,255,255,.85) 62%),
     url(../images/text.svg) -61% -5% / 70%;
-    
   }
   #container h1{
     visibility: hidden;
-    
   }
   .display-3{
     left: 15px;
     font-size: 25px;
+    
   }
   #pinReviewCont{ 
-    
-    /* background-position: -20px -30px ; */
     background-size: 100%;
-    /* margin: 0; */
-    margin-top: -160px; 
-    /* min-height: 70vh; */
+    margin-top: 5%; 
+    
   }
-
-
   #rLevel{
     left: 15px;
   }
   #ime_wrapper{
     height: 500px;
   }
-
 }

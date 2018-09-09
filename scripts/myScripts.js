@@ -572,6 +572,7 @@ window.onload = function () {
   }
   async function gTranslate(phrase) {
     phrase = phrase.replace('#', '')//google doesn't like #
+    console.log(phrase); 
     var img = '<img src="images/GoogleTranslate1.png" width="30" height="25" alt="Google Translate" title="Google Translate"/>';
     var url = 'https://translation.googleapis.com/language/translate/v2' + '?q=' + encodeURIComponent(phrase) + '&target=EN' + '&key=AIzaSyA8Hupp7Bd9QuzN5yMOoWJfD_hTZQDvrPo'
 
