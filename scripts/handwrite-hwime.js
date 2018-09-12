@@ -269,12 +269,23 @@ MdbgHwIme.prototype.sendStrokesToServer = function() {
 	if (this.strokeNum > 50) {
 		return;
 	}
-	var strokeData = this.getStrokeData();
-	var self = this;
-	this.postStrokeDataToServer(strokeData, function(result) {
-		self.resultCallback(result);
-	});
+	
+	this.loadingIndicator.fadeIn(100);
+
+	clearTimeout(timeout)	
+	timeout = setTimeout(()=>{
+		
+		var strokeData = this.getStrokeData();
+		var self = this;
+		this.postStrokeDataToServer(strokeData, function(result) {
+			self.resultCallback(result);
+		});
+	}, 3000);
 }
+//for use above
+//TODO: clear this delay once character discovery is done on own server
+var timeout;
+
 MdbgHwIme.prototype.finishStroke = function() {
 	this.resetPaging();
 	if (this.point_num > 1) {

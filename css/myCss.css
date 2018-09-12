@@ -259,12 +259,11 @@ select{
     min-height: 450px;
   }
   .nav{
-    display: block;
+    display: flex;
     margin-top: 55px;
   }
   .nav-item{
-    display: inline-block;
-    width: 45%
+ 
   }
   #banner{
     display: none;

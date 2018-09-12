@@ -1,3 +1,13 @@
 
 pinyin to accent
 https://toshuo.com/chinese-tools/pinyin-tone-tool/#
+
+TODO:
+- DB clean up for empty combinations or definitions with no combination
+- Create webconfig for the app to not allow access to api key files
+- retrieve keys from files to access apis
+- google api has been set to ip restriction
+- json storage, sign in with google https://jsonbin.io/
+	- create collection per user
+	- create bin per training mode ex. pinyin review
+	
