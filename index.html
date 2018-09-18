@@ -93,13 +93,36 @@
       </div>
     </div>
     <div id="searchCont" class="tab-pane">
-      <p>Level: </p>
-      <p>Character: </p>
-      <p>Pronunciation: </p>
-      <p>Definition:</p>
-      <p>Sentences: </p>
-      <p>Expressions: </p>
-
+      
+      <table>
+        <tr>
+          <td>Level: &nbsp;<select id="seaLevel" class="form-control-sm">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+            </td>
+          <td>
+              Consult: &nbsp;&nbsp;<input type="checkbox"  id="seaConsult" style="width: 20px; height: 20px; position: relative; top: 5px;">
+          </td>
+        </tr>
+        <tr>
+          <td>
+              
+              Character: <p id="seaChar"> </p>
+              Pronunciation: <p id="seaPron"> </p>
+              Definition: <p id="seaDef"></p>
+          </td>
+          <td>
+              
+              Expressions: <p id="seaExp"></p>
+          </td>
+        </tr>
+      </table>
+      
+      
+      Sentences: <p id="seaSen"></p>
     </div>
   </div>
   

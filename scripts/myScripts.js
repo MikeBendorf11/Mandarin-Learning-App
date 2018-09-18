@@ -572,7 +572,7 @@ window.onload = function () {
   }
   async function gTranslate(phrase) {
     phrase = phrase.replace('#', '')//google doesn't like #
-    console.log(phrase); 
+    // console.log(phrase); 
     var img = '<img src="images/GoogleTranslate1.png" width="30" height="25" alt="Google Translate" title="Google Translate"/>';
     var url = 'https://translation.googleapis.com/language/translate/v2' + '?q=' + encodeURIComponent(phrase) + '&target=EN' + '&key=AIzaSyA8Hupp7Bd9QuzN5yMOoWJfD_hTZQDvrPo'
 
@@ -582,7 +582,7 @@ window.onload = function () {
       xhr.onload = function () {
         if (this.status == 200) {
           data = JSON.parse(this.responseText);
-          console.log(data.data.translations[0].translatedText);
+          // console.log(data.data.translations[0].translatedText);
           resolve(img + data.data.translations[0].translatedText);
         }
       }
@@ -602,37 +602,79 @@ window.onload = function () {
     if (index - 1 < 0) return array.length - 1;
     else return index - 1;
   }
-
-
   //window events
-
-
   //same but runs on onload
   if (window.innerWidth < 651) {
 
     container.classList.add('tab-content');
-    var hwimeResult = document.querySelector('.mdbghwime-result');
-    hwimeResult.style.display = 'none';
+    // var hwimeResult = document.querySelector('.mdbghwime-result');
+    // hwimeResult.style.display = 'none';
   } else {
     container.classList.remove('tab-content');
   }
 
   $(".nav-tabs a").click(function () {
     $(this).tab('show');
-    //enableHWIme('txt_word');
+    $(pinyin).popover('hide');
     mdbgHwIme.adjustMdbgHwImeGridOffsets()
     setTimeout(() => window.scrollTo(0, 0), 30);
   });
-
-  //when maximizing from small window size
-  // $(window).bind('resize', function() {
-  //   enableHWIme('txt_word');
-  //   hwimeResult = document.querySelector('.mdbghwime-result');
-  //   hwimeResult.style.visibility = 'visible'
-  // })
   width = window.innerWidth;
   height = window.innerHeight;
-}
+
+  setTimeout(() => {
+    $('#seaLevel').val(units[16].level);
+    seaConsult.checked = units[16].consult;
+    seaChar.innerHTML = units[16].char;
+    seaPron.innerHTML = units[16].pronunciation;
+    seaDef.innerHTML = units[16].definitions.single;
+    
+    var count = 0;
+    units[16].combinations.short.forEach((v, i)=>{
+      var exp = document.createElement('span');
+      exp.id = 'exp' + i;
+      var def = document.createElement('span');
+      def.id = 'eDef' + i;
+      exp.innerHTML =  `${count=count+1}. ${units[16].combinations.short[i]}`;
+
+      if(units[16].definitions.short[i]){ //is there a def
+        def.innerHTML = `${units[16].definitions.short[i]}`
+      } else { //no? then translate
+        gTranslate(units[16].combinations.short[i])
+        .then(data =>{
+          def.innerHTML = data;
+        })
+      }
+      seaExp.appendChild(exp);
+      seaExp.appendChild(document.createElement('br'));
+      seaExp.appendChild(def);
+      seaExp.appendChild(document.createElement('br'));
+    });
+    count = 0;
+    units[16].combinations.long.forEach((v, i)=>{
+      var sen = document.createElement('span');
+      sen.id = 'sen' + i;
+      var def = document.createElement('span');
+      def.id = 'sDef' + i;
+      sen.innerHTML  = `${count=count+1}. ${units[16].combinations.long[i]}`
+
+      if(units[16].definitions.long[i]){
+        def.innerHTML = `${units[16].definitions.long[i]}`;
+      } else {
+        gTranslate(units[16].combinations.long[i])
+        .then(data =>{
+          def.innerHTML = data;
+        })      
+      }
+      seaSen.appendChild(sen);
+      seaSen.appendChild(document.createElement('br'));
+      seaSen.appendChild(def);
+      seaSen.appendChild(document.createElement('br'));
+    }); 
+  }, 1000);
+  $('[href="#searchCont"]').click();
+}//ends window.onload
+
 var width, height;
 function toggleDiv(element) {
   if (element.style.display == '') {
