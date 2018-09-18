@@ -9,22 +9,39 @@
   <!-- start handwriting tool -->
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-  <script type="text/javascript" src="scripts/handwrite-chindict.js"></script>
-  <script type="text/javascript" src="scripts/handwrite-hwime.js"></script>
-  <script src="scripts/myScripts.js"></script>
-  <script src="scripts/storageFunctions.js"></script>
-  <script src="scripts/parseCSV.js"></script>
-  <script src="scripts/storageFromBlank.js"></script>
+
+  <!-- stop browsers auto cache -->
+  <script>
+    var scriptUrls = [
+      "scripts/handwrite-chindict.js",
+      "scripts/handwrite-hwime.js",
+      "scripts/myScripts.js",
+      "scripts/storageFunctions.js",
+      "scripts/parseCSV.js",
+      "scripts/storageFromBlank.js"
+    ]
+    scriptUrls.forEach((v, i)=>{
+      var script = document.createElement('script');
+      script.src = scriptUrls[i] + '?v=' + Date.now();
+      document.head.appendChild(script);
+    })
+
+    var cssUrls = [
+    "css/bootstrap.css",
+    "css/handwrite-style.css",
+    "css/myCss.css"
+    ]
+    cssUrls.forEach((v,i)=>{
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = cssUrls[i] + '?v=' + Date.now();
+      document.head.appendChild(link);
+    })
+  </script>
   <script src="scripts/jquery.min.js"></script>
   <script src="scripts/jquery-ui.js"></script>
   <script src="scripts/popper.min.js"></script>
   <script src="scripts/bootstrap.js"></script>
-  
-  <link rel="stylesheet" href="css/bootstrap.css">
-  <link rel="stylesheet" href="css/handwrite-style.css" type="text/css">
-  <link rel="stylesheet" href="css/myCss.css">
-
-
 </head>
 
 <body>
@@ -93,7 +110,13 @@
       </div>
     </div>
     <div id="searchCont" class="tab-pane">
-      
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">&#128270;</span>
+            </div>
+            <input id="seaIpt" type="text" class="form-control" placeholder="...">
+          </div>
+          
       <table>
         <tr>
           <td>Level: &nbsp;<select id="seaLevel" class="form-control-sm">
@@ -109,19 +132,15 @@
         </tr>
         <tr>
           <td>
-              
               Character: <p id="seaChar"> </p>
               Pronunciation: <p id="seaPron"> </p>
               Definition: <p id="seaDef"></p>
           </td>
           <td>
-              
               Expressions: <p id="seaExp"></p>
           </td>
         </tr>
-      </table>
-      
-      
+      </table> 
       Sentences: <p id="seaSen"></p>
     </div>
   </div>

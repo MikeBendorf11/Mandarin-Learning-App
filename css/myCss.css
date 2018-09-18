@@ -271,8 +271,14 @@ select{
     color: #007bff;
     font-weight: 700
   }
+  /*same as #searchCont, but this syncs with bootstrap specificty*/
   .tab-content > .active {
     display: block;
+  }
+  #searchCont .input-group{
+    margin-top: 10px;
+    margin-left: 50%;
+    width: 50%
   }
   #searchCont td{
     vertical-align: top;

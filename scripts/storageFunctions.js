@@ -80,3 +80,27 @@ function saveToIndexedDB(storeName, object){
     }
   );
 }
+
+function findChar(storeName, searchStr){
+  return new Promise((resolve, reject)=>{
+    var dbRequest = indexedDB.open(storeName);
+    dbRequest.onupgradeneeded = function(event) {
+      // Objectstore does not exist. Nothing to load
+      event.target.transaction.abort();
+      resolve(false);
+    }
+    dbRequest.onerror = function(event) {
+      reject(Error("Problem while accessing DB"));
+    }
+    dbRequest.onsuccess = function(event) {
+      var database      = event.target.result;
+      var transaction   = database.transaction([storeName], 'readwrite');
+      var objectStore   = transaction.objectStore(storeName);
+      var index = objectStore.index('char').get(searchStr.trim());
+      index.onsuccess = (event) => resolve(event.target.result);
+      index.onerror =  () => reject(Error(
+        'Problem while getting index of chars'
+      ));
+    }
+  })
+}

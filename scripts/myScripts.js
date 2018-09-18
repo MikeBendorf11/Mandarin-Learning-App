@@ -570,29 +570,7 @@ window.onload = function () {
     display2.style.visibility = 'hidden';
     $(display1).animate({ color: '#007bff' }, 1000);
   }
-  async function gTranslate(phrase) {
-    phrase = phrase.replace('#', '')//google doesn't like #
-    // console.log(phrase); 
-    var img = '<img src="images/GoogleTranslate1.png" width="30" height="25" alt="Google Translate" title="Google Translate"/>';
-    var url = 'https://translation.googleapis.com/language/translate/v2' + '?q=' + encodeURIComponent(phrase) + '&target=EN' + '&key=AIzaSyA8Hupp7Bd9QuzN5yMOoWJfD_hTZQDvrPo'
-
-    var xhr = new XMLHttpRequest();
-    return new Promise((resolve, reject) => {
-      xhr.open('POST', url);
-      xhr.onload = function () {
-        if (this.status == 200) {
-          data = JSON.parse(this.responseText);
-          // console.log(data.data.translations[0].translatedText);
-          resolve(img + data.data.translations[0].translatedText);
-        }
-      }
-      xhr.onerror = function () {
-        console.log('error: ' + this.status);
-        reject(img + 'you are offline...');
-      }
-      xhr.send();
-    })
-  }
+  
   //roulette: switches to next array index or starts over
   function nextIdx(index, array) {
     if (index + 1 > array.length - 1) return 0;
@@ -623,24 +601,63 @@ window.onload = function () {
   height = window.innerHeight;
 
   setTimeout(() => {
-    $('#seaLevel').val(units[16].level);
-    seaConsult.checked = units[16].consult;
-    seaChar.innerHTML = units[16].char;
-    seaPron.innerHTML = units[16].pronunciation;
-    seaDef.innerHTML = units[16].definitions.single;
+    
+  }, 1000);
+  
+  $('[href="#searchCont"]').click();
+
+
+  
+  
+}//ends window.onload
+async function gTranslate(phrase) {
+  phrase = phrase.replace('#', '')//google doesn't like #
+  // console.log(phrase); 
+  var img = '<img src="images/GoogleTranslate1.png" width="30" height="25" alt="Google Translate" title="Google Translate"/>';
+  var url = 'https://translation.googleapis.com/language/translate/v2' + '?q=' + encodeURIComponent(phrase) + '&target=EN' + '&key=AIzaSyA8Hupp7Bd9QuzN5yMOoWJfD_hTZQDvrPo'
+
+  var xhr = new XMLHttpRequest();
+  return new Promise((resolve, reject) => {
+    xhr.open('POST', url);
+    xhr.onload = function () {
+      if (this.status == 200) {
+        data = JSON.parse(this.responseText);
+        // console.log(data.data.translations[0].translatedText);
+        resolve(img + data.data.translations[0].translatedText);
+      }
+    }
+    xhr.onerror = function () {
+      console.log('error: ' + this.status);
+      reject(img + 'you are offline...');
+    }
+    xhr.send();
+  })
+}
+seaIpt.oninput = () =>{
+  console.log('iptchange');
+  findChar(dbName, seaIpt.value).then(result=>{
+    displaySearch(result)
+  })
+}
+function displaySearch(input){
+  $('#seaLevel').val(input.level);
+    seaConsult.checked = input.consult;
+    seaChar.innerHTML = input.char;
+    seaPron.innerHTML = input.pronunciation;
+    seaDef.innerHTML = input.definitions.single;
     
     var count = 0;
-    units[16].combinations.short.forEach((v, i)=>{
+    input.combinations.short.forEach((v, i)=>{
       var exp = document.createElement('span');
       exp.id = 'exp' + i;
       var def = document.createElement('span');
       def.id = 'eDef' + i;
-      exp.innerHTML =  `${count=count+1}. ${units[16].combinations.short[i]}`;
+      exp.innerHTML =  `${count=count+1}. ${input.combinations.short[i]}`;
 
-      if(units[16].definitions.short[i]){ //is there a def
-        def.innerHTML = `${units[16].definitions.short[i]}`
+      if(input.definitions.short[i]){ //is there a def
+        def.innerHTML = `${input.definitions.short[i]}`
       } else { //no? then translate
-        gTranslate(units[16].combinations.short[i])
+        gTranslate(input.combinations.short[i])
         .then(data =>{
           def.innerHTML = data;
         })
@@ -651,17 +668,17 @@ window.onload = function () {
       seaExp.appendChild(document.createElement('br'));
     });
     count = 0;
-    units[16].combinations.long.forEach((v, i)=>{
+    input.combinations.long.forEach((v, i)=>{
       var sen = document.createElement('span');
       sen.id = 'sen' + i;
       var def = document.createElement('span');
       def.id = 'sDef' + i;
-      sen.innerHTML  = `${count=count+1}. ${units[16].combinations.long[i]}`
+      sen.innerHTML  = `${count=count+1}. ${input.combinations.long[i]}`
 
-      if(units[16].definitions.long[i]){
-        def.innerHTML = `${units[16].definitions.long[i]}`;
+      if(input.definitions.long[i]){
+        def.innerHTML = `${input.definitions.long[i]}`;
       } else {
-        gTranslate(units[16].combinations.long[i])
+        gTranslate(input.combinations.long[i])
         .then(data =>{
           def.innerHTML = data;
         })      
@@ -671,10 +688,7 @@ window.onload = function () {
       seaSen.appendChild(def);
       seaSen.appendChild(document.createElement('br'));
     }); 
-  }, 1000);
-  $('[href="#searchCont"]').click();
-}//ends window.onload
-
+}
 var width, height;
 function toggleDiv(element) {
   if (element.style.display == '') {
