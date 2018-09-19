@@ -20,18 +20,18 @@
       "scripts/parseCSV.js",
       "scripts/storageFromBlank.js"
     ]
-    scriptUrls.forEach((v, i)=>{
+    scriptUrls.forEach((v, i) => {
       var script = document.createElement('script');
       script.src = scriptUrls[i] + '?v=' + Date.now();
       document.head.appendChild(script);
     })
 
     var cssUrls = [
-    "css/bootstrap.css",
-    "css/handwrite-style.css",
-    "css/myCss.css"
+      "css/bootstrap.css",
+      "css/handwrite-style.css",
+      "css/myCss.css"
     ]
-    cssUrls.forEach((v,i)=>{
+    cssUrls.forEach((v, i) => {
       var link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = cssUrls[i] + '?v=' + Date.now();
@@ -46,7 +46,7 @@
 
 <body>
 
-  <h1 class="display-3">Chinese Learning Assistant</h1>
+  <h1 class="display-3">Mandarin Learning Assistant</h1>
   <div id="banner">
     <span class="display-1">希望</span>
   </div>
@@ -67,8 +67,7 @@
     <div id="pinReviewCont" class="tab-pane active">
       <h1>Review :</h1>
       <div id="dvReview">
-
-        <select id="rLevel" class="form-control-sm">
+        <select id="rLevel" class="form-control">
           <option id="rLevel0" value="0">Level 0 </option>
           <option id="rLevel1" value="1">Level 1</option>
           <option id="rLevel2" value="2">Level 2</option>
@@ -96,7 +95,8 @@
       </div><br>
       <footer id="footPc">
         <img id="git" alt="GitHub" title="GitHub" src="images/github.png" alt="GitHub">
-        <span>More info at <a href="https://github.com/mikebendorf11/Chinese-Learning-App">GitHub.com </a> Copyright &copy; 2018 MB</span><br>
+        <span>More info at <a href="https://github.com/mikebendorf11/Chinese-Learning-App">GitHub.com </a> Copyright &copy;
+          2018 MB</span><br>
         <p></p>
       </footer>
     </div>
@@ -110,13 +110,15 @@
       </div>
     </div>
     <div id="searchCont" class="tab-pane">
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon1">&#128270;</span>
-            </div>
-            <input id="seaIpt" type="text" class="form-control" placeholder="...">
-          </div>
-          
+      <div class="input-group mb-3">
+
+        <input id="seaIpt" type="text" class="form-control">
+        <div class="input-group-prepend">
+          <span id="ionSea" class="input-group-text  ion-search"></span>
+
+        </div>
+      </div>
+
       <table>
         <tr>
           <td>Level: &nbsp;<select id="seaLevel" class="form-control-sm">
@@ -125,26 +127,31 @@
               <option value="2">2</option>
               <option value="3">3</option>
             </select>
-            </td>
+          </td>
           <td>
-              Consult: &nbsp;&nbsp;<input type="checkbox"  id="seaConsult" style="width: 20px; height: 20px; position: relative; top: 5px;">
+            Consult: &nbsp;&nbsp;<input type="checkbox" id="seaConsult" style="width: 20px; height: 20px; position: relative; top: 5px;">
           </td>
         </tr>
         <tr>
           <td>
-              Character: <p id="seaChar"> </p>
-              Pronunciation: <p id="seaPron"> </p>
-              Definition: <p id="seaDef"></p>
+            Character:
+            <p id="seaChar"> </p>
+            Pronunciation:
+            <p id="seaPron"> </p>
+            Definition:
+            <p id="seaDef"></p>
           </td>
           <td>
-              Expressions: <p id="seaExp"></p>
+            Expressions:
+            <p id="seaExp"></p>
           </td>
         </tr>
-      </table> 
-      Sentences: <p id="seaSen"></p>
+      </table>
+      Sentences:
+      <p id="seaSen"></p>
     </div>
   </div>
-  
+
 </body>
 
 </html>

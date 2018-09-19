@@ -97,7 +97,11 @@ function findChar(storeName, searchStr){
       var transaction   = database.transaction([storeName], 'readwrite');
       var objectStore   = transaction.objectStore(storeName);
       var index = objectStore.index('char').get(searchStr.trim());
-      index.onsuccess = (event) => resolve(event.target.result);
+      
+      index.onsuccess = (event) => {
+        console.log(event.target.result);
+        resolve(event.target.result);
+      }
       index.onerror =  () => reject(Error(
         'Problem while getting index of chars'
       ));

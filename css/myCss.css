@@ -139,10 +139,24 @@ h2{
 .ion-loop:before {
 	content: "\f201";
 }
+.ion-search:before{
+  font-family: "Ionicons";
+  content: "\f21f"
+}
+
+.input-group-text, #seaIpt{
+  background-color: white;
+  border-color: #ced4da;
+}
+#seaIpt{
+  border-right: 0px;
+  
+}
 button{
   margin: 0 2px 16px;  
 }
 .btn-outline-dark{
+  box-shadow: 2px 2px 4px rgba(0,0,0, 0.4);
   background-color: rgba(255, 255, 255, 0.25);
   font-weight: 450
 }
@@ -193,15 +207,19 @@ select{
   background-color: rgb(255, 255, 255, 0.3);
 }
 #rLevel{
+  font-size: 1rem;
+  font-weight: 400;
   margin-bottom: -4px;
-  position: relative;
-  top: -4px
+
 }
 #pinReviewCont #dvConsult{
   display: inline-block;
 }
 .nav{
   display: none;
+}
+.nav-item a{
+  color: #495057;
 }
 .mdbghwime-result{
   /* visibility: hidden; */
@@ -282,6 +300,7 @@ select{
     margin-left: 50%;
     width: 50%
   }
+
   #searchCont td{
     vertical-align: top;
     width: 50%;
@@ -331,7 +350,7 @@ select{
   .display-3{
     left: 15px;
     font-size: 25px;
-    
+    font-weight: 350;
   }
   #pinReviewCont{ 
     background-size: 100%;
@@ -339,9 +358,8 @@ select{
     
   }
   #rLevel{
-    left: 15px;
+    margin-left: 45px;
+    width: 110px;
   }
-  #ime_wrapper{
-    
-  }
+
 }

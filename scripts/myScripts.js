@@ -611,8 +611,10 @@ window.onload = function () {
   
 }//ends window.onload
 async function gTranslate(phrase) {
+//  console.log('here');
+  if(!phrase) return new Promise(res => res(''));
   phrase = phrase.replace('#', '')//google doesn't like #
-  // console.log(phrase); 
+  
   var img = '<img src="images/GoogleTranslate1.png" width="30" height="25" alt="Google Translate" title="Google Translate"/>';
   var url = 'https://translation.googleapis.com/language/translate/v2' + '?q=' + encodeURIComponent(phrase) + '&target=EN' + '&key=AIzaSyA8Hupp7Bd9QuzN5yMOoWJfD_hTZQDvrPo'
 
@@ -634,26 +636,27 @@ async function gTranslate(phrase) {
   })
 }
 seaIpt.oninput = () =>{
-  findChar(dbName, seaIpt.value).then(result=>{
-    result ? displaySearch(result): (()=>{
-      $('#seaLevel').val(0);
-      seaConsult.checked = false;
-      seaChar.innerHTML = '';
-      seaPron.innerHTML = '';
-      seaDef.innerHTML = '';
-      seaSen.innerHTML = '';
-      seaExp.innerHTML = '';
-    })();
+  if(!seaIpt.value.trim()) return;
+  
+  findChar(dbName, seaIpt.value).then(result=>{ 
+    $('#seaLevel').val(0);
+    seaConsult.checked = false;
+    seaChar.innerHTML = '';
+    seaPron.innerHTML = '';
+    seaDef.innerHTML = '';
+    seaSen.innerHTML = '';
+    seaExp.innerHTML = '';
+    result ? displaySearch(result): null;
   })
 }
+
 function displaySearch(input){
   $('#seaLevel').val(input.level);
     seaConsult.checked = input.consult;
     seaChar.innerHTML = input.char;
     seaPron.innerHTML = input.pronunciation;
     seaDef.innerHTML = input.definitions.single;
-    
-    
+
     var count = 0;
     input.combinations.short.forEach((v, i)=>{
       var exp = document.createElement('span');
@@ -662,7 +665,7 @@ function displaySearch(input){
       def.id = 'eDef' + i;
       exp.innerHTML =  `${count=count+1}. ${input.combinations.short[i]}`;
 
-      if(input.definitions.short[i]){ //is there a def
+      if(input.definitions.short[i].trim()){ //is there a def
         def.innerHTML = `${input.definitions.short[i]}`
       } else { //no? then translate
         gTranslate(input.combinations.short[i])
@@ -683,7 +686,7 @@ function displaySearch(input){
       def.id = 'sDef' + i;
       sen.innerHTML  = `${count=count+1}. ${input.combinations.long[i]}`
 
-      if(input.definitions.long[i]){
+      if(input.definitions.long[i].trim()){
         def.innerHTML = `${input.definitions.long[i]}`;
       } else {
         gTranslate(input.combinations.long[i])
