@@ -634,9 +634,16 @@ async function gTranslate(phrase) {
   })
 }
 seaIpt.oninput = () =>{
-  console.log('iptchange');
   findChar(dbName, seaIpt.value).then(result=>{
-    displaySearch(result)
+    result ? displaySearch(result): (()=>{
+      $('#seaLevel').val(0);
+      seaConsult.checked = false;
+      seaChar.innerHTML = '';
+      seaPron.innerHTML = '';
+      seaDef.innerHTML = '';
+      seaSen.innerHTML = '';
+      seaExp.innerHTML = '';
+    })();
   })
 }
 function displaySearch(input){
@@ -645,6 +652,7 @@ function displaySearch(input){
     seaChar.innerHTML = input.char;
     seaPron.innerHTML = input.pronunciation;
     seaDef.innerHTML = input.definitions.single;
+    
     
     var count = 0;
     input.combinations.short.forEach((v, i)=>{
