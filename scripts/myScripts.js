@@ -123,18 +123,24 @@ UnitState.prototype.update = function (element) {
       }
     }
   }
-  saveToIndexedDB(dbName, unit);
-  //update units so we don't have to reload page or load units from db again
-  units[unit.id].char =unit.char ;
-  units[unit.id].pronunciation = unit.pronunciation;
-  units[unit.id].combinations.short = unit.combinations.short;
-  units[unit.id].combinations.long = unit.combinations.long;
-  units[unit.id].definitions.single = unit.definitions.single;
-  units[unit.id].definitions.short = unit.definitions.short;
-  units[unit.id].definitions.long = unit.definitions.long;
+  pushChanges();
 }
+
 UnitState.prototype.compare = function (content, unitMember) {
   //delete html double or single spaces
+
+  // var reg = /(&nbsp;)|(&lt;)[^(&gt;)]*(&gt;)/g;
+  // var myArray;
+  // while ((myArray = reg.exec(content)) !== null) {
+  //   console.log(myArray);
+  // }
+  // var reg2 = new RegExp('(&nbsp;)');
+  // console.log(reg2.exec(content));
+  // var myArray2;
+  // while ((myArray2 = reg2.exec(content)) !== null) {
+  //   console.log(myArray2);
+  // }
+
   var matches = new RegExp('(&nbsp;)').exec(content)
 
   if (matches) {
@@ -142,13 +148,13 @@ UnitState.prototype.compare = function (content, unitMember) {
     matches.forEach(match => content = content.replace(match, ''));
   }
 
-  console.log(unitMember + ' vs ' + content);
+  //console.log(unitMember + ' vs ' + content);
   if (unitMember.trim() != content.trim()) {
-    console.log('push to db');
+    //console.log('push to db: ' + content);
     return true;
   }
   else {
-    console.log('do nothing');
+    //console.log('do nothing');
     return false;
   }
 }
@@ -183,22 +189,28 @@ function AppState(dbStatus) {
     })
   }
 }
+//Used when adding data to db and updating the interface
+function pushChanges(){
+  units[unit.id].char =unit.char ;
+  units[unit.id].consult = unit.consult;
+  units[unit.id].level = unit.level;
+  units[unit.id].pronunciation = unit.pronunciation;
+  units[unit.id].combinations.short = unit.combinations.short;
+  units[unit.id].combinations.long = unit.combinations.long;
+  units[unit.id].definitions.single = unit.definitions.single;
+  units[unit.id].definitions.short = unit.definitions.short;
+  units[unit.id].definitions.long = unit.definitions.long;
+  saveToIndexedDB(dbName, units[unit.id]);
+}
 window.onload = function () {
-
   //to be send to nextIdx by event handler
   var index;
-
   //load handwriting tool and hide the result box
   enableHWIme('txt_word');
-
-
-
   //handwriting panel events
   $(document.body).on('click', '#btnHintDraw', function () {
     hwimeResult = document.querySelector('.mdbghwime-result');
-
     toggleDiv(hwimeResult);
-
   })
 
   checkDbExists(dbName).then(res => {
@@ -208,10 +220,11 @@ window.onload = function () {
     loadChar(state.charId, state.rLevel)
     unitState = new UnitState();
   })
-  //TODO:
-  //add search box and use char index on it, search on db instead?
+
   function loadChar(id, reviewLevel) {
     unit.id = units[id].id;
+    unit.consult = units[id].consult;
+    unit.level = units[id].level;
     unit.char = units[id].char;
     unit.pronunciation = units[id].pronunciation;
     unit.combinations.short = units[id].combinations.short;
@@ -235,48 +248,7 @@ window.onload = function () {
         a.push('')
       unit.definitions.long = a;
     }
-
-    //Level select and child option elements
-    var sLevel = document.createElement('select');
-    sLevel.setAttribute('id', 'sLevel');
-    sLevel.classList.add('form-control-sm')
-    for (let i = 0; i < 4; i++) {
-      var option = document.createElement('option');
-      option.setAttribute('value', i)
-      if (units[id].level != i) {
-        option.removeAttribute('selected');
-      } else {
-        option.setAttribute('selected', '');
-      }
-      option.innerHTML = i;
-      sLevel.appendChild(option);
-    }
-
-    //checkbox creation and attrs
-    var cbConsult = document.createElement('input');
-    cbConsult.setAttribute('id', 'cbConsult');
-    cbConsult.setAttribute('type', 'checkbox');
-    if (units[id].consult == true) {
-      cbConsult.setAttribute('checked', '')
-    } else {
-      cbConsult.removeAttribute('checked');
-    }
-    Object.assign(cbConsult.style, {
-      width: '20px',
-      height: '20px',
-      position: 'relative',
-      top: '5px'
-    });
-
-    //add to popover
-    $(pinyin).popover();
-    pinyin.setAttribute('data-content',
-      '<span>Level: </span>' +
-      sLevel.outerHTML +
-      '<span>&nbsp;&nbsp;&nbsp; Consult: </span>' +
-      cbConsult.outerHTML
-    )
-
+    updatePopover();
     //set review level
     for (let i = 0; i < 5; i++) {
       rLevel = document.querySelector('#rLevel' + i);
@@ -301,7 +273,49 @@ window.onload = function () {
 
     idDisplay.innerHTML = unit.id;
   }
-
+  /**
+   * Used by loadChar on load and popover click events
+   */
+  function updatePopover(){ 
+    var sLevel = document.createElement('select');
+    sLevel.setAttribute('id', 'sLvl');
+    sLevel.classList.add('form-control-sm')
+    for (let i = 0; i < 4; i++) {
+      var option = document.createElement('option');
+      option.setAttribute('value', i)
+      if (units[unit.id].level != i) {
+        option.removeAttribute('selected');
+      } else {
+        option.setAttribute('selected', '');
+      }
+      option.innerHTML = i;
+      sLevel.appendChild(option);
+    }
+    //checkbox creation and attrs
+    var cbConsult = document.createElement('input');
+    cbConsult.setAttribute('id', 'cbConsult');
+    cbConsult.setAttribute('type', 'checkbox');
+    if (units[unit.id].consult == true) {
+      cbConsult.setAttribute('checked', '')
+    } else {
+      cbConsult.removeAttribute('checked');
+    }
+    Object.assign(cbConsult.style, {
+      width: '20px',
+      height: '20px',
+      position: 'relative',
+      top: '5px'
+    });
+    //add to popover
+    $(pinyin).popover();
+    pinyin.setAttribute('data-content',
+      '<span>Level: </span>' +
+      sLevel.outerHTML +
+      '<span>&nbsp;&nbsp;&nbsp; Consult: </span>' +
+      cbConsult.outerHTML
+    )
+  }
+  /*Update view functions: current, next and prev char */
   function currentChar(level) {
     var cookieId = parseInt(getCookie('rLevel' + level + 'Id'))
     //not first load 
@@ -408,7 +422,6 @@ window.onload = function () {
 
   rLevel.onchange = function (event) {
     console.log();
-    $(pinyin).popover('hide');
     var lv = event.target.value;
     setCookie('rLevel', lv)
     currentChar(lv);
@@ -420,7 +433,6 @@ window.onload = function () {
 
     //buttons pressed
     if (target.id == 'btnNext') {
-      $(pinyin).popover('hide');
       var lv = $("#rLevel").val();
       getNextChar(lv);
       pDefNchar.setAttribute('contenteditable', 'false');
@@ -428,7 +440,6 @@ window.onload = function () {
       pHint.setAttribute('contenteditable', 'false')
     }
     else if (target.id == 'btnPrev') {
-      $(pinyin).popover('hide');
       var lv = $("#rLevel").val();
       getPrevChar(lv);
       pDefNchar.setAttribute('contenteditable', 'false');
@@ -436,7 +447,6 @@ window.onload = function () {
       pHint.setAttribute('contenteditable', 'false')
     }
     else if (target.id == 'btnHint') {
-      $(pinyin).popover('hide');
       if (aDefNchar[index.defNChar])
         pDefNchar.setAttribute('contenteditable', 'true')
       pDefNchar.style.color = 'transparent'
@@ -447,7 +457,6 @@ window.onload = function () {
 
     }
     else if (target.id == 'btnCombS') {
-      $(pinyin).popover('hide');
       unitState.locate(btnCombS, index.shortComb);
       pComb.setAttribute('contenteditable', 'true');
       showCombDef(
@@ -459,7 +468,6 @@ window.onload = function () {
       index.shortComb = nextIdx(index.shortComb, unit.combinations.short);
     }
     else if (target.id == 'btnCombL') {
-      $(pinyin).popover('hide');
       unitState.locate(btnCombL, index.longComb);
       pComb.setAttribute('contenteditable', 'true');
       pHint.setAttribute('contenteditable', 'false');
@@ -472,7 +480,6 @@ window.onload = function () {
       index.longComb = nextIdx(index.longComb, unit.combinations.long);
     }
     else if (target.id == 'btnCombH') {
-      $(pinyin).popover('hide');
       pHint.style.color = 'transparent';
       pHint.style.visibility = 'visible';
       $(pHint).animate({ color: '#212529' }, 1000);
@@ -497,17 +504,25 @@ window.onload = function () {
     target.id == 'ionCombHint' ? btnCombH.click() : null;
 
   }
-
-  $(document.body).on('click', '#sLevel', function () {
-    var lv = $('#sLevel').val();
+  
+  $(document.body).on('click', '#sLvl', function () {
+    var lv = $('#sLvl').val();
     unit.level = lv;
-    saveToIndexedDB(dbName, unit);
+    pushChanges();
+    updatePopover();
   })
   $(document.body).on('click', '#cbConsult', function () {
     var vl = cbConsult.checked;
     unit.consult = vl;
-    saveToIndexedDB(dbName, unit);
+    pushChanges();
+    updatePopover();
   })
+  $(document.body).on('click', (event)=>{
+    if(event.target.id != 'pinyin' && 
+       event.target.id != 'sLvl' &&
+       event.target.id != 'cbConsult')
+       $(pinyin).popover('hide');
+  });
 
   //content change/save events
   pDefNchar.onfocus = function () {
@@ -593,7 +608,6 @@ window.onload = function () {
 
   $(".nav-tabs a").click(function () {
     $(this).tab('show');
-    $(pinyin).popover('hide');
     mdbgHwIme.adjustMdbgHwImeGridOffsets()
     setTimeout(() => window.scrollTo(0, 0), 30);
   });
@@ -604,7 +618,7 @@ window.onload = function () {
     
   }, 1000);
   
-  $('[href="#searchCont"]').click();
+  // $('[href="#searchCont"]').click();
 
 
   
