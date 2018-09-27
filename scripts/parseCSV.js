@@ -77,6 +77,14 @@ function parseCSV() {
       unit.combinations.long = parsed[i][pClon];
       unit.definitions.short = parsed[i][pDsho];
       unit.definitions.long = parsed[i][pDlon];
+
+      // for learned chars add one more empty comb
+      // helps with editing and saving content
+      var lenCs = unit.combinations.short.length;
+      var lenCl = unit.combinations.long.length;
+      lenCs>0 ? unit.combinations.short.push(''):null;
+      lenCl>0 ? unit.combinations.long.push(''):null;
+
       units.push(unit);
     }
     // console.log(units[110]);

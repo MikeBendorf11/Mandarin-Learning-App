@@ -48,6 +48,7 @@ UnitState.prototype.locate = function (element, index) {
  * Uses the mapping from locate(), 
  */
 UnitState.prototype.update = function (element) {
+  parseInput(element);
   var content = element.innerHTML;
   var unitMember;
 
@@ -125,36 +126,27 @@ UnitState.prototype.update = function (element) {
   }
   pushChanges();
 }
-
-UnitState.prototype.compare = function (content, unitMember) {
-  //delete html double or single spaces
-
-  // var reg = /(&nbsp;)|(&lt;)[^(&gt;)]*(&gt;)/g;
-  // var myArray;
-  // while ((myArray = reg.exec(content)) !== null) {
-  //   console.log(myArray);
-  // }
-  // var reg2 = new RegExp('(&nbsp;)');
-  // console.log(reg2.exec(content));
-  // var myArray2;
-  // while ((myArray2 = reg2.exec(content)) !== null) {
-  //   console.log(myArray2);
-  // }
-
-  var matches = new RegExp('(&nbsp;)').exec(content)
-
-  if (matches) {
-    matches.forEach(match => content = content.replace(match, ''));
-    matches.forEach(match => content = content.replace(match, ''));
+/**
+ * Get rid of HTML tags when copy pasting content into comb and def
+ */
+function parseInput(element){
+  var reg = /<[^>]*>/g;
+  //or change regex.exec prototype 
+  var myArray = reg.exec(element.innerHTML);
+  while (myArray !== null) {
+    console.log(element.innerHTML);
+    element.innerHTML = element.innerHTML.replace(reg, '')
+    myArray = reg.exec(element.innerHTML);  
   }
-
-  //console.log(unitMember + ' vs ' + content);
+}
+UnitState.prototype.compare = function (content, unitMember) {
+  console.log(unitMember + ' vs ' + content);
   if (unitMember.trim() != content.trim()) {
-    //console.log('push to db: ' + content);
+    console.log('push to db: ' + content);
     return true;
   }
   else {
-    //console.log('do nothing');
+    console.log('do nothing');
     return false;
   }
 }
@@ -488,13 +480,13 @@ window.onload = function () {
     else if (target.id == 'pComb') {
       if (target.innerHTML == 'add content ...')
         target.innerHTML = "&nbsp;"
-      if (target.innerHTML.includes('<'))
-        target.innerHTML = target.innerHTML.replace(/(<.*>)/, '')
+      // if (target.innerHTML.includes('<'))
+      //   target.innerHTML = target.innerHTML.replace(/(<.*>)/, '')
     }
-    else if (target.id == 'pHint') {
-      if (target.innerHTML.includes('<'))
-        target.innerHTML = target.innerHTML.replace(/(<.*>)/, '')
-    }
+    // else if (target.id == 'pHint') {
+    //   if (target.innerHTML.includes('<'))
+    //     target.innerHTML = target.innerHTML.replace(/(<.*>)/, '')
+    // }
     //Ion icon to container button event chaining
     target.id == 'ionNext' ? btnNext.click() : null;
     target.id == 'ionHint' ? btnHint.click() : null;
@@ -700,7 +692,7 @@ function displaySearch(input){
       def.id = 'sDef' + i;
       sen.innerHTML  = `${count=count+1}. ${input.combinations.long[i]}`
 
-      if(input.definitions.long[i].trim()){
+      if(input.definitions.long[i]){
         def.innerHTML = `${input.definitions.long[i]}`;
       } else {
         gTranslate(input.combinations.long[i])
