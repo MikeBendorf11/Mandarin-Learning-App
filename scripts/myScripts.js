@@ -162,22 +162,29 @@ function AppState(dbStatus) {
       if (dbStatus) { //db exists
         self.rLevel = parseInt(getCookie('rLevel'))
         self.charId = parseInt(getCookie('rLevel' + self.rLevel + 'Id'))
+        loadFromIndexedDB(dbName).then(db => {
+          units = db;
+          resolve(self)
+        })
       } else {
-        parseCSV();
-        storageFromBlank(dbName);
-        self.charId = 0;
-        self.rLevel = 0;
-        setCookie('rLevel', self.rLevel);
-        setCookie('rLevel0Id', 0)
-        setCookie('rLevel1Id', 0)
-        setCookie('rLevel2Id', 0)
-        setCookie('rLevel3Id', 0)
-        setCookie('rLevel4Id', 0)
+        console.log('here');
+        parseCSV()
+        .then(()=>storageFromBlank(dbName)
+        .then(()=>{
+          self.charId = 0;
+          self.rLevel = 0;
+          setCookie('rLevel', self.rLevel);
+          setCookie('rLevel0Id', 0)
+          setCookie('rLevel1Id', 0)
+          setCookie('rLevel2Id', 0)
+          setCookie('rLevel3Id', 0)
+          setCookie('rLevel4Id', 0)
+          loadFromIndexedDB(dbName).then(db => {
+            units = db;
+            resolve(self)
+          })
+        }))
       }
-      loadFromIndexedDB(dbName).then(db => {
-        units = db;
-        resolve(self)
-      })
     })
   }
 }
@@ -413,7 +420,6 @@ window.onload = function () {
 
 
   rLevel.onchange = function (event) {
-    console.log();
     var lv = event.target.value;
     setCookie('rLevel', lv)
     currentChar(lv);
@@ -480,13 +486,7 @@ window.onload = function () {
     else if (target.id == 'pComb') {
       if (target.innerHTML == 'add content ...')
         target.innerHTML = "&nbsp;"
-      // if (target.innerHTML.includes('<'))
-      //   target.innerHTML = target.innerHTML.replace(/(<.*>)/, '')
     }
-    // else if (target.id == 'pHint') {
-    //   if (target.innerHTML.includes('<'))
-    //     target.innerHTML = target.innerHTML.replace(/(<.*>)/, '')
-    // }
     //Ion icon to container button event chaining
     target.id == 'ionNext' ? btnNext.click() : null;
     target.id == 'ionHint' ? btnHint.click() : null;
@@ -494,17 +494,18 @@ window.onload = function () {
     target.id == 'ionCombShort' ? btnCombS.click() : null;
     target.id == 'ionCombLong' ? btnCombL.click() : null;
     target.id == 'ionCombHint' ? btnCombH.click() : null;
-
   }
   
-  $(document.body).on('click', '#sLvl', function () {
+  $(document.body).on('change', '#sLvl', function (event) {
     var lv = $('#sLvl').val();
+    console.log('level: ' + event.target.value);
     unit.level = lv;
     pushChanges();
     updatePopover();
   })
-  $(document.body).on('click', '#cbConsult', function () {
+  $(document.body).on('click', '#cbConsult', function (event) {
     var vl = cbConsult.checked;
+    console.log('Consult: ' + event.target.value);
     unit.consult = vl;
     pushChanges();
     updatePopover();
