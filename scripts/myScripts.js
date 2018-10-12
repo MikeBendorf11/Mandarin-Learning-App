@@ -579,15 +579,7 @@ window.onload = function () {
     $(display1).animate({ color: '#007bff' }, 1000);
   }
   
-  //roulette: switches to next array index or starts over
-  function nextIdx(index, array) {
-    if (index + 1 > array.length - 1) return 0;
-    else return index + 1;
-  }
-  function prevIdx(index, array) {
-    if (index - 1 < 0) return array.length - 1;
-    else return index - 1;
-  }
+
   //window events
   //same but runs on onload
   if (window.innerWidth < 651) {
@@ -642,40 +634,60 @@ async function gTranslate(phrase) {
     xhr.send();
   })
 }
+
+var seaIdx = 0; //for chars with 2+ pronunciations
+var results = []; //for chars with 2+ pronunciations
 seaIpt.oninput = () =>{
   if(!seaIpt.value.trim()) return;
   
   findChar(dbName, seaIpt.value).then(result=>{ 
-    $('#seaLevel').val(0);
+    clearResults();
+    if(result.length == 1){
+      displaySearch(result, 0)
+    } else {
+      results = result;
+      displaySearch(results, 0)  
+    }
+  })
+}
+ionSea.onclick = ()=> {
+  if(results.length == 0) return;
+  seaIdx = nextIdx(seaIdx, results);
+  console.log(seaIdx);
+  
+  clearResults();
+  displaySearch(results, seaIdx)
+  
+}
+//when searching multiple times
+function clearResults(){
+  $('#seaLevel').val(0);
     seaConsult.checked = false;
     seaChar.innerHTML = '';
     seaPron.innerHTML = '';
     seaDef.innerHTML = '';
     seaSen.innerHTML = '';
     seaExp.innerHTML = '';
-    result ? displaySearch(result): null;
-  })
 }
-
-function displaySearch(input){
-  $('#seaLevel').val(input.level);
-    seaConsult.checked = input.consult;
-    seaChar.innerHTML = input.char;
-    seaPron.innerHTML = input.pronunciation;
-    seaDef.innerHTML = input.definitions.single;
+function displaySearch(aResult, index){
+    $('#seaLevel').val(aResult[index].level);
+    seaConsult.checked = aResult[index].consult;
+    seaChar.innerHTML = aResult[index].char;
+    seaPron.innerHTML = aResult[index].pronunciation;
+    seaDef.innerHTML = aResult[index].definitions.single;
 
     var count = 0;
-    input.combinations.short.forEach((v, i)=>{
+    aResult[index].combinations.short.forEach((v, i)=>{
       var exp = document.createElement('span');
       exp.id = 'exp' + i;
       var def = document.createElement('span');
       def.id = 'eDef' + i;
-      exp.innerHTML =  `${count=count+1}. ${input.combinations.short[i]}`;
+      exp.innerHTML =  `${count=count+1}. ${aResult[index].combinations.short[i]}`;
 
-      if(input.definitions.short[i].trim()){ //is there a def
-        def.innerHTML = `${input.definitions.short[i]}`
+      if(aResult[index].definitions.short[i]){ //is there a def
+        def.innerHTML = `${aResult[index].definitions.short[i]}`
       } else { //no? then translate
-        gTranslate(input.combinations.short[i])
+        gTranslate(aResult[index].combinations.short[i])
         .then(data =>{
           def.innerHTML = data;
         })
@@ -686,17 +698,17 @@ function displaySearch(input){
       seaExp.appendChild(document.createElement('br'));
     });
     count = 0;
-    input.combinations.long.forEach((v, i)=>{
+    aResult[index].combinations.long.forEach((v, i)=>{
       var sen = document.createElement('span');
       sen.id = 'sen' + i;
       var def = document.createElement('span');
       def.id = 'sDef' + i;
-      sen.innerHTML  = `${count=count+1}. ${input.combinations.long[i]}`
+      sen.innerHTML  = `${count=count+1}. ${aResult[index].combinations.long[i]}`
 
-      if(input.definitions.long[i]){
-        def.innerHTML = `${input.definitions.long[i]}`;
+      if(aResult[index].definitions.long[i]){
+        def.innerHTML = `${aResult[index].definitions.long[i]}`;
       } else {
-        gTranslate(input.combinations.long[i])
+        gTranslate(aResult[index].combinations.long[i])
         .then(data =>{
           def.innerHTML = data;
         })      
@@ -731,3 +743,12 @@ window.onresize = function () {
   }
 }
 
+//roulette: switches to next array index or starts over
+function nextIdx(index, array) {
+  if (index + 1 > array.length - 1) return 0;
+  else return index + 1;
+}
+function prevIdx(index, array) {
+  if (index - 1 < 0) return array.length - 1;
+  else return index - 1;
+}

@@ -152,6 +152,10 @@ h2{
   border-right: 0px;
   
 }
+#ionSea:hover{
+  background-color: lightgrey;
+  cursor: pointer;
+}
 button{
   margin: 0 2px 16px;  
 }

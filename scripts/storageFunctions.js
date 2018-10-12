@@ -96,10 +96,10 @@ function findChar(storeName, searchStr){
       var database      = event.target.result;
       var transaction   = database.transaction([storeName], 'readwrite');
       var objectStore   = transaction.objectStore(storeName);
-      var index = objectStore.index('char').get(searchStr.trim());
+      var index = objectStore.index('char').getAll(searchStr.trim());
       
       index.onsuccess = (event) => {
-        console.log(event.target.result);
+        //console.log(event.target.result);
         resolve(event.target.result);
       }
       index.onerror =  () => reject(Error(
@@ -108,3 +108,5 @@ function findChar(storeName, searchStr){
     }
   })
 }
+
+//着
