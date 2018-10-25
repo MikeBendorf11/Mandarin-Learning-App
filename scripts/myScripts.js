@@ -124,7 +124,7 @@ UnitState.prototype.update = function (element) {
       }
     }
   }
-  pushChanges();
+  pushChanges(unit);
 }
 /**
  * Get rid of HTML tags when copy pasting content into comb and def
@@ -190,17 +190,19 @@ function AppState(dbStatus) {
   }
 }
 //Used when adding data to db and updating the interface
-function pushChanges(){
-  units[unit.id].char =unit.char ;
-  units[unit.id].consult = unit.consult;
-  units[unit.id].level = unit.level;
-  units[unit.id].pronunciation = unit.pronunciation;
-  units[unit.id].combinations.short = unit.combinations.short;
-  units[unit.id].combinations.long = unit.combinations.long;
-  units[unit.id].definitions.single = unit.definitions.single;
-  units[unit.id].definitions.short = unit.definitions.short;
-  units[unit.id].definitions.long = unit.definitions.long;
-  saveToIndexedDB(dbName, units[unit.id]);
+function pushChanges(displayUnit){
+  var u = displayUnit;
+  units[u.id].char =u.char ;
+  units[u.id].consult = u.consult;
+  units[u.id].learnedId = u.learnedId;
+  units[u.id].level = u.level;
+  units[u.id].pronunciation = u.pronunciation;
+  units[u.id].combinations.short = u.combinations.short;
+  units[u.id].combinations.long = u.combinations.long;
+  units[u.id].definitions.single = u.definitions.single;
+  units[u.id].definitions.short = u.definitions.short;
+  units[u.id].definitions.long = u.definitions.long;
+  saveToIndexedDB(dbName, units[u.id]);
 }
 window.onload = function () {
   //to be send to nextIdx by event handler
@@ -224,6 +226,7 @@ window.onload = function () {
   function loadChar(id, reviewLevel) {
     unit.id = units[id].id;
     unit.consult = units[id].consult;
+    unit.learnedId = units[id].learnedId;
     unit.level = units[id].level;
     unit.char = units[id].char;
     unit.pronunciation = units[id].pronunciation;
@@ -501,14 +504,14 @@ window.onload = function () {
     var lv = $('#sLvl').val();
     console.log('level: ' + event.target.value);
     unit.level = lv;
-    pushChanges();
+    pushChanges(unit);
     updatePopover();
   })
   $(document.body).on('click', '#cbConsult', function (event) {
     var vl = cbConsult.checked;
     console.log('Consult: ' + event.target.value);
     unit.consult = vl;
-    pushChanges();
+    pushChanges(unit);
     updatePopover();
   })
   $(document.body).on('click', (event)=>{
@@ -602,7 +605,7 @@ window.onload = function () {
   
   //tests
   document.querySelector('[href="#searchCont"]').click();
-  seaIpt.value = "一个"
+  seaIpt.value = "找"
   seaIpt.focus();
   
 }//ends window.onload
@@ -640,7 +643,6 @@ seaIpt.oninput = () =>{
   
   findChar(dbName, seaIpt.value).then(result=>{ 
     clearSeaDisplay();
-    console.log(result);
     results = result;
     if(result.length == 1){
       displaySearch(result, 0)
@@ -656,6 +658,22 @@ ionSea.onclick = ()=> {
   clearSeaDisplay();
   displaySearch(results, seaIdx);
 }
+/*
+  if( //new chars
+    !results[seaIdx].pronunciation
+  ){ 
+    console.log('here');
+    results[seaIdx].learnedId = getLearned() + 1;
+    results[seaIdx].level = 3;
+    results[seaIdx].combinations.short =
+    results[seaIdx].combinations.long = 
+    results[seaIdx].definitions.long = 
+    results[seaIdx].definitions.short = 
+    results[seaIdx].definitions.single = [''];
+    results[seaIdx].pronunciation = content;
+  }
+  else
+*/
 var lastNewChar = 0; //id
 ionNew.onclick = () =>{
   getLearned();
@@ -666,12 +684,18 @@ ionNew.onclick = () =>{
       seaIpt.value = units[i].char;
       results = [];
       results.push(units[i]);
-      displaySearch(results, 0);
+      
       break;
-    } else {
-      console.log('finished learning');
-    }
+    } 
   }
+  results[seaIdx].learnedId = getLearned() + 1;
+  results[seaIdx].level = 3;
+  results[seaIdx].combinations.short = [''];
+  results[seaIdx].combinations.long = [''];
+  results[seaIdx].definitions.long = [''];
+  results[seaIdx].definitions.short = [''];
+  results[seaIdx].definitions.single = [''];
+  displaySearch(results, 0);
 }
 seaLevel.onchange = () =>{
  var lv = $('#seaLevel').val();
@@ -713,19 +737,7 @@ function checkSeaChanges(event){
   var elem = event.target;
   var numb = parseInt(elem.id.replace(/^[^0-9]+/, ''), 10);
   var content = parseInput(elem);
-  if( //new chars
-    !results[seaIdx].pronunciation
-  ){ 
-    results[seaIdx].learnedId = getLearned() + 1;
-    results[seaIdx].level = 3;
-    results[seaIdx].combinations.short =
-    results[seaIdx].combinations.long = 
-    results[seaIdx].definitions.long = 
-    results[seaIdx].definitions.short = 
-    results[seaIdx].definitions.single = [''];
-    results[seaIdx].pronunciation = content;
-  }
-  else if( //known chars
+  if( //known chars
     elem.id == 'seaChar' &&
     content != results[seaIdx].char
   ){ results[seaIdx].char = content }
@@ -762,7 +774,10 @@ function checkSeaChanges(event){
   }
   clearSeaDisplay();
   displaySearch(results, seaIdx);
+  pushChanges(results[seaIdx]); 
+  //console.log('pushed');
   console.log(results[seaIdx]);
+
 }
 //Sea: creates and displays either short of long combs and defs
 function buildCombDef(combsArr, defsArr, display){
@@ -803,20 +818,20 @@ function buildSingleDef(singleArr, display){
     sDef.id = 'sDef'+i;
     sDef.setAttribute('contenteditable', 'true');
     sDef.classList.add('seaPs');
+    sDef.addEventListener('focusin', ()=>parseInput(sDef));
     sDef.addEventListener('focusout', checkSeaChanges);
     sDef.innerHTML = v;
     display.appendChild(sDef);
   });
 }
 function displaySearch(aResult, index){
-  //console.log(aResult[0]);
   seaChar.innerHTML = aResult[index].char;
   seaPron.innerHTML = aResult[index].pronunciation;
     if(!aResult[index].pronunciation) { //it's new char
       $('#seaLevel').val(3);
       gTranslate(aResult[index].char)
       .then(data=>{
-        seaDef.innerHTML = data;
+        buildSingleDef([data], seaDef);
       })
       buildCombDef(
         [''],
@@ -829,9 +844,20 @@ function displaySearch(aResult, index){
         seaSen,
       ); 
     } else { //it's known char
+    
       $('#seaLevel').val(aResult[index].level);
       seaConsult.checked = aResult[index].consult;
-      buildSingleDef(aResult[index].definitions.single, seaDef);
+      let tempDef = aResult[index].definitions.single;
+      if(tempDef == ""){
+        console.log('here');
+        gTranslate(aResult[index].char)
+        .then(data=>{
+          buildSingleDef([data], seaDef);
+        })
+      } else {
+        console.log('there');
+        buildSingleDef(tempDef, seaDef);
+      }
       buildCombDef(
         aResult[index].combinations.short,
         aResult[index].definitions.short,
