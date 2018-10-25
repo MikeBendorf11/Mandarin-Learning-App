@@ -134,10 +134,11 @@ function parseInput(element){
   //or change regex.exec prototype 
   var myArray = reg.exec(element.innerHTML);
   while (myArray !== null) {
-    console.log(element.innerHTML);
+    //console.log(element.innerHTML);
     element.innerHTML = element.innerHTML.replace(reg, '')
     myArray = reg.exec(element.innerHTML);  
   }
+  return element.innerHTML;
 }
 UnitState.prototype.compare = function (content, unitMember) {
   console.log(unitMember + ' vs ' + content);
@@ -485,7 +486,7 @@ window.onload = function () {
     }
     else if (target.id == 'pComb') {
       if (target.innerHTML == 'add content ...')
-        target.innerHTML = "&nbsp;"
+        target.innerHTML = ""
     }
     //Ion icon to container button event chaining
     target.id == 'ionNext' ? btnNext.click() : null;
@@ -598,17 +599,14 @@ window.onload = function () {
   });
   width = window.innerWidth;
   height = window.innerHeight;
-
-  setTimeout(() => {
-    
-  }, 1000);
   
-  // $('[href="#searchCont"]').click();
-
-
-  
+  //tests
+  document.querySelector('[href="#searchCont"]').click();
+  seaIpt.value = "一个"
+  seaIpt.focus();
   
 }//ends window.onload
+
 async function gTranslate(phrase) {
 //  console.log('here');
   if(!phrase) return new Promise(res => res(''));
@@ -623,7 +621,7 @@ async function gTranslate(phrase) {
     xhr.onload = function () {
       if (this.status == 200) {
         data = JSON.parse(this.responseText);
-        // console.log(data.data.translations[0].translatedText);
+        //console.log(data);
         resolve(img + data.data.translations[0].translatedText);
       }
     }
@@ -634,33 +632,74 @@ async function gTranslate(phrase) {
     xhr.send();
   })
 }
-
+//Search events
 var seaIdx = 0; //for chars with 2+ pronunciations
 var results = []; //for chars with 2+ pronunciations
 seaIpt.oninput = () =>{
   if(!seaIpt.value.trim()) return;
   
   findChar(dbName, seaIpt.value).then(result=>{ 
-    clearResults();
+    clearSeaDisplay();
+    console.log(result);
+    results = result;
     if(result.length == 1){
       displaySearch(result, 0)
     } else {
-      results = result;
       displaySearch(results, 0)  
     }
   })
 }
 ionSea.onclick = ()=> {
-  if(results.length == 0) return;
+  if(results.length == 0) return; //only 1 result
   seaIdx = nextIdx(seaIdx, results);
-  console.log(seaIdx);
-  
-  clearResults();
-  displaySearch(results, seaIdx)
-  
+  //console.log(seaIdx);
+  clearSeaDisplay();
+  displaySearch(results, seaIdx);
+}
+var lastNewChar = 0; //id
+ionNew.onclick = () =>{
+  getLearned();
+  for(var i=lastNewChar;i<units.length;i++){
+    if(!units[i].pronunciation){
+      lastNewChar = units[i].id + 1;
+      clearSeaDisplay();
+      seaIpt.value = units[i].char;
+      results = [];
+      results.push(units[i]);
+      displaySearch(results, 0);
+      break;
+    } else {
+      console.log('finished learning');
+    }
+  }
+}
+seaLevel.onchange = () =>{
+ var lv = $('#seaLevel').val();
+ results[seaIdx]? results[seaIdx].level = lv : null;
+}
+seaConsult.onclick = () =>{
+  var vl = seaConsult.checked;
+  results[seaIdx]? results[seaIdx].consult = vl : null;
+}
+//Get last learnedId to be used when adding a char
+function getLearned(){
+  var learnedId = 0;
+  units.forEach((v,i,a)=>{
+    if(v.learnedId && learnedId<v.learnedId){
+      learnedId = v.learnedId;    
+    }
+  })
+  return learnedId;
+}
+//get's rid of content within tags
+function parseHtmlContent(element){
+  var dirty = element.innerHTML;
+  var clean = dirty.replace(/<([^>]+?)([^>]*?)>(.*?)<\/\1>/ig, "");
+  element.innerHTML = clean;
+  return element.innerHTML;
 }
 //when searching multiple times
-function clearResults(){
+function clearSeaDisplay(){
   $('#seaLevel').val(0);
     seaConsult.checked = false;
     seaChar.innerHTML = '';
@@ -669,56 +708,148 @@ function clearResults(){
     seaSen.innerHTML = '';
     seaExp.innerHTML = '';
 }
-function displaySearch(aResult, index){
-    $('#seaLevel').val(aResult[index].level);
-    seaConsult.checked = aResult[index].consult;
-    seaChar.innerHTML = aResult[index].char;
-    seaPron.innerHTML = aResult[index].pronunciation;
-    seaDef.innerHTML = aResult[index].definitions.single;
-
-    var count = 0;
-    aResult[index].combinations.short.forEach((v, i)=>{
-      var exp = document.createElement('span');
-      exp.id = 'exp' + i;
-      var def = document.createElement('span');
-      def.id = 'eDef' + i;
-      exp.innerHTML =  `${count=count+1}. ${aResult[index].combinations.short[i]}`;
-
-      if(aResult[index].definitions.short[i]){ //is there a def
-        def.innerHTML = `${aResult[index].definitions.short[i]}`
-      } else { //no? then translate
-        gTranslate(aResult[index].combinations.short[i])
-        .then(data =>{
-          def.innerHTML = data;
-        })
-      }
-      seaExp.appendChild(exp);
-      seaExp.appendChild(document.createElement('br'));
-      seaExp.appendChild(def);
-      seaExp.appendChild(document.createElement('br'));
-    });
-    count = 0;
-    aResult[index].combinations.long.forEach((v, i)=>{
-      var sen = document.createElement('span');
-      sen.id = 'sen' + i;
-      var def = document.createElement('span');
-      def.id = 'sDef' + i;
-      sen.innerHTML  = `${count=count+1}. ${aResult[index].combinations.long[i]}`
-
-      if(aResult[index].definitions.long[i]){
-        def.innerHTML = `${aResult[index].definitions.long[i]}`;
-      } else {
-        gTranslate(aResult[index].combinations.long[i])
-        .then(data =>{
-          def.innerHTML = data;
-        })      
-      }
-      seaSen.appendChild(sen);
-      seaSen.appendChild(document.createElement('br'));
-      seaSen.appendChild(def);
-      seaSen.appendChild(document.createElement('br'));
-    }); 
+//handlers for search paragraph events
+function checkSeaChanges(event){
+  var elem = event.target;
+  var numb = parseInt(elem.id.replace(/^[^0-9]+/, ''), 10);
+  var content = parseInput(elem);
+  if( //new chars
+    !results[seaIdx].pronunciation
+  ){ 
+    results[seaIdx].learnedId = getLearned() + 1;
+    results[seaIdx].level = 3;
+    results[seaIdx].combinations.short =
+    results[seaIdx].combinations.long = 
+    results[seaIdx].definitions.long = 
+    results[seaIdx].definitions.short = 
+    results[seaIdx].definitions.single = [''];
+    results[seaIdx].pronunciation = content;
+  }
+  else if( //known chars
+    elem.id == 'seaChar' &&
+    content != results[seaIdx].char
+  ){ results[seaIdx].char = content }
+  else if(
+    elem.id == 'sDef0' &&
+    content != results[seaIdx].definitions.single[0]
+  ){ results[seaIdx].definitions.single[0] = content }
+  else if(
+    elem.id == 'sDef1' &&
+    content != results[seaIdx].definitions.single[1]
+  ){ results[seaIdx].definitions.single[1] = content }
+    else if(
+    elem.id == 'seaPron' &&
+    content != results[seaIdx].pronunciation
+  ){ results[seaIdx].pronunciation = content; }
+  else if(
+    elem.id.includes('senComb') &&
+    content != results[seaIdx].combinations.long[numb] 
+  ){ results[seaIdx].combinations.long[numb] = content; } 
+  else if(
+    elem.id.includes('expComb') &&
+    content != results[seaIdx].combinations.short[numb]
+  ){ results[seaIdx].combinations.short[numb] = content;  } 
+  else if(
+    elem.id.includes('senDef') &&
+    content != results[seaIdx].definitions.long[numb]
+  ){ results[seaIdx].definitions.long[numb] = content; } 
+  else if(
+    elem.id.includes('expDef') && 
+    content != results[seaIdx].definitions.short[numb]
+  ){ results[seaIdx].definitions.short[numb] = content; }
+  else {
+    console.log('no matching paragraph, or no changes');
+  }
+  clearSeaDisplay();
+  displaySearch(results, seaIdx);
+  console.log(results[seaIdx]);
 }
+//Sea: creates and displays either short of long combs and defs
+function buildCombDef(combsArr, defsArr, display){
+  var radical = ''
+  display == seaSen ?  radical = 'sen' : radical = 'exp';
+  
+  var count = 0; 
+  combsArr.forEach((v, i)=>{
+    var comb = document.createElement('span');
+    comb.id = radical+'Comb' + i;
+    comb.setAttribute('contenteditable', 'true')
+    comb.classList.add('seaPs');
+    comb.addEventListener('focusin', ()=>parseHtmlContent(comb));
+    comb.addEventListener('focusout', checkSeaChanges);
+    var def = document.createElement('span');
+    def.id = radical +'Def' + i;
+    def.setAttribute('contenteditable', 'true')
+    def.classList.add('seaPs');
+    def.addEventListener('focusin', ()=>parseInput(def));
+    def.addEventListener('focusout', checkSeaChanges);
+    comb.innerHTML =  `<x>${count=count+1}. </x>${combsArr[i]}`;
+
+    if(defsArr[i]){ //is there a def
+      def.innerHTML = `${defsArr[i]}`
+    } else { //no? then translate
+      gTranslate(combsArr[i])
+      .then(data =>{
+        def.innerHTML = data;
+      })
+    }
+    display.appendChild(comb);
+    display.appendChild(def);
+  });
+}
+function buildSingleDef(singleArr, display){
+  singleArr.forEach((v,i,a)=>{
+    var sDef = document.createElement('span');
+    sDef.id = 'sDef'+i;
+    sDef.setAttribute('contenteditable', 'true');
+    sDef.classList.add('seaPs');
+    sDef.addEventListener('focusout', checkSeaChanges);
+    sDef.innerHTML = v;
+    display.appendChild(sDef);
+  });
+}
+function displaySearch(aResult, index){
+  //console.log(aResult[0]);
+  seaChar.innerHTML = aResult[index].char;
+  seaPron.innerHTML = aResult[index].pronunciation;
+    if(!aResult[index].pronunciation) { //it's new char
+      $('#seaLevel').val(3);
+      gTranslate(aResult[index].char)
+      .then(data=>{
+        seaDef.innerHTML = data;
+      })
+      buildCombDef(
+        [''],
+        [''],
+        seaExp,
+      );
+      buildCombDef(
+        [''],
+        [''],
+        seaSen,
+      ); 
+    } else { //it's known char
+      $('#seaLevel').val(aResult[index].level);
+      seaConsult.checked = aResult[index].consult;
+      buildSingleDef(aResult[index].definitions.single, seaDef);
+      buildCombDef(
+        aResult[index].combinations.short,
+        aResult[index].definitions.short,
+        seaExp,
+      )
+      buildCombDef(
+        aResult[index].combinations.long,
+        aResult[index].definitions.long,
+        seaSen,
+      )
+    }
+    //either way make content editable
+    seaChar.setAttribute('contenteditable', 'true');
+    seaChar.addEventListener('focusout',checkSeaChanges)
+    seaPron.setAttribute('contenteditable','true');
+    seaPron.addEventListener('focusout',checkSeaChanges)
+}
+
 var width, height;
 function toggleDiv(element) {
   if (element.style.display == '') {
