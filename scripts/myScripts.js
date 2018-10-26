@@ -554,9 +554,6 @@ window.onload = function () {
       this.innerHTML = '&nbsp;'
   }
 
-
-
-
   function showCombDef(combination, definition, display1, display2) {
     //display the combination if any
     display1.style.color = 'transparent';
@@ -583,7 +580,6 @@ window.onload = function () {
     $(display1).animate({ color: '#007bff' }, 1000);
   }
   
-
   //window events
   //same but runs on onload
   if (window.innerWidth < 651) {
@@ -658,80 +654,6 @@ ionSea.onclick = ()=> {
   clearSeaDisplay();
   displaySearch(results, seaIdx);
 }
-/*
-  if( //new chars
-    !results[seaIdx].pronunciation
-  ){ 
-    console.log('here');
-    results[seaIdx].learnedId = getLearned() + 1;
-    results[seaIdx].level = 3;
-    results[seaIdx].combinations.short =
-    results[seaIdx].combinations.long = 
-    results[seaIdx].definitions.long = 
-    results[seaIdx].definitions.short = 
-    results[seaIdx].definitions.single = [''];
-    results[seaIdx].pronunciation = content;
-  }
-  else
-*/
-var lastNewChar = 0; //id
-ionNew.onclick = () =>{
-  getLearned();
-  for(var i=lastNewChar;i<units.length;i++){
-    if(!units[i].pronunciation){
-      lastNewChar = units[i].id + 1;
-      clearSeaDisplay();
-      seaIpt.value = units[i].char;
-      results = [];
-      results.push(units[i]);
-      
-      break;
-    } 
-  }
-  results[seaIdx].learnedId = getLearned() + 1;
-  results[seaIdx].level = 3;
-  results[seaIdx].combinations.short = [''];
-  results[seaIdx].combinations.long = [''];
-  results[seaIdx].definitions.long = [''];
-  results[seaIdx].definitions.short = [''];
-  results[seaIdx].definitions.single = [''];
-  displaySearch(results, 0);
-}
-seaLevel.onchange = () =>{
- var lv = $('#seaLevel').val();
- results[seaIdx]? results[seaIdx].level = lv : null;
-}
-seaConsult.onclick = () =>{
-  var vl = seaConsult.checked;
-  results[seaIdx]? results[seaIdx].consult = vl : null;
-}
-//Get last learnedId to be used when adding a char
-function getLearned(){
-  var learnedId = 0;
-  units.forEach((v,i,a)=>{
-    if(v.learnedId && learnedId<v.learnedId){
-      learnedId = v.learnedId;    
-    }
-  })
-  return learnedId;
-}
-//get's rid of content within tags
-function parseHtmlContent(element){
-  var dirty = element.innerHTML;
-  var clean = dirty.replace(/<([^>]+?)([^>]*?)>(.*?)<\/\1>/ig, "");
-  element.innerHTML = clean;
-  return element.innerHTML;
-}
-//when searching multiple times
-function clearSeaDisplay(){
-  $('#seaLevel').val(0);
-    seaConsult.checked = false;
-    seaChar.innerHTML = '';
-    seaPron.innerHTML = '';
-    seaDef.innerHTML = '';
-    seaSen.innerHTML = '';
-    seaExp.innerHTML = '';
-}
 //handlers for search paragraph events
 function checkSeaChanges(event){
   var elem = event.target;
@@ -756,11 +678,22 @@ function checkSeaChanges(event){
   else if(
     elem.id.includes('senComb') &&
     content != results[seaIdx].combinations.long[numb] 
-  ){ results[seaIdx].combinations.long[numb] = content; } 
+  ){
+    var lgth = results[seaIdx].combinations.long.length;
+    //console.log(lgth + " " + numb);
+    results[seaIdx].combinations.long[numb] = content; 
+    lgth-1 == numb ? //last member of array? increase size
+      results[seaIdx].combinations.long.push('') : null;
+  } 
   else if(
     elem.id.includes('expComb') &&
     content != results[seaIdx].combinations.short[numb]
-  ){ results[seaIdx].combinations.short[numb] = content;  } 
+  ){ 
+    var lgth = results[seaIdx].combinations.short.length;
+    results[seaIdx].combinations.short[numb] = content;  
+    lgth-1 == numb ? 
+      results[seaIdx].combinations.short.push('') : null;
+  } 
   else if(
     elem.id.includes('senDef') &&
     content != results[seaIdx].definitions.long[numb]
@@ -775,11 +708,79 @@ function checkSeaChanges(event){
   clearSeaDisplay();
   displaySearch(results, seaIdx);
   pushChanges(results[seaIdx]); 
-  //console.log('pushed');
   console.log(results[seaIdx]);
-
 }
-//Sea: creates and displays either short of long combs and defs
+var lastNewChar = 0; //id
+ionNew.onclick = () =>{
+  getLearned();
+  for(var i=lastNewChar;i<units.length;i++){
+    if(!units[i].pronunciation){
+      lastNewChar = units[i].id + 1;
+      clearSeaDisplay();
+      seaIpt.value = units[i].char;
+      results = [];
+      results.push(units[i]);
+      break;
+    } 
+  }
+  results[seaIdx].learnedId = getLearned() + 1;
+  results[seaIdx].level = 3;
+  results[seaIdx].combinations.short = [''];
+  results[seaIdx].combinations.long = [''];
+  results[seaIdx].definitions.long = [''];
+  results[seaIdx].definitions.short = [''];
+  if(results[seaIdx].char.length > 1){
+    results[seaIdx].definitions.single = ['', ''];
+  } else {
+    results[seaIdx].definitions.single = [''];
+  }
+  displaySearch(results, 0);
+}
+seaLevel.onchange = () =>{
+ var lv = $('#seaLevel').val();
+ results[seaIdx]? results[seaIdx].level = parseInt(lv) : null;
+}
+seaConsult.onclick = () =>{
+  var vl = seaConsult.checked;
+  results[seaIdx]? results[seaIdx].consult = vl : null;
+  console.log(results[seaIdx]);
+} //end of search event handlers
+
+/**
+ * Get last learnedId, to be used when adding a char
+ */
+function getLearned(){
+  var learnedId = 0;
+  units.forEach((v,i,a)=>{
+    if(v.learnedId && learnedId<v.learnedId){
+      learnedId = v.learnedId;    
+    }
+  })
+  return learnedId;
+}
+/**
+ * Get's rid of tags and their contents
+ */
+function parseHtmlContent(element){
+  var dirty = element.innerHTML;
+  var clean = dirty.replace(/<([^>]+?)([^>]*?)>(.*?)<\/\1>/ig, "");
+  element.innerHTML = clean;
+  return element.innerHTML;
+}
+//when searching multiple times
+function clearSeaDisplay(){
+  $('#seaLevel').val(0);
+    seaConsult.checked = false;
+    seaChar.innerHTML = '';
+    seaPron.innerHTML = '';
+    seaDef.innerHTML = '';
+    seaSen.innerHTML = '';
+    seaExp.innerHTML = '';
+}
+
+/** 
+ * Creates and displays either short of long combs and defs
+ */
 function buildCombDef(combsArr, defsArr, display){
   var radical = ''
   display == seaSen ?  radical = 'sen' : radical = 'exp';
@@ -798,8 +799,11 @@ function buildCombDef(combsArr, defsArr, display){
     def.classList.add('seaPs');
     def.addEventListener('focusin', ()=>parseInput(def));
     def.addEventListener('focusout', checkSeaChanges);
-    comb.innerHTML =  `<x>${count=count+1}. </x>${combsArr[i]}`;
-
+    if(v==''){ //placeholder for empty combs
+      comb.innerHTML =  `<x>${count=count+1}. _________</x>${combsArr[i]}`;
+    } else {
+      comb.innerHTML =  `<x>${count=count+1}. </x>${combsArr[i]}`;
+    }
     if(defsArr[i]){ //is there a def
       def.innerHTML = `${defsArr[i]}`
     } else { //no? then translate
@@ -812,6 +816,9 @@ function buildCombDef(combsArr, defsArr, display){
     display.appendChild(def);
   });
 }
+/**
+ * for one and 2 char single defs
+ */
 function buildSingleDef(singleArr, display){
   singleArr.forEach((v,i,a)=>{
     var sDef = document.createElement('span');
@@ -827,7 +834,7 @@ function buildSingleDef(singleArr, display){
 function displaySearch(aResult, index){
   seaChar.innerHTML = aResult[index].char;
   seaPron.innerHTML = aResult[index].pronunciation;
-    if(!aResult[index].pronunciation) { //it's new char
+    if(!aResult[index].learnedId) { //it's new char
       $('#seaLevel').val(3);
       gTranslate(aResult[index].char)
       .then(data=>{
@@ -844,18 +851,15 @@ function displaySearch(aResult, index){
         seaSen,
       ); 
     } else { //it's known char
-    
       $('#seaLevel').val(aResult[index].level);
       seaConsult.checked = aResult[index].consult;
       let tempDef = aResult[index].definitions.single;
       if(tempDef == ""){
-        console.log('here');
         gTranslate(aResult[index].char)
         .then(data=>{
           buildSingleDef([data], seaDef);
         })
       } else {
-        console.log('there');
         buildSingleDef(tempDef, seaDef);
       }
       buildCombDef(
