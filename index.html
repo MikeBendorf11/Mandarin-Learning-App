@@ -61,10 +61,14 @@
     <li class="nav-item">
       <a class="nav-link" href="#searchCont">Search</a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#links">...</a>
+    </li>
   </ul>
   <div id="container">
-
+    
     <div id="pinReviewCont" class="tab-pane active">
+        <h2 id="mobileTitle">Mandarin Assistant</h2>
       <h1>Review :</h1>
       <div id="dvReview">
         <select id="rLevel" class="form-control">
@@ -74,7 +78,7 @@
           <option id="rLevel3" value="3">Level 3</option>
           <option id="rLevel4" value="4">Consult </option>
         </select>
-      </div><br>
+      </div><br id='brLvl'>
       <button class="btn btn-outline-dark" id="btnPrev"><span id="ionPrev" class="ion ion-back"></span></button>
       <button id="btnHint" class="btn btn-outline-dark">Hint <span id="ionHint" class="ion ion-hint"></span></button>
       <button class="btn btn-outline-dark" id="btnNext"><span id="ionNext" class="ion ion-next"></span></button>
@@ -152,8 +156,26 @@
           </td>
         </tr>
       </table>
-      Sentences:
+      &nbsp;&nbsp;Sentences:
       <p id="seaSen"></p>
+    </div>
+    <div id="links" class="tab-pane">
+      <ul id="navLinks" class="nav nav-tabs ">
+        <li >
+          <a class="nav-link" id="ichachaLink">Ichacha</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " id="googleLink">Google</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="mdbgLink">Mdbg</a>
+        </li>
+      </ul>
+      <div id="gSearch">
+          <gcse:search></gcse:search>
+      </div>
+      
+      <iframe id="iframe1" src="" frameborder="0"></iframe>        
     </div>
   </div>
 

@@ -214,8 +214,46 @@ window.onload = function () {
     hwimeResult = document.querySelector('.mdbghwime-result');
     toggleDiv(hwimeResult);
   })
-
+  /**
+   * After 5 seconds first load units should be ready for upload.
+   * If not first time it will update the external based on current
+   * units
+   */
+  function externalStorage(){
+    setTimeout(function(){
+      var myData = JSON.stringify(units)
+      if(!getCookie('uri')){ //1st time? generate URI
+        /*
+        $.ajax({
+          url: "https://api.myjson.com/bins",
+          type: "POST",
+          data: myData,
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          success: function (data, textStatus, jqXHR) {
+              setCookie('uri', JSON.stringify(data))
+              console.log('External storage created')
+          }
+        });
+      } else { //update with current version of units from db
+        var uri = getCookie('uri');
+        console.log(uri);
+        uri = uri.slice(8,uri.length-2)
+        /*$.ajax({
+          url: uri,
+          type: "PUT",
+          data: myData,
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          success: function (data, textStatus, jqXHR) {
+              console.log("Updated to latest units version")
+          }
+        });*/
+      }
+    }, 5000)
+  }
   checkDbExists(dbName).then(res => {
+    externalStorage();
     var appState = new AppState(res);
     return appState.get()
   }).then(state => {
@@ -594,15 +632,13 @@ window.onload = function () {
   $(".nav-tabs a").click(function () {
     $(this).tab('show');
     mdbgHwIme.adjustMdbgHwImeGridOffsets()
-    setTimeout(() => window.scrollTo(0, 0), 30);
+    setTimeout(() => window.scrollTo(0, 0), 10);
   });
   width = window.innerWidth;
   height = window.innerHeight;
   
   //tests
-  document.querySelector('[href="#searchCont"]').click();
-  seaIpt.value = "找"
-  seaIpt.focus();
+  //document.querySelector('[href="#links"]').click();
   
 }//ends window.onload
 
@@ -912,4 +948,24 @@ function nextIdx(index, array) {
 function prevIdx(index, array) {
   if (index - 1 < 0) return array.length - 1;
   else return index - 1;
+}
+
+mdbgLink.onclick = () =>{
+  iframe1.setAttribute('src','https://www.mdbg.net/chinese/dictionary#')
+  gSearch.style.display = 'none';
+}
+ichachaLink.onclick = () =>{
+  iframe1.setAttribute('src', 'http://ichacha.net/');
+  gSearch.style.display = 'none';
+}
+googleLink.onclick = () =>{
+  gSearch.style.display = 'block';
+  iframe1.setAttribute('src','')
+  var cx = '002805804690599183502:cmqdgcgjmd4';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
 }

@@ -14,6 +14,9 @@ margin: 0 0 0 0;
 .tab-pane:nth-of-type(3){
   display: none;
 }
+.tab-pane:nth-of-type(4){
+  display: none;
+}
 #banner{
   
   transform: rotate(-25deg);
@@ -49,7 +52,7 @@ background: linear-gradient(300deg,
   flex: 50%;
   outline: 10px dashed  rgb(228, 238, 238);
   max-width: 300px;
-  margin: 4% 0;
+  margin: 50px 0;
   padding: 0 20px;
   box-sizing: border-box;
 }
@@ -61,8 +64,8 @@ background: linear-gradient(300deg,
   transform: scale(1.2);
   box-sizing: border-box;
   max-height: 50vh;
-  max-width: 280px;
-  margin: 25vh 0px 0px 0px;
+  max-width: 290px;
+  margin: 15vh 0px 0px 0px;
   text-align: center;
   background-image: url("../images/bg1.png");
   background-size: 280px;
@@ -179,6 +182,7 @@ button{
 #btnPrev, #btnNext, #btnHint{
   margin-bottom: 5px;
 }
+
 #btnPrev span, #btnNext span{
   font-size: 35px;
 }
@@ -285,18 +289,37 @@ select{
     width: 90%;
     margin: 5%;
   }
+  #ime_wrapper{
+    margin: 120px 0
+  }
 }
 @media screen and (max-width:640px){
+  body{
+    background: none;
+  }
+  #container{
+    justify-content: flex-start;
+    border-style: none;
+    width: 100%; 
+    min-height: 567px;
+    margin: 0;
+    border-radius: 0;
+    background: none;
+    background: linear-gradient(-40deg,
+    rgba(252,229,148,.65) 10%,
+    rgba(252,229,148,.95) 28%,
+    rgba(255,255,255,.85) 62%),
+    url(../images/text.svg) -61% -5% / 70%;
+  }
   .display-3{ 
-    margin: 0; 
-    left: 10px
+    display: none;
   }
   #pinReviewCont{
     min-height: 450px;
   }
   .nav{
     display: flex;
-    margin-top: 55px;
+    /* margin-top: 55px; */
   }
   #searchCont{
     padding: 10px 10px;
@@ -314,7 +337,7 @@ select{
   }
   #searchCont table{
     border-bottom: 3px dashed lightgrey;
-    margin-bottom: 10px;
+    margin: 0 auto 10px ;
   }
   #searchCont td{
     vertical-align: top;
@@ -348,6 +371,12 @@ select{
   #banner{
     display: none;
   }
+  #ime_wrapper{
+    margin: 20px 0
+  }
+  #pinyin{
+    margin: 25px 0;
+  }
 }
 
 @media screen and (max-width:540px){
@@ -355,39 +384,57 @@ select{
     font-size: 30px;
     margin: 10px;
   }
-  body{
-    background: none;
-  }
-  #container{
-    justify-content: flex-start;
-    border-style: none;
-    width: 100%; 
-    min-height: 567px;
-    margin: 0;
-    border-radius: 0;
-    background: none;
-    background: linear-gradient(-40deg,
-    rgba(252,229,148,.65) 10%,
-    rgba(252,229,148,.95) 28%,
-    rgba(255,255,255,.85) 62%),
-    url(../images/text.svg) -61% -5% / 70%;
-  }
+ 
   #container h1{
-    visibility: hidden;
+    display: none;
   }
-  .display-3{
-    left: 15px;
-    font-size: 25px;
-    font-weight: 350;
-  }
+
   #pinReviewCont{ 
     background-size: 100%;
     margin-top: 5%; 
-    
   }
   #rLevel{
-    margin-left: 45px;
-    width: 110px;
+    border-color: #343a40;
+    width: 96px;
   }
+  #ime_wrapper{
+    margin: 20px 0
+  }
+  .form-control{
+    background-color: rgb(255, 255, 255, 0.3)
+  }
+  #btnPrev span, #btnNext span{
+    font-size: 20px;
+  }
+}
+#seaSen{
+  margin: 0 auto 0;
+}
+#links{
+  width: 100%
+}
 
+#links iframe{
+  width: 100%; 
+  height: 100vh
+}
+#navLinks{
+  margin-top: 0;
+}
+#navLinks li .nav-link{
+  border-top-color: rgb(255, 255, 255)
+}
+#mobileTitle{
+  display:none;
+  font-family: Brush Script MT, Brush Script Std, cursive;
+  font-size: 2.2em;
+  margin: -0px 0 20px 0;
+}
+@media screen and (max-width:640px){
+  #mobileTitle{
+    display: inline-block;
+  }
+  #brLvl{
+    display: none;
+  }
 }
