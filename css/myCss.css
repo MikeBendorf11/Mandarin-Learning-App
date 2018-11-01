@@ -215,7 +215,7 @@ select{
   font-size: 0.7em;
   font-weight: 750;
   color: rgb(95, 95, 95);
-  background-color: rgb(255, 255, 255, 0.3);
+  background-color: rgb(255, 255, 255, 0);
 }
 /* preserves bgcolor when hidding def*/
 #dvPcombHint{
@@ -382,6 +382,7 @@ select{
 @media screen and (max-width:540px){
   .display-3{
     font-size: 30px;
+    font-weight: 600;
     margin: 10px;
   }
  
@@ -395,7 +396,7 @@ select{
   }
   #rLevel{
     border-color: #343a40;
-    width: 96px;
+    box-shadow: 2px 2px 4px rgba(0,0,0, 0.4);
   }
   #ime_wrapper{
     margin: 20px 0
@@ -404,7 +405,7 @@ select{
     background-color: rgb(255, 255, 255, 0.3)
   }
   #btnPrev span, #btnNext span{
-    font-size: 20px;
+    font-size: 25px;
   }
 }
 #seaSen{
@@ -426,7 +427,13 @@ select{
 }
 #mobileTitle{
   display:none;
+  color: rgb(189, 189, 189);
   font-family: Brush Script MT, Brush Script Std, cursive;
+  text-shadow: -1px 0 rgb(121, 121, 121), 
+                0 1px rgb(121, 121, 121), 
+                1px 0 rgb(121, 121, 121), 
+                0 -1px rgb(121, 121, 121);
+  /* font-weight: 910; */
   font-size: 2.2em;
   margin: -0px 0 20px 0;
 }

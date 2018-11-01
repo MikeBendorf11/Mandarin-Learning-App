@@ -168,7 +168,6 @@ function AppState(dbStatus) {
           resolve(self)
         })
       } else {
-        console.log('here');
         parseCSV()
         .then(()=>storageFromBlank(dbName)
         .then(()=>{
@@ -223,7 +222,7 @@ window.onload = function () {
     setTimeout(function(){
       var myData = JSON.stringify(units)
       if(!getCookie('uri')){ //1st time? generate URI
-        /*
+        
         $.ajax({
           url: "https://api.myjson.com/bins",
           type: "POST",
@@ -232,23 +231,25 @@ window.onload = function () {
           dataType: "json",
           success: function (data, textStatus, jqXHR) {
               setCookie('uri', JSON.stringify(data))
-              console.log('External storage created')
+              console.log('Created')
+              console.log(data)
           }
         });
       } else { //update with current version of units from db
         var uri = getCookie('uri');
         console.log(uri);
         uri = uri.slice(8,uri.length-2)
-        /*$.ajax({
+        $.ajax({
           url: uri,
           type: "PUT",
           data: myData,
           contentType: "application/json; charset=utf-8",
           dataType: "json",
           success: function (data, textStatus, jqXHR) {
-              console.log("Updated to latest units version")
+              console.log('Updated')
+              console.log(data)
           }
-        });*/
+        });
       }
     }, 5000)
   }
@@ -638,7 +639,7 @@ window.onload = function () {
   height = window.innerHeight;
   
   //tests
-  //document.querySelector('[href="#links"]').click();
+  // document.querySelector('[href="#searchCont"]').click();
   
 }//ends window.onload
 
@@ -779,7 +780,6 @@ seaLevel.onchange = () =>{
 seaConsult.onclick = () =>{
   var vl = seaConsult.checked;
   results[seaIdx]? results[seaIdx].consult = vl : null;
-  console.log(results[seaIdx]);
 } //end of search event handlers
 
 /**
@@ -870,7 +870,7 @@ function buildSingleDef(singleArr, display){
 function displaySearch(aResult, index){
   seaChar.innerHTML = aResult[index].char;
   seaPron.innerHTML = aResult[index].pronunciation;
-    if(!aResult[index].learnedId) { //it's new char
+    if(!aResult[index].pronunciation) { //it's new char
       $('#seaLevel').val(3);
       gTranslate(aResult[index].char)
       .then(data=>{
