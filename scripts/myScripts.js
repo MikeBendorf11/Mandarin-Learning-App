@@ -639,7 +639,34 @@ window.onload = function () {
   height = window.innerHeight;
   
   //tests
+  
   // document.querySelector('[href="#searchCont"]').click();
+  // seaIpt.value = "可能"
+  // seaIpt.focus()
+  
+
+  //Load Frames and hide secondary ones
+  
+  iframe1.setAttribute('src', 'http://ichacha.net/')
+  var gooSea = document.createElement('gcse:search');
+  var cx = '002805804690599183502:cmqdgcgjmd4';
+  var gcse = document.createElement('script');
+  gcse.type = 'text/javascript';
+  gcse.async = true;
+  gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+  var s = document.getElementsByTagName('script')[0];
+  iframe2.contentWindow.document.body.appendChild(gooSea);
+  iframe2.contentWindow.document.body.appendChild(gcse);
+  iframe3.setAttribute('src','https://www.mdbg.net/chinese/dictionary#');
+  iframe4.setAttribute('src','https://chinesepod.com/dictionary/english-chinese/');
+  //iframe5.setAttribute('src','https://yellowbridge.com/chinese/dictionary.php')
+
+  
+
+  iframe3.style.display = 'none';
+  iframe2.style.display = 'none';
+  iframe4.style.display = 'none';
+  // iframe5.style.display = 'none';
   
 }//ends window.onload
 
@@ -668,28 +695,67 @@ async function gTranslate(phrase) {
     xhr.send();
   })
 }
+
 //Search events
 var seaIdx = 0; //for chars with 2+ pronunciations
 var results = []; //for chars with 2+ pronunciations
+
+//typing in the serach box
 seaIpt.oninput = () =>{
   if(!seaIpt.value.trim()) return;
   
   findChar(dbName, seaIpt.value).then(result=>{ 
     clearSeaDisplay();
     results = result;
-    if(result.length == 1){
-      displaySearch(result, 0)
-    } else {
-      displaySearch(results, 0)  
+    if(results[seaIdx].learnedId == undefined){ //new char
+      prepareResults(); //clear undefs
     }
+    displaySearch(result, 0)
   })
 }
+
+//magnifier icon: db has 2 def results per char
 ionSea.onclick = ()=> {
   if(results.length == 0) return; //only 1 result
   seaIdx = nextIdx(seaIdx, results);
   //console.log(seaIdx);
   clearSeaDisplay();
   displaySearch(results, seaIdx);
+}
+
+var lastNewChar = 0; //id
+//plus sign: get a the next unknown char
+ionNew.onclick = () =>{
+  //getLearned();
+  for(var i=lastNewChar;i<units.length;i++){
+    if(!units[i].pronunciation){
+      lastNewChar = units[i].id + 1;
+      clearSeaDisplay();
+      seaIpt.value = units[i].char;
+      results = [];
+      results.push(units[i]);
+      break;
+    } 
+  }
+  prepareResults();
+  displaySearch(results, 0);
+}
+/**
+ * Get rid of undefined values when dealing with new chars
+ * Prepares the search results to be added to db when focusout
+ */
+function prepareResults(){
+  results[seaIdx].learnedId = getLearned() + 1;
+  results[seaIdx].level = 3;
+  results[seaIdx].combinations.short = [''];
+  results[seaIdx].combinations.long = [''];
+  results[seaIdx].definitions.long = [''];
+  results[seaIdx].definitions.short = [''];
+  if(results[seaIdx].char.length > 1){
+    results[seaIdx].definitions.single = ['', ''];
+  } else {
+    results[seaIdx].definitions.single = [''];
+  }
 }
 //handlers for search paragraph events
 function checkSeaChanges(event){
@@ -745,34 +811,9 @@ function checkSeaChanges(event){
   clearSeaDisplay();
   displaySearch(results, seaIdx);
   pushChanges(results[seaIdx]); 
-  console.log(results[seaIdx]);
+  //console.log(results[seaIdx]);
 }
-var lastNewChar = 0; //id
-ionNew.onclick = () =>{
-  getLearned();
-  for(var i=lastNewChar;i<units.length;i++){
-    if(!units[i].pronunciation){
-      lastNewChar = units[i].id + 1;
-      clearSeaDisplay();
-      seaIpt.value = units[i].char;
-      results = [];
-      results.push(units[i]);
-      break;
-    } 
-  }
-  results[seaIdx].learnedId = getLearned() + 1;
-  results[seaIdx].level = 3;
-  results[seaIdx].combinations.short = [''];
-  results[seaIdx].combinations.long = [''];
-  results[seaIdx].definitions.long = [''];
-  results[seaIdx].definitions.short = [''];
-  if(results[seaIdx].char.length > 1){
-    results[seaIdx].definitions.single = ['', ''];
-  } else {
-    results[seaIdx].definitions.single = [''];
-  }
-  displaySearch(results, 0);
-}
+
 seaLevel.onchange = () =>{
  var lv = $('#seaLevel').val();
  results[seaIdx]? results[seaIdx].level = parseInt(lv) : null;
@@ -837,6 +878,7 @@ function buildCombDef(combsArr, defsArr, display){
     def.addEventListener('focusout', checkSeaChanges);
     if(v==''){ //placeholder for empty combs
       comb.innerHTML =  `<x>${count=count+1}. _________</x>${combsArr[i]}`;
+      //comb.innerHTML =  `<x>${count=count+1}. _________</x>`;
     } else {
       comb.innerHTML =  `<x>${count=count+1}. </x>${combsArr[i]}`;
     }
@@ -870,22 +912,27 @@ function buildSingleDef(singleArr, display){
 function displaySearch(aResult, index){
   seaChar.innerHTML = aResult[index].char;
   seaPron.innerHTML = aResult[index].pronunciation;
-    if(!aResult[index].pronunciation) { //it's new char
+    if(!aResult[index].pronunciation) { //it's new char     
       $('#seaLevel').val(3);
-      gTranslate(aResult[index].char)
-      .then(data=>{
-        buildSingleDef([data], seaDef);
-      })
-      buildCombDef(
-        [''],
-        [''],
-        seaExp,
-      );
-      buildCombDef(
-        [''],
-        [''],
-        seaSen,
-      ); 
+      if(aResult[index].char.length>1){ //2 char unit
+        gTranslate(aResult[index].char[0])
+        .then(data1=>gTranslate(aResult[index].char[1])
+        .then(data2=>gTranslate(aResult[index].char)
+        .then(data3=>{
+            var reg = /<[^>]*>/g; //clean gtranslate icon
+            data1 = data1.replace(reg, '')
+            data2 = data2.replace(reg, '')
+          buildSingleDef([`(${data1} ,${data2})`, `${data3}`], seaDef);
+        })))
+      } else {
+        gTranslate(aResult[index].char)
+        .then(data=>{
+          buildSingleDef([data], seaDef);
+        })
+      }
+      buildCombDef([''],[''],seaExp,);
+      buildCombDef([''],[''],seaSen,); 
+
     } else { //it's known char
       $('#seaLevel').val(aResult[index].level);
       seaConsult.checked = aResult[index].consult;
@@ -949,23 +996,35 @@ function prevIdx(index, array) {
   if (index - 1 < 0) return array.length - 1;
   else return index - 1;
 }
+//handler for iframes display
+links.onclick = (event) => {
+  switch(event.target){
+    case(ichachaLink):
+      showFrame(1);
+      break;
+    case(googleLink):
+      showFrame(2);
+      break;
+    case(mdbgLink):
+      showFrame(3);
+      break;
+    case(cpodLink):
+      showFrame(4);
+      break;
+    // case(yebrLink):
+    //   showFrame(5);
+    //   break;
+  }
+}
 
-mdbgLink.onclick = () =>{
-  iframe1.setAttribute('src','https://www.mdbg.net/chinese/dictionary#')
-  gSearch.style.display = 'none';
-}
-ichachaLink.onclick = () =>{
-  iframe1.setAttribute('src', 'http://ichacha.net/');
-  gSearch.style.display = 'none';
-}
-googleLink.onclick = () =>{
-  gSearch.style.display = 'block';
-  iframe1.setAttribute('src','')
-  var cx = '002805804690599183502:cmqdgcgjmd4';
-    var gcse = document.createElement('script');
-    gcse.type = 'text/javascript';
-    gcse.async = true;
-    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(gcse, s);
+//clear frames except the one calling this method
+function showFrame(number){
+  for(i=1; i<6; i++){
+    var fr = document.getElementById('iframe'+i);
+    if(i==number) {
+      fr.style.display = 'block';
+      continue;
+    }
+    fr.style.display = 'none'
+  }
 }
