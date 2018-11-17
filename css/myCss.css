@@ -445,3 +445,7 @@ select{
     display: none;
   }
 }
+
+picture{
+  display:none;
+}
