@@ -203,6 +203,46 @@ function pushChanges(displayUnit){
   units[u.id].definitions.long = u.definitions.long;
   saveToIndexedDB(dbName, units[u.id]);
 }
+
+/**
+   * After 5 seconds first load units should be ready for upload.
+   * If not first time it will update the external based on current
+   * units
+   */
+function externalStorage(){
+  setTimeout(function(){
+    var myData = JSON.stringify(units)
+    if(!getCookie('uri')){ //1st time? generate URI
+      
+      $.ajax({
+        url: "https://api.myjson.com/bins",
+        type: "POST",
+        data: myData,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data, textStatus, jqXHR) {
+            setCookie('uri', JSON.stringify(data))
+            console.log('Created')
+            console.log(data)
+        }
+      });
+    } else { //update with current version of units from db
+      var uri = getCookie('uri');
+      console.log(uri);
+      uri = uri.slice(8,uri.length-2)
+      $.ajax({
+        url: uri,
+        type: "PUT",
+        data: myData,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data, textStatus, jqXHR) {
+            console.log('Updated external storage on load.')
+        }
+      });
+    }
+  }, 5000)
+}
 window.onload = function () {
   //to be send to nextIdx by event handler
   var index;
@@ -213,53 +253,27 @@ window.onload = function () {
     hwimeResult = document.querySelector('.mdbghwime-result');
     toggleDiv(hwimeResult);
   })
-  /**
-   * After 5 seconds first load units should be ready for upload.
-   * If not first time it will update the external based on current
-   * units
-   */
-  function externalStorage(){
-    setTimeout(function(){
-      var myData = JSON.stringify(units)
-      if(!getCookie('uri')){ //1st time? generate URI
-        
-        $.ajax({
-          url: "https://api.myjson.com/bins",
-          type: "POST",
-          data: myData,
-          contentType: "application/json; charset=utf-8",
-          dataType: "json",
-          success: function (data, textStatus, jqXHR) {
-              setCookie('uri', JSON.stringify(data))
-              console.log('Created')
-              console.log(data)
-          }
-        });
-      } else { //update with current version of units from db
-        var uri = getCookie('uri');
-        console.log(uri);
-        uri = uri.slice(8,uri.length-2)
-        $.ajax({
-          url: uri,
-          type: "PUT",
-          data: myData,
-          contentType: "application/json; charset=utf-8",
-          dataType: "json",
-          success: function (data, textStatus, jqXHR) {
-              console.log('Updated')
-              console.log(data)
-          }
-        });
-      }
-    }, 5000)
-  }
+  
   checkDbExists(dbName).then(res => {
-    externalStorage();
+    if(!res) {
+      $('#mLoading').modal('show');
+      var count = 1;
+      var interval = setInterval(function(){
+        count = count+3;
+        pLoading.innerHTML = 'Adding Characters to db: ' + count;
+      },10)
+      
+      setTimeout(()=>{
+        $('#mLoading').modal('hide');
+        clearInterval(interval)
+      }, 3000);
+    }
     var appState = new AppState(res);
     return appState.get()
   }).then(state => {
     loadChar(state.charId, state.rLevel)
     unitState = new UnitState();
+    externalStorage();
   })
 
   function loadChar(id, reviewLevel) {

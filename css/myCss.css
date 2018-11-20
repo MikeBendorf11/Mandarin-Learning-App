@@ -2,6 +2,9 @@ body{
   background: rgb(232,232,232);
 background: linear-gradient(10deg, rgba(232,232,202,1) 18%, rgba(255,255,255,1) 31%);
 }
+.modal-content{
+  background-color: rgba(255, 255, 255, 0.8)
+}
 .display-3{
   font-size: 5vw;
 position: absolute;
