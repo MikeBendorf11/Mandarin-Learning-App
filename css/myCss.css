@@ -304,7 +304,7 @@ select{
     justify-content: flex-start;
     border-style: none;
     width: 100%; 
-    min-height: 567px;
+    min-height: 547px;
     margin: 0;
     border-radius: 0;
     background: none;
@@ -395,7 +395,7 @@ select{
 
   #pinReviewCont{ 
     background-size: 100%;
-    margin-top: 5%; 
+    /* margin-top: 5%;  */
   }
   #rLevel{
     border-color: #343a40;

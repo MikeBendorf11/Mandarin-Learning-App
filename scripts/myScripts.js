@@ -661,7 +661,7 @@ window.onload = function () {
 
   //Load Frames and hide secondary ones
   
-  iframe1.setAttribute('src', 'http://ichacha.net/')
+  iframe1.setAttribute('src', 'http://ichacha.net/m')
   var gooSea = document.createElement('gcse:search');
   var cx = '002805804690599183502:cmqdgcgjmd4';
   var gcse = document.createElement('script');
