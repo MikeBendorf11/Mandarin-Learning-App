@@ -265,6 +265,10 @@ window.onload = function () {
       
       setTimeout(()=>{
         $('#mLoading').modal('hide');
+        btnHint.click();
+        btnCombL.click();
+        btnCombH.click();
+        ionNew.click();
         clearInterval(interval)
       }, 3000);
     }

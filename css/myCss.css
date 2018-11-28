@@ -2,11 +2,21 @@ body{
   background: rgb(232,232,232);
 background: linear-gradient(10deg, rgba(232,232,202,1) 18%, rgba(255,255,255,1) 31%);
 }
+#divDownload{
+  text-align: right;
+  position: absolute;
+  /* float: right; */
+  top: 0px;
+  right: 40px;
+}
+#divDownload img{
+  width: 25px;
+}
 .modal-content{
   background-color: rgba(255, 255, 255, 0.8)
 }
 .display-3{
-  font-size: 5vw;
+  font-size: 4vw;
 position: absolute;
 text-shadow:  2px 2px 5px grey;
 top: 0;
@@ -21,7 +31,7 @@ margin: 0 0 0 0;
   display: none;
 }
 #banner{
-  
+
   transform: rotate(-25deg);
   margin: -15% 0 -15% 0;
 }
@@ -79,10 +89,13 @@ footer{
   transform: scale(0.8);
   text-align: left;
 }
+#footer2{
+  display:none;
+}
 #git{
-  float: left;
-  width: 50px;
-  margin-right: 20px;
+    float: left;
+    width: 50px;
+    margin-right: 20px;
 }
 h1{
   font-size: 1.8vw;
@@ -269,10 +282,14 @@ select{
   }
 }
 @media screen and (max-width:760px){
+  #divDownload{
+    display: none;
+  }
   #pinReviewCont{
     transform: scale(1);
     margin-top: 10%;
     width: 100%;
+    max-width: 90%;
   }
   h1{
     font-size: 22.5px
@@ -298,18 +315,27 @@ select{
 }
 @media screen and (max-width:640px){
   body{
-    background: none;
+    background: linear-gradient(to bottom, 
+    rgba(252,229,148) 1%,
+    
+    rgb(255, 255, 255, .9), 
+    #F0C869
+    );
+    background-size: 50%;
   }
   #container{
+    /* visibility: hidden; */
     justify-content: flex-start;
     border-style: none;
     width: 100%; 
-    min-height: 547px;
+    min-height: 455px;
     margin: 0;
     border-radius: 0;
     background: none;
     background: linear-gradient(-40deg,
-    rgba(252,229,148,.65) 10%,
+    #F0C869, 
+    rgba(252,229,148) 20%,
+    
     rgba(252,229,148,.95) 28%,
     rgba(255,255,255,.85) 62%),
     url(../images/text.svg) -61% -5% / 70%;
@@ -318,7 +344,7 @@ select{
     display: none;
   }
   #pinReviewCont{
-    min-height: 450px;
+    min-height: 430px;
   }
   .nav{
     display: flex;
@@ -328,7 +354,8 @@ select{
     padding: 10px 10px;
     margin: 0 2%;
     color: #007bff;
-    font-weight: bolder；
+    font-weight: bolder;
+    min-height: 462px;
   }
   /*same as #searchCont, but this syncs with bootstrap specificty*/
   .tab-content > .active {
@@ -380,6 +407,27 @@ select{
   #pinyin{
     margin: 25px 0;
   }
+  footer{
+    display: none;
+  }
+  #footer2{
+    background: #F0C869;
+    padding-top: 7px;
+    font-size:  0.8em;
+    display: block;
+    width: 100%;
+    /* text-align: center; */
+    /* margin-top: -30px; */
+  }
+  #git2 {
+    float: left;
+    width: 40px;
+    margin: 0 20px 0 20%;
+  }
+ 
+  #pHint{
+    /* margin-bottom: 0; */
+  }
 }
 
 @media screen and (max-width:540px){
@@ -400,6 +448,7 @@ select{
   #rLevel{
     border-color: #343a40;
     box-shadow: 2px 2px 4px rgba(0,0,0, 0.4);
+    width: 15px;
   }
   #ime_wrapper{
     margin: 20px 0
@@ -442,7 +491,7 @@ select{
 }
 @media screen and (max-width:640px){
   #mobileTitle{
-    display: inline-block;
+    display: block;
   }
   #brLvl{
     display: none;
