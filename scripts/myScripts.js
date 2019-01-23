@@ -639,7 +639,7 @@ window.onload = function () {
   
   //window events
   //same but runs on onload
-  if (window.innerWidth < 651) {
+  if (window.innerWidth < 651) { 
 
     container.classList.add('tab-content');
     // var hwimeResult = document.querySelector('.mdbghwime-result');
@@ -651,11 +651,263 @@ window.onload = function () {
   $(".nav-tabs a").click(function () {
     $(this).tab('show');
     mdbgHwIme.adjustMdbgHwImeGridOffsets()
-    setTimeout(() => window.scrollTo(0, 0), 10);
-  });
+    //setTimeout(() => window.scrollTo(0, 0), 10);
+  }); 
   width = window.innerWidth;
   height = window.innerHeight;
   
+
+  var mySVG = `
+  <svg width="25cm" height="40cm" version="1.1"
+     xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink">
+
+  <text x="0" y="0" font-size="100" style="fill:grey">
+    <tspan x="0" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
+    <tspan x="0" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+    <tspan x="0" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+    <tspan x="0" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+    <tspan x="0" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
+    <tspan x="0" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
+     <tspan x="0" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+    <tspan x="0" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+    <tspan x="0" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+  </text>
+
+  <text x="60" y="70" font-size="20" style="fill:red;">
+    <tspan x="60" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
+    <tspan x="60" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+    <tspan x="60" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+    <tspan x="60" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+    <tspan x="60" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
+    <tspan x="60" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
+    <tspan x="60" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
+    <tspan x="60" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
+    <tspan x="60" dy="1.2em">百科一般要求和方式进行审核</tspan>
+    <tspan x="60" dy="1.2em">容需强制规则。</tspan>
+    <tspan x="60" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+    <tspan x="60" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+  </text>
+
+    <text x="500" y="100" style="fill:red;">
+    <tspan x="500" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
+    <tspan x="500" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+    <tspan x="500" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+    <tspan x="500" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+    <tspan x="500" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
+    <tspan x="500" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
+    <tspan x="500" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
+    <tspan x="500" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
+    <tspan x="500" dy="1.2em">百科一般要求和方式进行审核</tspan>
+    <tspan x="500" dy="1.2em">容需强制规则。</tspan>
+    <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+    <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+  </text>
+      <text x="500" y="400" style="fill:red;">
+    <tspan x="500" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
+    <tspan x="500" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+    <tspan x="500" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+    <tspan x="500" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+    <tspan x="500" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
+    <tspan x="500" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
+    <tspan x="500" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
+    <tspan x="500" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
+    <tspan x="500" dy="1.2em">百科一般要求和方式进行审核</tspan>
+    <tspan x="500" dy="1.2em">容需强制规则。</tspan>
+    <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+    <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+  </text>
+    <text x="100" y="500" style="fill:red;">
+    <tspan x="100" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
+    <tspan x="100" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+    <tspan x="100" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+    <tspan x="100" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+    <tspan x="100" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
+    <tspan x="100" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
+    <tspan x="100" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
+    <tspan x="100" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
+    <tspan x="100" dy="1.2em">百科一般要求和方式进行审核</tspan>
+    <tspan x="100" dy="1.2em">容需强制规则。</tspan>
+    <tspan x="100" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+    <tspan x="100" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+  </text>
+    <text x="0" y="820" font-size="20" style="fill:red;">
+    <tspan x="0" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
+    <tspan x="0" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+    <tspan x="0" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+    <tspan x="0" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+    <tspan x="0" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
+    <tspan x="0" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
+    <tspan x="0" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
+    <tspan x="0" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
+    <tspan x="0" dy="1.2em">百科一般要求和方式进行审核</tspan>
+    <tspan x="0" dy="1.2em">容需强制规则。</tspan>
+    <tspan x="0" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+    <tspan x="0" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+  </text>
+</svg>
+
+  `;
+  var Base64 = {
+
+    // private property
+    _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
+
+    // public method for encoding
+    , encode: function (input)
+    {
+        var output = "";
+        var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+        var i = 0;
+
+        input = Base64._utf8_encode(input);
+
+        while (i < input.length)
+        {
+            chr1 = input.charCodeAt(i++);
+            chr2 = input.charCodeAt(i++);
+            chr3 = input.charCodeAt(i++);
+
+            enc1 = chr1 >> 2;
+            enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+            enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+            enc4 = chr3 & 63;
+
+            if (isNaN(chr2))
+            {
+                enc3 = enc4 = 64;
+            }
+            else if (isNaN(chr3))
+            {
+                enc4 = 64;
+            }
+
+            output = output +
+                this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
+                this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
+        } // Whend 
+
+        return output;
+    } // End Function encode 
+
+
+    // public method for decoding
+    ,decode: function (input)
+    {
+        var output = "";
+        var chr1, chr2, chr3;
+        var enc1, enc2, enc3, enc4;
+        var i = 0;
+
+        input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+        while (i < input.length)
+        {
+            enc1 = this._keyStr.indexOf(input.charAt(i++));
+            enc2 = this._keyStr.indexOf(input.charAt(i++));
+            enc3 = this._keyStr.indexOf(input.charAt(i++));
+            enc4 = this._keyStr.indexOf(input.charAt(i++));
+
+            chr1 = (enc1 << 2) | (enc2 >> 4);
+            chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+            chr3 = ((enc3 & 3) << 6) | enc4;
+
+            output = output + String.fromCharCode(chr1);
+
+            if (enc3 != 64)
+            {
+                output = output + String.fromCharCode(chr2);
+            }
+
+            if (enc4 != 64)
+            {
+                output = output + String.fromCharCode(chr3);
+            }
+
+        } // Whend 
+
+        output = Base64._utf8_decode(output);
+
+        return output;
+    } // End Function decode 
+
+
+    // private method for UTF-8 encoding
+    ,_utf8_encode: function (string)
+    {
+        var utftext = "";
+        string = string.replace(/\r\n/g, "\n");
+
+        for (var n = 0; n < string.length; n++)
+        {
+            var c = string.charCodeAt(n);
+
+            if (c < 128)
+            {
+                utftext += String.fromCharCode(c);
+            }
+            else if ((c > 127) && (c < 2048))
+            {
+                utftext += String.fromCharCode((c >> 6) | 192);
+                utftext += String.fromCharCode((c & 63) | 128);
+            }
+            else
+            {
+                utftext += String.fromCharCode((c >> 12) | 224);
+                utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+                utftext += String.fromCharCode((c & 63) | 128);
+            }
+
+        } // Next n 
+
+        return utftext;
+    } // End Function _utf8_encode 
+
+    // private method for UTF-8 decoding
+    ,_utf8_decode: function (utftext)
+    {
+        var string = "";
+        var i = 0;
+        var c, c1, c2, c3;
+        c = c1 = c2 = 0;
+
+        while (i < utftext.length)
+        {
+            c = utftext.charCodeAt(i);
+
+            if (c < 128)
+            {
+                string += String.fromCharCode(c);
+                i++;
+            }
+            else if ((c > 191) && (c < 224))
+            {
+                c2 = utftext.charCodeAt(i + 1);
+                string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+                i += 2;
+            }
+            else
+            {
+                c2 = utftext.charCodeAt(i + 1);
+                c3 = utftext.charCodeAt(i + 2);
+                string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+                i += 3;
+            }
+
+        } // Whend 
+
+        return string;
+    } // End Function _utf8_decode 
+
+}
+  document.getElementById('container').style.background =
+  `
+  linear-gradient(-40deg,
+  rgba(252,229,148,.65) 18%,
+  rgba(252,229,148,.95) 52%,
+  rgba(255,255,255,1) 79%),
+  url('data:image/svg+xml;base64,${Base64.encode(mySVG)}') -61% -25% /70% 
+  `
+
+
   //tests
   
   // document.querySelector('[href="#searchCont"]').click();
@@ -665,7 +917,7 @@ window.onload = function () {
 
   //Load Frames and hide secondary ones
   
-  iframe1.setAttribute('src', 'http://ichacha.net/m')
+  iframe1.setAttribute('src', 'https://eng.ichacha.net/m')
   var gooSea = document.createElement('gcse:search');
   var cx = '002805804690599183502:cmqdgcgjmd4';
   var gcse = document.createElement('script');

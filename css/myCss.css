@@ -44,15 +44,14 @@ margin: 0 0 0 0;
   border-radius: 18vw;
   border-color: rgb(102, 40, 40, .6);
   border-right-style: solid;
-  background: rgb(252,229,148);
 background: linear-gradient(300deg,
     rgba(252,229,148,.65) 38%,
-    rgba(252,229,148,.95) 48%,
-    rgba(255,255,255,1) 69%),
-    url(../images/text.svg) -61% -5%;
+    rgba(252,229,148,.95) 53%,
+    rgba(255,255,255,1) 75%); 
+    /* url(../images/text.svg) -61% -5%; */
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly; 
+  justify-content: space-around; 
   width: 78%;
   height: 720px;
   margin: 3% 15%;
@@ -73,6 +72,7 @@ background: linear-gradient(300deg,
   transform: scale(1.1);
 }
 #pinReviewCont{
+  /* min-width: 50%; */
   flex: 50%;
   transform: scale(1.2);
   box-sizing: border-box;
@@ -303,8 +303,8 @@ select{
     background: linear-gradient(-40deg,
     rgba(252,229,148,.65) 18%,
     rgba(252,229,148,.95) 52%,
-    rgba(255,255,255,1) 79%),
-    url(../images/text.svg) -61% -5%;
+    rgba(255,255,255,1) 79%);
+    /* url(../images/text.svg) -61% -5%; */
     height: 100%;
     width: 90%;
     margin: 5%;
@@ -337,8 +337,8 @@ select{
     rgba(252,229,148) 20%,
     
     rgba(252,229,148,.95) 28%,
-    rgba(255,255,255,.85) 62%),
-    url(../images/text.svg) -61% -5% / 70%;
+    rgba(255,255,255,.85) 62%);
+    /* url(../images/text.svg) -61% -5% / 70%; */
   }
   .display-3{ 
     display: none;
@@ -347,6 +347,7 @@ select{
     min-height: 430px;
   }
   .nav{
+    
     display: flex;
     /* margin-top: 55px; */
   }
