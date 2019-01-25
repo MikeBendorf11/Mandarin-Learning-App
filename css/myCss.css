@@ -71,7 +71,7 @@ background: linear-gradient(300deg,
 #ime_wrapper h1{
   transform: scale(1.1);
 }
-#pinReviewCont{
+#reviewCont{
   /* min-width: 50%; */
   flex: 50%;
   transform: scale(1.2);
@@ -166,6 +166,12 @@ h2{
   font-family: "Ionicons";
   content: "\f48a"
 }
+.ion-nav:after{
+  content: none;
+}
+.ion-nav:before{
+  display:none;
+}
 
 .input-group-text, #seaIpt{
   background-color:rgba(255, 255, 255, 0.25);
@@ -222,11 +228,11 @@ select{
   background-color: rgba(255, 255, 255, 0.4);
   padding-bottom: 10px;
 }
-#pinReviewCont #pinyin{
+#reviewCont #pinyin{
   font-family: 'fnt_pronunciation';
   
 }
-#dvLevel, #dvConsult span, #dvReview, #combTitle{
+#dvLevel, #dvConsult span, #LevelCont, #combTitle{
   display: inline-block;
   font-size: 0.7em;
   font-weight: 750;
@@ -245,7 +251,7 @@ select{
   margin-bottom: -4px;
 
 }
-#pinReviewCont #dvConsult{
+#reviewCont #dvConsult{
   display: inline-block;
 }
 .nav{
@@ -269,7 +275,7 @@ select{
   h1{
     font-size: 2.5vw
   }
-  #pinReviewCont{
+  #reviewCont{
     transform: scale(1.1);
     
   }
@@ -285,11 +291,22 @@ select{
   #divDownload{
     display: none;
   }
-  #pinReviewCont{
+  .ion-nav:before{
+    display:unset;
+    font-family: "Ionicons";
+    font-size: 35px;
+    color: rgb(204, 204, 204);
+    content: "\f20d";
+  }
+  .dropdown{
+    text-align: left;
+  }
+  #reviewCont{
     transform: scale(1);
-    margin-top: 10%;
+    margin-top: 0%;
     width: 100%;
     max-width: 90%;
+    
   }
   h1{
     font-size: 22.5px
@@ -328,7 +345,7 @@ select{
     justify-content: flex-start;
     border-style: none;
     width: 100%; 
-    min-height: 455px;
+    min-height: 525px;;
     margin: 0;
     border-radius: 0;
     background: none;
@@ -343,13 +360,22 @@ select{
   .display-3{ 
     display: none;
   }
-  #pinReviewCont{
-    min-height: 430px;
+  #reviewCont{
+    min-height: 465px;
+  }
+  #sentReview{
+    display: none;
+    background-color: rgba(255, 255, 255, 0.507);
+    text-align: left;
+    height: 405px;
+    overflow-y: scroll;
   }
   .nav{
-    
     display: flex;
     /* margin-top: 55px; */
+  }
+  #LevelCont{
+    margin-top:40px;
   }
   #searchCont{
     padding: 10px 10px;
@@ -406,7 +432,7 @@ select{
     margin: 20px 0
   }
   #pinyin{
-    margin: 25px 0;
+    margin: 10px 0 10px 0;
   }
   footer{
     display: none;
@@ -435,14 +461,14 @@ select{
   .display-3{
     font-size: 30px;
     font-weight: 600;
-    margin: 10px;
+    margin: 20px;
   }
  
   #container h1{
     display: none;
   }
 
-  #pinReviewCont{ 
+  #reviewCont{ 
     background-size: 100%;
     /* margin-top: 5%;  */
   }
@@ -488,11 +514,12 @@ select{
                 0 -1px rgb(121, 121, 121);
   /* font-weight: 910; */
   font-size: 2.2em;
-  margin: -0px 0 20px 0;
+  margin: 10px 0 20px 0;
 }
 @media screen and (max-width:640px){
   #mobileTitle{
     display: block;
+    margin-top: 0;
   }
   #brLvl{
     display: none;

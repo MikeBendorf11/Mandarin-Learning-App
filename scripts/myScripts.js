@@ -487,7 +487,7 @@ window.onload = function () {
   }
 
   //review tab events
-  pinReviewCont.onclick = function (event) {
+  reviewCont.onclick = function (event) {
     var target = event.target;
 
     //buttons pressed
@@ -913,7 +913,7 @@ window.onload = function () {
   // document.querySelector('[href="#searchCont"]').click();
   // seaIpt.value = "可能"
   // seaIpt.focus()
-  
+//  setTimeout(()=>revSent.click(),1000);
 
   //Load Frames and hide secondary ones
   
@@ -929,9 +929,6 @@ window.onload = function () {
   iframe2.contentWindow.document.body.appendChild(gcse);
   iframe3.setAttribute('src','https://www.mdbg.net/chinese/dictionary#');
   iframe4.setAttribute('src','https://chinesepod.com/dictionary/english-chinese/');
-  //iframe5.setAttribute('src','https://yellowbridge.com/chinese/dictionary.php')
-
-  
 
   iframe3.style.display = 'none';
   iframe2.style.display = 'none';
@@ -939,6 +936,52 @@ window.onload = function () {
   // iframe5.style.display = 'none';
   
 }//ends window.onload
+
+/**Sentence Review */
+var loaded=false;
+var wait = 0;
+revSent.onclick =()=>{
+  pronReview.style.display = 'none'
+  sentReview.style.display = 'block';
+  if(!loaded){
+    units.forEach(unit =>{
+      var sentences = unit.combinations.long;
+      var definitions = unit.definitions.long;
+      if(sentences){
+        for(i=0;i<sentences.length;i++){
+          if(sentences[i]){
+            var group = document.createElement('details');
+            var aComb = document.createElement('summary');
+            var aDef = document.createElement('span');
+            aComb.innerHTML = `<b>${unit.char}:</b> <span> ${sentences[i]}</span>`;
+            if(typeof(definitions[i]) == 'undefined' || !definitions[i]){
+              aDef.innerHTML = ''              
+              aComb.addEventListener('click', (event)=>{
+                console.log(event.target)
+                var target= event.target;
+                gTranslate(target.innerHTML).then(data=>{
+                  target.parentNode.parentNode.children[1].innerHTML = data;
+                })
+              })
+              
+            } else {
+              aDef.innerHTML = definitions[i];
+            }
+            group.appendChild(aComb);
+            group.appendChild(aDef);
+            sentReview.appendChild(group);
+          }
+        }
+      } 
+    })
+    loaded = true;
+  }
+}
+revPron.onclick = ()=>{
+  sentReview.style.display = 'none';
+  pronReview.style.display = 'block';
+}
+
 
 async function gTranslate(phrase) {
 //  console.log('here');

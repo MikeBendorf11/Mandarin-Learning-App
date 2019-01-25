@@ -5,11 +5,11 @@
   <meta charset="UTF-8" manifest="cache.mf">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  
+
   <!-- LinkedIn -->
-  <meta property="og:title" content="Title of the article"/>
-  <meta property="og:image" content="images/chapp.PNG"/>
-  <meta property="og:description" content="Website Capture Screen"/>
+  <meta property="og:title" content="Title of the article" />
+  <meta property="og:image" content="images/chapp.PNG" />
+  <meta property="og:description" content="Website Capture Screen" />
   <meta property="og:url" content="http://mb11.info/chapp/" />
   <meta name="theme-color" content="#F0C869" />
   <title>Mandarin Learning App</title>
@@ -20,7 +20,7 @@
   <!-- stop browsers auto cache -->
   <script>
     var scriptUrls = [
-      "scripts/handwrite-chindict.js", 
+      "scripts/handwrite-chindict.js",
       "scripts/handwrite-hwime.js",
       "scripts/myScripts.js",
       "scripts/storageFunctions.js",
@@ -52,36 +52,29 @@
 </head>
 
 <body>
-<div id="divDownload">
-  <span>Download for pc:</span><br>
-  <a href="downloads/MLA_Standalone_win_x64.exe"><img src="images/windows2.png" alt="Windows"></a>
-  <a href="downloads/MLA_MacOS.app.zip"><img src="images/mac2.png" alt="Mac"></a>
-  <a href=""><img src="images/linux2.png" alt="Linux"></a>
-</div>
+  <div id="divDownload">
+    <span>Download for pc:</span><br>
+    <a href="downloads/MLA_Standalone_win_x64.exe"><img src="images/windows2.png" alt="Windows"></a>
+    <a href="downloads/MLA_MacOS.app.zip"><img src="images/mac2.png" alt="Mac"></a>
+    <a href=""><img src="images/linux2.png" alt="Linux"></a>
+  </div>
   <!-- The Modal -->
-<div class="modal fade" id="mLoading">
-  <div class="modal-dialog modal-dialog-centered" >
-    <div class="modal-content"> 
-      <!-- Modal body -->
-      <div class="modal-header">
+  <div class="modal fade" id="mLoading">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <!-- Modal body -->
+        <div class="modal-header">
           <h4 class="modal-title">Loading app</h4>
         </div>
-      <div class="modal-body">
-        <span id="pLoading"></span>
-      </div>
-      <div class="modal-footer">
+        <div class="modal-body">
+          <span id="pLoading"></span>
+        </div>
+        <div class="modal-footer">
           <img width="50px" src="images/loading2.gif" alt="loading">
         </div>
+      </div>
     </div>
   </div>
-</div>
-  
-  <!-- //linked in capture -->
-  <picture>
-    <source srcset="images/chapp.PNG"
-      media="(max-width:380px)">
-    <img src="images/chapp.PNG" alt="Site Capture">
-  </picture>  
   <h1 class="display-3">Mandarin Learning Assistant</h1>
   <div id="banner">
     <span class="display-1">希望</span>
@@ -89,10 +82,10 @@
   <!-- Nav tabs -->
   <ul id="nav" class="nav nav-tabs nav-justified">
     <li class="nav-item">
-      <a class="nav-link active" data-toggle="tab" href="#pinReviewCont" onclick="return false;">Review</a>
+      <a class="nav-link active" data-toggle="tab" href="#reviewCont" onclick="return false;">Review</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#ime_wrapper"  data-toggle="tab" onclick="return false;">Draw</a>
+      <a class="nav-link" href="#ime_wrapper" data-toggle="tab" onclick="return false;">Draw</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" data-toggle="tab" href="#searchCont" onclick="return false;">Search</a>
@@ -101,45 +94,70 @@
       <a class="nav-link" data-toggle="tab" href="#links" onclick="return false;">Links</a>
     </li>
   </ul>
+
   <div id="container">
-    
-    <div id="pinReviewCont" class="tab-pane active">
+
+    <div id="reviewCont" class="tab-pane active">
+      <div class="dropdown">
+        <span id="ionNav" class="ion-nav dropdown-toggle " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
+        <div class="dropdown-menu" aria-labelledby="ionNav">
+          <span>&nbsp;&nbsp;Review:</span>
+          <a class="dropdown-item" id="revPron">Pronunciation</a>
+          <a class="dropdown-item" id="revSent">Sentences</a>
+        </div>
+
+      </div>
+      <div id="pronReview">
+
+
+        <div><a href=""></a><a href=""></a></div>
         <h2 id="mobileTitle">Mandarin Assistant</h2>
-      <h1>Review :</h1>
-      <div id="dvReview">
-        <select id="rLevel" class="form-control">
-          <option id="rLevel0" value="0">0 </option>
-          <option id="rLevel1" value="1">1</option>
-          <option id="rLevel2" value="2">2</option>
-          <option id="rLevel3" value="3">3</option>
-          <option id="rLevel4" value="4">4</option>
-        </select>
-      </div><br id='brLvl'>
-      <button class="btn btn-outline-dark" id="btnPrev"><span id="ionPrev" class="ion ion-back"></span></button>
-      <button id="btnHint" class="btn btn-outline-dark">Hint <span id="ionHint" class="ion ion-hint"></span></button>
-      <button class="btn btn-outline-dark" id="btnNext"><span id="ionNext" class="ion ion-next"></span></button>
-      <br>
-      <br>
-      <h2 id="pinyin" data-toggle="popover" title="<p align='center'>Edit this entry:</p>" data-html="true" data-placement="bottom">&nbsp;</h2><sup
-        id="idDisplay"></sup>
+        <h1>Review :</h1>
+        <div id="LevelCont">
+          <select id="rLevel" class="form-control">
+            <option id="rLevel0" value="0">0 </option>
+            <option id="rLevel1" value="1">1</option>
+            <option id="rLevel2" value="2">2</option>
+            <option id="rLevel3" value="3">3</option>
+            <option id="rLevel4" value="4">4</option>
+          </select>
+        </div><br id='brLvl'>
+        <button class="btn btn-outline-dark" id="btnPrev"><span id="ionPrev" class="ion ion-back"></span></button>
+        <button id="btnHint" class="btn btn-outline-dark">Hint <span id="ionHint" class="ion ion-hint"></span></button>
+        <button class="btn btn-outline-dark" id="btnNext"><span id="ionNext" class="ion ion-next"></span></button>
+        <br>
 
-      <p id="pDefNchar">&nbsp;</p>
+        <h2 id="pinyin" data-toggle="popover" title="<p align='center'>Edit this entry:</p>" data-html="true"
+          data-placement="bottom">&nbsp;</h2><sup id="idDisplay"></sup>
 
-      <span id="combTitle">COMBINATIONS:</span><br>
-      <button class="btn btn-outline-dark" id="btnCombS">Short <span id="ionCombShort" class="ion ion-short"></span></button>
-      <button class="btn btn-outline-dark" id="btnCombL">Long <span id="ionCombLong" class="ion ion-long"></span></button>
-      <button class="btn btn-outline-dark" id="btnCombH">Hint <span id="ionCombHint" class="ion ion-hint"></span></button>
-      <p id="pComb">&nbsp;</p>
-      <div id="dvPcombHint">
-        <p id="pHint">&nbsp;</p>
-      </div><br>
-      <footer id="footPc">
-        <img id="git" alt="GitHub" title="GitHub" src="images/github.png" alt="GitHub">
-        <span>More info at <a href="https://github.com/mikebendorf11/Chinese-Learning-App">GitHub.com </a><br> Copyright &copy;
-          2018 MB</span><br>
-        <p></p>
-      </footer>
-    </div>
+        <p id="pDefNchar">&nbsp;</p>
+
+        <span id="combTitle">COMBINATIONS:</span><br>
+        <button class="btn btn-outline-dark" id="btnCombS">Short <span id="ionCombShort" class="ion ion-short"></span></button>
+        <button class="btn btn-outline-dark" id="btnCombL">Long <span id="ionCombLong" class="ion ion-long"></span></button>
+        <button class="btn btn-outline-dark" id="btnCombH">Hint <span id="ionCombHint" class="ion ion-hint"></span></button>
+        <p id="pComb">&nbsp;</p>
+        <div id="dvPcombHint">
+          <p id="pHint">&nbsp;</p>
+        </div><br>
+        <footer id="footPc">
+          <img id="git" alt="GitHub" title="GitHub" src="images/github.png" alt="GitHub">
+          <span>More info at <a href="https://github.com/mikebendorf11/Chinese-Learning-App">GitHub.com </a><br>
+            Copyright &copy;
+            2018 MB</span><br>
+          <p></p>
+        </footer>
+
+
+
+      </div><!-- end pronReview -->
+
+      <div id="sentReview">
+
+      </div><!-- end sentReview -->
+
+
+    </div><!-- Reviewcont -->
     <div id="ime_wrapper" class="tab-pane">
       <h1>Draw :</h1>
       <div id="ime_word">
@@ -155,13 +173,13 @@
         <input id="seaIpt" type="text" class="form-control">
         <div class="input-group-prepend">
           <span id="ionSea" class="input-group-text  ion-search"></span>
-         
+
         </div>
         <div class="input-group-prepend">
           <span id="ionNew" class="input-group-text ion-new"></span>
-         
+
         </div>
-        
+
       </div>
 
       <table>
@@ -197,7 +215,7 @@
     </div>
     <div id="links" class="tab-pane">
       <ul id="navLinks" class="nav nav-tabs ">
-        <li >
+        <li>
           <a class="nav-link active" id="ichachaLink">Icha</a>
         </li>
         <li class="nav-item">
@@ -210,27 +228,27 @@
           <a class="nav-link" id="cpodLink">CPod</a>
         </li>
         <!-- <li class="nav-item">
-          <a class="nav-link" id="yebrLink">YeBr</a>
-        </li> -->
+            <a class="nav-link" id="yebrLink">YeBr</a>
+          </li> -->
       </ul>
       <!-- <div id="gSearch">
-          <gcse:search></gcse:search>
-      </div> -->
-      
-      <iframe id="iframe1" src="" frameborder="0"></iframe>        
+            <gcse:search></gcse:search>
+        </div> -->
+
+      <iframe id="iframe1" src="" frameborder="0"></iframe>
       <iframe id="iframe2" src="" frameborder="0"></iframe>
       <iframe id="iframe3" src="" frameborder="0"></iframe>
       <iframe id="iframe4" src="" frameborder="0"></iframe>
       <!-- <iframe id="iframe5" src="" frameborder="0"></iframe> -->
-      
+
     </div>
     <div id="footer2">
       <img id="git2" alt="GitHub" title="GitHub" src="images/github.png" alt="GitHub">
-        <span>More info at <a href="https://github.com/mikebendorf11/Chinese-Learning-App">GitHub.com </a><br> Copyright &copy; 2018 MB</span><br>
-        <p></p>
+      <span>More info at <a href="https://github.com/mikebendorf11/Chinese-Learning-App">GitHub.com </a><br> Copyright
+        &copy; 2018 MB</span><br>
+      <p></p>
     </div>
-  </div>
-  
+  </div><!-- end container -->
 </body>
 
 </html>
