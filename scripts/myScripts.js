@@ -210,38 +210,38 @@ function pushChanges(displayUnit){
    * units
    */
 function externalStorage(){
-  setTimeout(function(){
-    var myData = JSON.stringify(units)
-    if(!getCookie('uri')){ //1st time? generate URI
+  // setTimeout(function(){
+  //   var myData = JSON.stringify(units)
+  //   if(!getCookie('uri')){ //1st time? generate URI
       
-      $.ajax({
-        url: "https://api.myjson.com/bins",
-        type: "POST",
-        data: myData,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (data, textStatus, jqXHR) {
-            setCookie('uri', JSON.stringify(data))
-            console.log('Created')
-            console.log(data)
-        }
-      });
-    } else { //update with current version of units from db
-      var uri = getCookie('uri');
-      console.log(uri);
-      uri = uri.slice(8,uri.length-2)
-      $.ajax({
-        url: uri,
-        type: "PUT",
-        data: myData,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (data, textStatus, jqXHR) {
-            console.log('Updated external storage on load.')
-        }
-      });
-    }
-  }, 5000)
+  //     $.ajax({
+  //       url: "https://api.myjson.com/bins",
+  //       type: "POST",
+  //       data: myData,
+  //       contentType: "application/json; charset=utf-8",
+  //       dataType: "json",
+  //       success: function (data, textStatus, jqXHR) {
+  //           setCookie('uri', JSON.stringify(data))
+  //           console.log('Created')
+  //           console.log(data)
+  //       }
+  //     });
+  //   } else { //update with current version of units from db
+  //     var uri = getCookie('uri');
+  //     console.log(uri);
+  //     uri = uri.slice(8,uri.length-2)
+  //     $.ajax({
+  //       url: uri,
+  //       type: "PUT",
+  //       data: myData,
+  //       contentType: "application/json; charset=utf-8",
+  //       dataType: "json",
+  //       success: function (data, textStatus, jqXHR) {
+  //           console.log('Updated external storage on load.')
+  //       }
+  //     });
+  //   }
+  // }, 5000)
 }
 window.onload = function () {
   //to be send to nextIdx by event handler
@@ -910,29 +910,29 @@ window.onload = function () {
 
   //tests
   
-  // document.querySelector('[href="#searchCont"]').click();
-  // seaIpt.value = "可能"
-  // seaIpt.focus()
+  document.querySelector('[href="#searchCont"]').click();
+  seaIpt.value = "什么"
+  seaIpt.focus()
 //  setTimeout(()=>revSent.click(),1000);
 
   //Load Frames and hide secondary ones
   
-  iframe1.setAttribute('src', 'https://eng.ichacha.net/m')
-  var gooSea = document.createElement('gcse:search');
-  var cx = '002805804690599183502:cmqdgcgjmd4';
-  var gcse = document.createElement('script');
-  gcse.type = 'text/javascript';
-  gcse.async = true;
-  gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
-  var s = document.getElementsByTagName('script')[0];
-  iframe2.contentWindow.document.body.appendChild(gooSea);
-  iframe2.contentWindow.document.body.appendChild(gcse);
-  iframe3.setAttribute('src','https://www.mdbg.net/chinese/dictionary#');
-  iframe4.setAttribute('src','https://chinesepod.com/dictionary/english-chinese/');
+  // iframe1.setAttribute('src', 'https://eng.ichacha.net/m')
+  // var gooSea = document.createElement('gcse:search');
+  // var cx = '002805804690599183502:cmqdgcgjmd4';
+  // var gcse = document.createElement('script');
+  // gcse.type = 'text/javascript';
+  // gcse.async = true;
+  // gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+  // var s = document.getElementsByTagName('script')[0];
+  // iframe2.contentWindow.document.body.appendChild(gooSea);
+  // iframe2.contentWindow.document.body.appendChild(gcse);
+  // iframe3.setAttribute('src','https://www.mdbg.net/chinese/dictionary#');
+  // iframe4.setAttribute('src','https://chinesepod.com/dictionary/english-chinese/');
 
-  iframe3.style.display = 'none';
-  iframe2.style.display = 'none';
-  iframe4.style.display = 'none';
+  // iframe3.style.display = 'none';
+  // iframe2.style.display = 'none';
+  // iframe4.style.display = 'none';
   // iframe5.style.display = 'none';
   
 }//ends window.onload
@@ -957,10 +957,14 @@ revSent.onclick =()=>{
             if(typeof(definitions[i]) == 'undefined' || !definitions[i]){
               aDef.innerHTML = ''              
               aComb.addEventListener('click', (event)=>{
-                console.log(event.target)
+                //console.log(event.target)
                 var target= event.target;
-                gTranslate(target.innerHTML).then(data=>{
+                gTranslate(target.innerHTML)
+                .then(data=>{
                   target.parentNode.parentNode.children[1].innerHTML = data;
+                })
+                .catch(data=>{
+                  buildSingleDef([data], seaDef);
                 })
               })
               
@@ -1002,7 +1006,7 @@ async function gTranslate(phrase) {
       }
     }
     xhr.onerror = function () {
-      console.log('error: ' + this.status);
+      //console.log('error: ' + this.status);
       reject(img + 'you are offline...');
     }
     xhr.send();
@@ -1202,6 +1206,7 @@ function buildCombDef(combsArr, defsArr, display){
       .then(data =>{
         def.innerHTML = data;
       })
+      .catch(data=>def.innerHTML = data)
     }
     display.appendChild(comb);
     display.appendChild(def);
@@ -1237,9 +1242,17 @@ function displaySearch(aResult, index){
             data2 = data2.replace(reg, '')
           buildSingleDef([`(${data1} ,${data2})`, `${data3}`], seaDef);
         })))
+        .catch(data=>{
+          
+          buildSingleDef([data], seaDef);
+        })
       } else {
         gTranslate(aResult[index].char)
         .then(data=>{
+          buildSingleDef([data], seaDef);
+        })
+        .catch(data=>{
+          //console.log("here")
           buildSingleDef([data], seaDef);
         })
       }
@@ -1253,6 +1266,9 @@ function displaySearch(aResult, index){
       if(tempDef == ""){
         gTranslate(aResult[index].char)
         .then(data=>{
+          buildSingleDef([data], seaDef);
+        })
+        .catch(data=>{
           buildSingleDef([data], seaDef);
         })
       } else {
