@@ -210,38 +210,38 @@ function pushChanges(displayUnit){
    * units
    */
 function externalStorage(){
-  // setTimeout(function(){
-  //   var myData = JSON.stringify(units)
-  //   if(!getCookie('uri')){ //1st time? generate URI
+  setTimeout(function(){
+    var myData = JSON.stringify(units)
+    if(!getCookie('uri')){ //1st time? generate URI
       
-  //     $.ajax({
-  //       url: "https://api.myjson.com/bins",
-  //       type: "POST",
-  //       data: myData,
-  //       contentType: "application/json; charset=utf-8",
-  //       dataType: "json",
-  //       success: function (data, textStatus, jqXHR) {
-  //           setCookie('uri', JSON.stringify(data))
-  //           console.log('Created')
-  //           console.log(data)
-  //       }
-  //     });
-  //   } else { //update with current version of units from db
-  //     var uri = getCookie('uri');
-  //     console.log(uri);
-  //     uri = uri.slice(8,uri.length-2)
-  //     $.ajax({
-  //       url: uri,
-  //       type: "PUT",
-  //       data: myData,
-  //       contentType: "application/json; charset=utf-8",
-  //       dataType: "json",
-  //       success: function (data, textStatus, jqXHR) {
-  //           console.log('Updated external storage on load.')
-  //       }
-  //     });
-  //   }
-  // }, 5000)
+      $.ajax({
+        url: "https://api.myjson.com/bins",
+        type: "POST",
+        data: myData,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data, textStatus, jqXHR) {
+            setCookie('uri', JSON.stringify(data))
+            console.log('Created')
+            console.log(data)
+        }
+      });
+    } else { //update with current version of units from db
+      var uri = getCookie('uri');
+      console.log(uri);
+      uri = uri.slice(8,uri.length-2)
+      $.ajax({
+        url: uri,
+        type: "PUT",
+        data: myData,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data, textStatus, jqXHR) {
+            console.log('Updated external storage on load.')
+        }
+      });
+    }
+  }, 5000)
 }
 window.onload = function () {
   //to be send to nextIdx by event handler
@@ -917,23 +917,23 @@ window.onload = function () {
 
   //Load Frames and hide secondary ones
   
-  // iframe1.setAttribute('src', 'https://eng.ichacha.net/m')
-  // var gooSea = document.createElement('gcse:search');
-  // var cx = '002805804690599183502:cmqdgcgjmd4';
-  // var gcse = document.createElement('script');
-  // gcse.type = 'text/javascript';
-  // gcse.async = true;
-  // gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
-  // var s = document.getElementsByTagName('script')[0];
-  // iframe2.contentWindow.document.body.appendChild(gooSea);
-  // iframe2.contentWindow.document.body.appendChild(gcse);
-  // iframe3.setAttribute('src','https://www.mdbg.net/chinese/dictionary#');
-  // iframe4.setAttribute('src','https://chinesepod.com/dictionary/english-chinese/');
+  iframe1.setAttribute('src', 'https://eng.ichacha.net/m')
+  var gooSea = document.createElement('gcse:search');
+  var cx = '002805804690599183502:cmqdgcgjmd4';
+  var gcse = document.createElement('script');
+  gcse.type = 'text/javascript';
+  gcse.async = true;
+  gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+  var s = document.getElementsByTagName('script')[0];
+  iframe2.contentWindow.document.body.appendChild(gooSea);
+  iframe2.contentWindow.document.body.appendChild(gcse);
+  iframe3.setAttribute('src','https://www.mdbg.net/chinese/dictionary#');
+  iframe4.setAttribute('src','https://chinesepod.com/dictionary/english-chinese/');
 
-  // iframe3.style.display = 'none';
-  // iframe2.style.display = 'none';
-  // iframe4.style.display = 'none';
-  // iframe5.style.display = 'none';
+  iframe3.style.display = 'none';
+  iframe2.style.display = 'none';
+  iframe4.style.display = 'none';
+  iframe5.style.display = 'none';
   
 }//ends window.onload
 
