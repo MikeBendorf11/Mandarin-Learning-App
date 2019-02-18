@@ -910,10 +910,11 @@ window.onload = function () {
 
   //tests
   
-  document.querySelector('[href="#searchCont"]').click();
-  seaIpt.value = "什么"
-  seaIpt.focus()
-//  setTimeout(()=>revSent.click(),1000);
+  // document.querySelector('[href="#searchCont"]').click();
+  // seaIpt.value = "什么"
+  // seaIpt.focus()
+  //setTimeout(()=>revSent.click(),1000);
+    
 
   //Load Frames and hide secondary ones
   
@@ -957,14 +958,15 @@ revSent.onclick =()=>{
             if(typeof(definitions[i]) == 'undefined' || !definitions[i]){
               aDef.innerHTML = ''              
               aComb.addEventListener('click', (event)=>{
-                //console.log(event.target)
+                console.log(event.target)
+                console.log(event.target.parentNode.children)
                 var target= event.target;
                 gTranslate(target.innerHTML)
                 .then(data=>{
                   target.parentNode.parentNode.children[1].innerHTML = data;
                 })
                 .catch(data=>{
-                  buildSingleDef([data], seaDef);
+                  target.parentNode.parentNode.children[1].innerHTML = data;
                 })
               })
               
