@@ -327,7 +327,7 @@ select{
     margin: 5%;
   }
   #ime_wrapper{
-    margin: 120px 0
+    margin: 155px 0
   }
 }
 @media screen and (max-width:640px){
@@ -361,6 +361,7 @@ select{
     display: none;
   }
   #reviewCont{
+    margin-top: 52px;
     min-height: 465px;
   }
   #sentReview{
@@ -372,6 +373,7 @@ select{
   }
   .nav{
     display: flex;
+    position: fixed;
     /* margin-top: 55px; */
   }
   #LevelCont{
@@ -379,7 +381,7 @@ select{
   }
   #searchCont{
     padding: 10px 10px;
-    margin: 0 2%;
+    margin: 50px 2% 0 0;
     color: #007bff;
     font-weight: bolder;
     min-height: 462px;
@@ -429,7 +431,7 @@ select{
     display: none;
   }
   #ime_wrapper{
-    margin: 20px 0
+    margin: 75px 0 0 0
   }
   #pinyin{
     margin: 10px 0 10px 0;
@@ -478,7 +480,7 @@ select{
     width: 15px;
   }
   #ime_wrapper{
-    margin: 20px 0
+    margin: 75px 0 0 0
   }
   .form-control{
     background-color: rgb(255, 255, 255, 0.3)
@@ -491,6 +493,7 @@ select{
   margin: 0 auto 0;
 }
 #links{
+  margin: 83px 0 0 0;
   width: 100%
 }
 
@@ -500,8 +503,18 @@ select{
 }
 #navLinks{
   margin-top: 0;
+  position: fixed;
+  top: 40px;
+}
+#nav li{
+  width: 100px;
+  background-color: white;
+}
+#navLinks li{
+  width: 90px;
 }
 #navLinks li .nav-link{
+  background-color: white;
   border-top-color: rgb(255, 255, 255)
 }
 #mobileTitle{

@@ -210,38 +210,40 @@ function pushChanges(displayUnit){
    * units
    */
 function externalStorage(){
-  setTimeout(function(){
-    var myData = JSON.stringify(units)
-    if(!getCookie('uri')){ //1st time? generate URI
-      
-      $.ajax({
-        url: "https://api.myjson.com/bins",
-        type: "POST",
-        data: myData,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (data, textStatus, jqXHR) {
-            setCookie('uri', JSON.stringify(data))
-            console.log('Created')
-            console.log(data)
-        }
-      });
-    } else { //update with current version of units from db
-      var uri = getCookie('uri');
-      console.log(uri);
-      uri = uri.slice(8,uri.length-2)
-      $.ajax({
-        url: uri,
-        type: "PUT",
-        data: myData,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (data, textStatus, jqXHR) {
-            console.log('Updated external storage on load.')
-        }
-      });
-    }
-  }, 5000)
+  if(!ttg){
+    setTimeout(function(){
+      var myData = JSON.stringify(units)
+      if(!getCookie('uri')){ //1st time? generate URI
+        
+        $.ajax({
+          url: "https://api.myjson.com/bins",
+          type: "POST",
+          data: myData,
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          success: function (data, textStatus, jqXHR) {
+              setCookie('uri', JSON.stringify(data))
+              console.log('Created')
+              console.log(data)
+          }
+        });
+      } else { //update with current version of units from db
+        var uri = getCookie('uri');
+        console.log(uri);
+        uri = uri.slice(8,uri.length-2)
+        $.ajax({
+          url: uri,
+          type: "PUT",
+          data: myData,
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          success: function (data, textStatus, jqXHR) {
+              console.log('Updated external storage on load.')
+          }
+        });
+      }
+    }, 5000)
+  }
 }
 window.onload = function () {
   //to be send to nextIdx by event handler
@@ -656,97 +658,101 @@ window.onload = function () {
   width = window.innerWidth;
   height = window.innerHeight;
   
+  var mySVG = ''
+  if(!ttg){
+    mySVG =  `
+    <svg width="25cm" height="40cm" version="1.1"
+       xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink">
+  
+    <text x="0" y="0" font-size="100" style="fill:grey">
+      <tspan x="0" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
+      <tspan x="0" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+      <tspan x="0" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+      <tspan x="0" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+      <tspan x="0" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
+      <tspan x="0" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
+       <tspan x="0" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+      <tspan x="0" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+      <tspan x="0" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+    </text>
+  
+    <text x="60" y="70" font-size="20" style="fill:red;">
+      <tspan x="60" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
+      <tspan x="60" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+      <tspan x="60" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+      <tspan x="60" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+      <tspan x="60" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
+      <tspan x="60" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
+      <tspan x="60" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
+      <tspan x="60" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
+      <tspan x="60" dy="1.2em">百科一般要求和方式进行审核</tspan>
+      <tspan x="60" dy="1.2em">容需强制规则。</tspan>
+      <tspan x="60" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+      <tspan x="60" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+    </text>
+  
+      <text x="500" y="100" style="fill:red;">
+      <tspan x="500" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
+      <tspan x="500" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+      <tspan x="500" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+      <tspan x="500" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+      <tspan x="500" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
+      <tspan x="500" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
+      <tspan x="500" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
+      <tspan x="500" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
+      <tspan x="500" dy="1.2em">百科一般要求和方式进行审核</tspan>
+      <tspan x="500" dy="1.2em">容需强制规则。</tspan>
+      <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+      <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+    </text>
+        <text x="500" y="400" style="fill:red;">
+      <tspan x="500" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
+      <tspan x="500" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+      <tspan x="500" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+      <tspan x="500" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+      <tspan x="500" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
+      <tspan x="500" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
+      <tspan x="500" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
+      <tspan x="500" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
+      <tspan x="500" dy="1.2em">百科一般要求和方式进行审核</tspan>
+      <tspan x="500" dy="1.2em">容需强制规则。</tspan>
+      <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+      <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+    </text>
+      <text x="100" y="500" style="fill:red;">
+      <tspan x="100" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
+      <tspan x="100" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+      <tspan x="100" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+      <tspan x="100" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+      <tspan x="100" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
+      <tspan x="100" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
+      <tspan x="100" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
+      <tspan x="100" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
+      <tspan x="100" dy="1.2em">百科一般要求和方式进行审核</tspan>
+      <tspan x="100" dy="1.2em">容需强制规则。</tspan>
+      <tspan x="100" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+      <tspan x="100" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+    </text>
+      <text x="0" y="820" font-size="20" style="fill:red;">
+      <tspan x="0" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
+      <tspan x="0" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+      <tspan x="0" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+      <tspan x="0" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+      <tspan x="0" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
+      <tspan x="0" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
+      <tspan x="0" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
+      <tspan x="0" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
+      <tspan x="0" dy="1.2em">百科一般要求和方式进行审核</tspan>
+      <tspan x="0" dy="1.2em">容需强制规则。</tspan>
+      <tspan x="0" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+      <tspan x="0" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+    </text>
+  </svg>
+  
+    `;
+  }
 
-  var mySVG = `
-  <svg width="25cm" height="40cm" version="1.1"
-     xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink">
-
-  <text x="0" y="0" font-size="100" style="fill:grey">
-    <tspan x="0" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
-    <tspan x="0" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
-    <tspan x="0" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
-    <tspan x="0" dy="1.2em">由用户自行负责解决与第三人的</tspan>
-    <tspan x="0" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
-    <tspan x="0" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
-     <tspan x="0" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
-    <tspan x="0" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
-    <tspan x="0" dy="1.2em">由用户自行负责解决与第三人的</tspan>
-  </text>
-
-  <text x="60" y="70" font-size="20" style="fill:red;">
-    <tspan x="60" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
-    <tspan x="60" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
-    <tspan x="60" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
-    <tspan x="60" dy="1.2em">由用户自行负责解决与第三人的</tspan>
-    <tspan x="60" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
-    <tspan x="60" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
-    <tspan x="60" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
-    <tspan x="60" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
-    <tspan x="60" dy="1.2em">百科一般要求和方式进行审核</tspan>
-    <tspan x="60" dy="1.2em">容需强制规则。</tspan>
-    <tspan x="60" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-    <tspan x="60" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-  </text>
-
-    <text x="500" y="100" style="fill:red;">
-    <tspan x="500" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
-    <tspan x="500" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
-    <tspan x="500" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
-    <tspan x="500" dy="1.2em">由用户自行负责解决与第三人的</tspan>
-    <tspan x="500" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
-    <tspan x="500" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
-    <tspan x="500" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
-    <tspan x="500" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
-    <tspan x="500" dy="1.2em">百科一般要求和方式进行审核</tspan>
-    <tspan x="500" dy="1.2em">容需强制规则。</tspan>
-    <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-    <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-  </text>
-      <text x="500" y="400" style="fill:red;">
-    <tspan x="500" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
-    <tspan x="500" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
-    <tspan x="500" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
-    <tspan x="500" dy="1.2em">由用户自行负责解决与第三人的</tspan>
-    <tspan x="500" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
-    <tspan x="500" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
-    <tspan x="500" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
-    <tspan x="500" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
-    <tspan x="500" dy="1.2em">百科一般要求和方式进行审核</tspan>
-    <tspan x="500" dy="1.2em">容需强制规则。</tspan>
-    <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-    <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-  </text>
-    <text x="100" y="500" style="fill:red;">
-    <tspan x="100" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
-    <tspan x="100" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
-    <tspan x="100" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
-    <tspan x="100" dy="1.2em">由用户自行负责解决与第三人的</tspan>
-    <tspan x="100" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
-    <tspan x="100" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
-    <tspan x="100" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
-    <tspan x="100" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
-    <tspan x="100" dy="1.2em">百科一般要求和方式进行审核</tspan>
-    <tspan x="100" dy="1.2em">容需强制规则。</tspan>
-    <tspan x="100" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-    <tspan x="100" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-  </text>
-    <text x="0" y="820" font-size="20" style="fill:red;">
-    <tspan x="0" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
-    <tspan x="0" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
-    <tspan x="0" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
-    <tspan x="0" dy="1.2em">由用户自行负责解决与第三人的</tspan>
-    <tspan x="0" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
-    <tspan x="0" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
-    <tspan x="0" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
-    <tspan x="0" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
-    <tspan x="0" dy="1.2em">百科一般要求和方式进行审核</tspan>
-    <tspan x="0" dy="1.2em">容需强制规则。</tspan>
-    <tspan x="0" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-    <tspan x="0" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-  </text>
-</svg>
-
-  `;
+  
   var Base64 = {
 
     // private property
@@ -910,33 +916,37 @@ window.onload = function () {
 
   //tests
   
-  // document.querySelector('[href="#searchCont"]').click();
+  document.querySelector('[href="#searchCont"]').click();
   // seaIpt.value = "什么"
   // seaIpt.focus()
   //setTimeout(()=>revSent.click(),1000);
     
 
   //Load Frames and hide secondary ones
-  
-  iframe1.setAttribute('src', 'https://eng.ichacha.net/m')
-  var gooSea = document.createElement('gcse:search');
-  var cx = '002805804690599183502:cmqdgcgjmd4';
-  var gcse = document.createElement('script');
-  gcse.type = 'text/javascript';
-  gcse.async = true;
-  gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
-  var s = document.getElementsByTagName('script')[0];
-  iframe2.contentWindow.document.body.appendChild(gooSea);
-  iframe2.contentWindow.document.body.appendChild(gcse);
-  iframe3.setAttribute('src','https://www.mdbg.net/chinese/dictionary#');
-  iframe4.setAttribute('src','https://chinesepod.com/dictionary/english-chinese/');
+  if(!ttg){
+    iframe1.setAttribute('src', 'https://eng.ichacha.net/m')
+    var gooSea = document.createElement('gcse:search');
+    var cx = '002805804690599183502:cmqdgcgjmd4';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    iframe2.contentWindow.document.body.appendChild(gooSea);
+    iframe2.contentWindow.document.body.appendChild(gcse);
+    iframe3.setAttribute('src','https://www.mdbg.net/chinese/dictionary#');
+    iframe4.setAttribute('src','https://chinesepod.com/dictionary/english-chinese/');
 
-  iframe3.style.display = 'none';
-  iframe2.style.display = 'none';
-  iframe4.style.display = 'none';
-  iframe5.style.display = 'none';
+    iframe3.style.display = 'none';
+    iframe2.style.display = 'none';
+    iframe4.style.display = 'none';
+    //iframe5.style.display = 'none';
+  }
+  
   
 }//ends window.onload
+//testing
+var ttg = false;
 
 /**Sentence Review */
 var loaded=false;
