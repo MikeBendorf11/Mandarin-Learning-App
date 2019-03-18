@@ -168,22 +168,24 @@ function AppState(dbStatus) {
           resolve(self)
         })
       } else {
-        parseCSV()
-        .then(()=>storageFromBlank(dbName)
-        .then(()=>{
-          self.charId = 0;
-          self.rLevel = 0;
-          setCookie('rLevel', self.rLevel);
-          setCookie('rLevel0Id', 0)
-          setCookie('rLevel1Id', 0)
-          setCookie('rLevel2Id', 0)
-          setCookie('rLevel3Id', 0)
-          setCookie('rLevel4Id', 0)
-          loadFromIndexedDB(dbName).then(db => {
-            units = db;
-            resolve(self)
-          })
-        }))
+        //enable to be able to add new users
+        // parseCSV()
+        // .then(()=>storageFromBlank(dbName)
+        // .then(()=>{
+        //   self.charId = 0;
+        //   self.rLevel = 0;
+        //   setCookie('rLevel', self.rLevel);
+        //   setCookie('rLevel0Id', 0)
+        //   setCookie('rLevel1Id', 0)
+        //   setCookie('rLevel2Id', 0)
+        //   setCookie('rLevel3Id', 0)
+        //   setCookie('rLevel4Id', 0)
+        //   loadFromIndexedDB(dbName).then(db => {
+        //     units = db;
+        //     resolve(self)
+        //   })
+        // }))
+        console.log("Db doesn't exist, skipped cookies")
       }
     })
   }
