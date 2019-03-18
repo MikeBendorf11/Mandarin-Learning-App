@@ -166,6 +166,10 @@ h2{
   font-family: "Ionicons";
   content: "\f48a"
 }
+.ion-save:before{
+  font-family: "Ionicons";
+  content: "\f255"
+}
 .ion-nav:after{
   content: none;
 }
@@ -182,7 +186,7 @@ h2{
   border-right: 0px;
   
 }
-#ionSea:hover, #ionNew:hover{
+#ionSea:hover, #ionNew:hover, #ionSave:hover{
   background-color: lightgrey;
   cursor: pointer;
 }

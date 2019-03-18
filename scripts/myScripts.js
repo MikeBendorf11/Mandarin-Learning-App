@@ -215,18 +215,19 @@ function externalStorage(){
       var myData = JSON.stringify(units)
       if(!getCookie('uri')){ //1st time? generate URI
         
-        $.ajax({
-          url: "https://api.myjson.com/bins",
-          type: "POST",
-          data: myData,
-          contentType: "application/json; charset=utf-8",
-          dataType: "json",
-          success: function (data, textStatus, jqXHR) {
-              setCookie('uri', JSON.stringify(data))
-              console.log('Created')
-              console.log(data)
-          }
-        });
+        // $.ajax({
+        //   url: "https://api.myjson.com/bins",
+        //   type: "POST",
+        //   data: myData,
+        //   contentType: "application/json; charset=utf-8",
+        //   dataType: "json",
+        //   success: function (data, textStatus, jqXHR) {
+        //       setCookie('uri', JSON.stringify(data))
+        //       console.log('Created')
+        //       console.log(data)
+        //   }
+        // });
+        console.log('URI is missing');
       } else { //update with current version of units from db
         var uri = getCookie('uri');
         console.log(uri);
@@ -238,11 +239,11 @@ function externalStorage(){
           contentType: "application/json; charset=utf-8",
           dataType: "json",
           success: function (data, textStatus, jqXHR) {
-              console.log('Updated external storage on load.')
+              console.log('Updated external storage.')
           }
         });
       }
-    }, 5000)
+    }, 1000)
   }
 }
 window.onload = function () {
@@ -279,7 +280,8 @@ window.onload = function () {
   }).then(state => {
     loadChar(state.charId, state.rLevel)
     unitState = new UnitState();
-    externalStorage();
+    //should be enabled for new users
+    //externalStorage();
   })
 
   function loadChar(id, reviewLevel) {
@@ -916,7 +918,7 @@ window.onload = function () {
 
   //tests
   
-  document.querySelector('[href="#searchCont"]').click();
+  //document.querySelector('[href="#searchCont"]').click();
   // seaIpt.value = "什么"
   // seaIpt.focus()
   //setTimeout(()=>revSent.click(),1000);
@@ -1068,6 +1070,10 @@ ionNew.onclick = () =>{
   }
   prepareResults();
   displaySearch(results, 0);
+}
+ionSave.onclick = () =>{
+  externalStorage();
+  alert('Cloud updated')
 }
 /**
  * Get rid of undefined values when dealing with new chars
