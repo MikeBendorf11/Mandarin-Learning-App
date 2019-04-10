@@ -1,0 +1,23 @@
+{
+  "name": "chapp",
+  "version": "1.0.0",
+  "description": "Hosted at: [mb11.info/chapp/](http://mb11.info/chapp/)",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MikeBendorf11/Chinese-Learning-App.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MikeBendorf11/Chinese-Learning-App/issues"
+  },
+  "homepage": "https://github.com/MikeBendorf11/Chinese-Learning-App#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
