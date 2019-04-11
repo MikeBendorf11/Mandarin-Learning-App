@@ -929,22 +929,10 @@ window.onload = function () {
   //Load Frames and hide secondary ones
   if(!ttg){
     iframe1.setAttribute('src', 'https://eng.ichacha.net/m')
-    var gooSea = document.createElement('gcse:search');
-    var cx = '002805804690599183502:cmqdgcgjmd4';
-    var gcse = document.createElement('script');
-    gcse.type = 'text/javascript';
-    gcse.async = true;
-    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
-    var s = document.getElementsByTagName('script')[0];
-    iframe2.contentWindow.document.body.appendChild(gooSea);
-    iframe2.contentWindow.document.body.appendChild(gcse);
-    iframe3.setAttribute('src','https://www.mdbg.net/chinese/dictionary#');
-    iframe4.setAttribute('src','https://chinesepod.com/dictionary/english-chinese/');
-
-    iframe3.style.display = 'none';
+    iframe2.setAttribute('src','https://www.mdbg.net/chinese/dictionary#');
+    iframe3.setAttribute('src','https://chinesepod.com/dictionary/english-chinese/');
     iframe2.style.display = 'none';
-    iframe4.style.display = 'none';
-    //iframe5.style.display = 'none';
+    iframe3.style.display = 'none';
   }
   
   
@@ -1351,14 +1339,11 @@ links.onclick = (event) => {
     case(ichachaLink):
       showFrame(1);
       break;
-    case(googleLink):
+    case(mdbgLink):
       showFrame(2);
       break;
-    case(mdbgLink):
-      showFrame(3);
-      break;
     case(cpodLink):
-      showFrame(4);
+      showFrame(3);
       break;
     // case(yebrLink):
     //   showFrame(5);
@@ -1368,7 +1353,7 @@ links.onclick = (event) => {
 
 //clear frames except the one calling this method
 function showFrame(number){
-  for(i=1; i<5; i++){
+  for(i=1; i<4; i++){
     var fr = document.getElementById('iframe'+i);
     if(i==number) {
       fr.style.display = 'block';
