@@ -16,7 +16,12 @@
   <!-- start handwriting tool -->
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-
+  
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/jquery-ui.js"></script>
+  <script src="scripts/popper.min.js"></script>
+  <script src="scripts/bootstrap.js"></script>
+  
   <!-- stop browsers auto cache -->
   <script>
     var scriptUrls = [
@@ -29,7 +34,7 @@
     ]
     scriptUrls.forEach((v, i) => {
       var script = document.createElement('script');
-      script.src = scriptUrls[i] + '?v=' + Date.now();
+      script.src = scriptUrls[i] //+ '?v=' + Date.now();
       document.head.appendChild(script);
     })
 
@@ -41,14 +46,11 @@
     cssUrls.forEach((v, i) => {
       var link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.href = cssUrls[i] + '?v=' + Date.now();
+      link.href = cssUrls[i] //+ '?v=' + Date.now();
       document.head.appendChild(link);
     })
   </script>
-  <script src="scripts/jquery.min.js"></script>
-  <script src="scripts/jquery-ui.js"></script>
-  <script src="scripts/popper.min.js"></script>
-  <script src="scripts/bootstrap.js"></script>
+
 </head>
 
 <body>

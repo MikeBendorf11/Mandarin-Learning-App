@@ -80,7 +80,7 @@ background: linear-gradient(300deg,
   max-width: 290px;
   margin: 15vh 0px 0px 0px;
   text-align: center;
-  background-image: url("/images/bg1.png");
+  background-image: url("../images/bg1.png");
   background-size: 280px;
   background-repeat: no-repeat;
   background-position: 0px 12px;
@@ -110,7 +110,7 @@ h2{
 }
 @font-face{
   font-family: 'fnt_pronunciation';
-  src: url(/font/Chonburi-Regular.ttf)
+  src: url(../font/Chonburi-Regular.ttf)
 }
 .ion {
 	display: inline-block;
