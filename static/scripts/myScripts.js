@@ -234,7 +234,145 @@ function checkCookies() {
   }
 }
 
-function loadChar(id, reviewLevel) {
+
+window.onload = function () {
+  function loadChar(id, reviewLevel) {
+    unit.id = units[id].id;
+    unit.consult = units[id].consult;
+    unit.learnedId = units[id].learnedId;
+    unit.level = units[id].level;
+    unit.char = units[id].char;
+    unit.pronunciation = units[id].pronunciation;
+    unit.combinations.short = units[id].combinations.short;
+    unit.combinations.long = units[id].combinations.long;
+    unit.definitions.single = units[id].definitions.single;
+    unit.definitions.short = units[id].definitions.short;
+    unit.definitions.long = units[id].definitions.long;
+  
+    //balancing comb->def empty array size
+    var lenCs = unit.combinations.short.length;
+    var lenCl = unit.combinations.long.length;
+    if (lenCs > 0 && unit.definitions.short == '') {
+      let a = [];
+      for (let i = 0; i < lenCs; i++)
+        a.push('')
+      unit.definitions.short = a;
+    }
+    if (lenCl > 0 && unit.definitions.long == '') {
+      let a = [];
+      for (let i = 0; i < lenCl; i++)
+        a.push('')
+      unit.definitions.long = a;
+    }
+    updatePopover();
+    //set review level
+    for (let i = 0; i < 5; i++) {
+      rLevel = document.querySelector('#rLevel' + i);
+      if (i != reviewLevel)
+        rLevel.removeAttribute('selected');
+      else
+        rLevel.setAttribute('selected', '');
+    }
+    //for btnHint
+    aDefNchar = [];
+    aDefNchar.push(unit.char);
+    aDefNchar = aDefNchar.concat(unit.definitions.single);
+    index = { defNChar: 0, shortComb: 0, longComb: 0 }
+    //console.log(aDefNchar);
+    pinyin.style.color = 'transparent';
+    //pinyin.innerHTML = unit.pronunciation
+    $("#pinyin").html(unit.pronunciation);
+    $(pinyin).animate({ color: 'black' }, 1000);
+    pDefNchar.innerHTML = '&nbsp;';
+    pComb.innerHTML = '&nbsp;';
+    pHint.innerHTML = '&nbsp;';
+    idDisplay.innerHTML = unit.id; 
+  }
+    /**
+     * Used by loadChar on load and popover click events
+     */
+    function updatePopover() {
+      var sLevel = document.createElement('select');
+      sLevel.setAttribute('id', 'sLvl');
+      sLevel.classList.add('form-control-sm')
+      for (let i = 0; i < 4; i++) {
+        var option = document.createElement('option');
+        option.setAttribute('value', i)
+        if (units[unit.id].level != i) {
+          option.removeAttribute('selected');
+        } else {
+          option.setAttribute('selected', '');
+        }
+        option.innerHTML = i;
+        sLevel.appendChild(option);
+      }
+      //checkbox creation and attrs
+      var cbConsult = document.createElement('input');
+      cbConsult.setAttribute('id', 'cbConsult');
+      cbConsult.setAttribute('type', 'checkbox');
+      if (units[unit.id].consult == true) {
+        cbConsult.setAttribute('checked', '')
+      } else {
+        cbConsult.removeAttribute('checked');
+      }
+      Object.assign(cbConsult.style, {
+        width: '20px',
+        height: '20px',
+        position: 'relative',
+        top: '5px'
+      });
+      //add to popover
+      $(pinyin).popover();
+      pinyin.setAttribute('data-content',
+        '<span>Level: </span>' +
+        sLevel.outerHTML +
+        '<span>&nbsp;&nbsp;&nbsp; Consult: </span>' +
+        cbConsult.outerHTML
+      )
+    }
+  var index;
+  checkDbExists(dbName).then(res => {
+    if (res) {//exist 
+
+      checkCookies();
+      // $('#mLoading').modal('show'); 
+      // setTimeout(()=>{ 
+      //   if(units.length>0)
+      //     $('#mLoading').modal('hide'); 
+      // },5000)
+      var level = parseInt(getCookie('rLevel'));
+      var levelId = parseInt(getCookie(`rLevel${level}Id`));
+      loadFromIndexedDB(dbName)
+      .then(db => { units = db })
+      .catch(()=>{ //db is corrupted delete cookies, db and start from scratch
+        var cookies = document.cookie.split(";");
+
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i];
+            var eqPos = cookie.indexOf("=");
+            var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        }
+        var del = window.indexedDB.deleteDatabase(dbName)
+        del.onerror((err)=> console.log(err))
+        del.onsuccess(()=>window.location.reload())
+      })
+        .then(() => {
+          loadChar(levelId, level)
+          //console.log(unit)
+          //to be send to nextIdx by event handler
+          
+          //load handwriting tool and hide the result box
+          enableHWIme('txt_word');
+          //handwriting panel events
+          $(document.body).on('click', '#btnHintDraw', function () {
+            hwimeResult = document.querySelector('.mdbghwime-result');
+            toggleDiv(hwimeResult);
+          })
+
+
+          unitState = new UnitState();
+          function loadChar(id, reviewLevel) {
   unit.id = units[id].id;
   unit.consult = units[id].consult;
   unit.learnedId = units[id].learnedId;
@@ -271,6 +409,20 @@ function loadChar(id, reviewLevel) {
     else
       rLevel.setAttribute('selected', '');
   }
+  //for btnHint
+  aDefNchar = [];
+  aDefNchar.push(unit.char);
+  aDefNchar = aDefNchar.concat(unit.definitions.single);
+  index = { defNChar: 0, shortComb: 0, longComb: 0 }
+  //console.log(aDefNchar);
+  pinyin.style.color = 'transparent';
+  //pinyin.innerHTML = unit.pronunciation
+  $("#pinyin").html(unit.pronunciation);
+  $(pinyin).animate({ color: 'black' }, 1000);
+  pDefNchar.innerHTML = '&nbsp;';
+  pComb.innerHTML = '&nbsp;';
+  pHint.innerHTML = '&nbsp;';
+  idDisplay.innerHTML = unit.id; 
 }
   /**
    * Used by loadChar on load and popover click events
@@ -314,62 +466,6 @@ function loadChar(id, reviewLevel) {
       cbConsult.outerHTML
     )
   }
-window.onload = function () {
-  var index;
-  checkDbExists(dbName).then(res => {
-    if (res) {//exist 
-
-      checkCookies();
-      // $('#mLoading').modal('show'); 
-      // setTimeout(()=>{ 
-      //   if(units.length>0)
-      //     $('#mLoading').modal('hide'); 
-      // },5000)
-      var level = parseInt(getCookie('rLevel'));
-      var levelId = parseInt(getCookie(`rLevel${level}Id`));
-      loadFromIndexedDB(dbName)
-      .then(db => { units = db })
-      .catch(()=>{ //db is corrupted delete cookies, db and start from scratch
-        var cookies = document.cookie.split(";");
-
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i];
-            var eqPos = cookie.indexOf("=");
-            var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-        }
-        var del = window.indexedDB.deleteDatabase(dbName)
-        del.onerror((err)=> console.log(err))
-        del.onsuccess(()=>window.location.reload())
-      })
-        .then(() => {
-          loadChar(levelId, level)
-          //console.log(unit)
-          //to be send to nextIdx by event handler
-          
-          //load handwriting tool and hide the result box
-          enableHWIme('txt_word');
-          //handwriting panel events
-          $(document.body).on('click', '#btnHintDraw', function () {
-            hwimeResult = document.querySelector('.mdbghwime-result');
-            toggleDiv(hwimeResult);
-          })
-
-
-          unitState = new UnitState();
-          //for btnHint
-          aDefNchar = [];
-          aDefNchar.push(unit.char);
-          aDefNchar = aDefNchar.concat(unit.definitions.single);
-          index = { defNChar: 0, shortComb: 0, longComb: 0 }
-          //console.log(aDefNchar);
-          pinyin.style.color = 'transparent';
-          $("#pinyin").html(unit.pronunciation);
-          $(pinyin).animate({ color: 'black' }, 1000);
-          pDefNchar.innerHTML = '&nbsp;';
-          pComb.innerHTML = '&nbsp;';
-          pHint.innerHTML = '&nbsp;';
-          idDisplay.innerHTML = unit.id;
           //window events
           //same but runs on onload
           if (window.innerWidth < 651) {
@@ -628,7 +724,7 @@ window.onload = function () {
           //document.querySelector('[href="#searchCont"]').click();
           // seaIpt.value = "什么"
           // seaIpt.focus()
-          //setTimeout(()=>revSent.click(),1000);
+          setTimeout(()=>revSent.click(),1000);
         
         
           //Load Frames and hide secondary ones
