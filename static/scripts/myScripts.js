@@ -153,41 +153,6 @@ UnitState.prototype.compare = function (content, unitMember) {
   }
 }
 
-/*
-function AppState(dbStatus) {
-  self = this;
-  this.get = function () {
-    return new Promise(resolve => {
-      if (dbStatus) { //db exists
-        self.rLevel = parseInt(getCookie('rLevel'))
-        self.charId = parseInt(getCookie('rLevel' + self.rLevel + 'Id'))
-        loadFromIndexedDB(dbName).then(db => {
-          units = db;
-          resolve(self)
-        })
-      } else {
-        enable to be able to add new users
-        parseCSV()
-        .then(()=>storageFromBlank(dbName)
-        .then(()=>{
-          self.charId = 0;
-          self.rLevel = 0;
-          setCookie('rLevel', self.rLevel);
-          setCookie('rLevel0Id', 0)
-          setCookie('rLevel1Id', 0)
-          setCookie('rLevel2Id', 0)
-          setCookie('rLevel3Id', 0)
-          setCookie('rLevel4Id', 0)
-          loadFromIndexedDB(dbName).then(db => {
-            units = db;
-            resolve(self)
-          })
-        }))
-        console.log("Db doesn't exist, skipped cookies")
-      }
-    })
-  }
-}*/
 //Used when adding data to db and updating the interface
 function pushChanges(displayUnit) {
   var u = displayUnit;
@@ -236,100 +201,7 @@ function checkCookies() {
 
 
 window.onload = function () {
-  function loadChar(id, reviewLevel) {
-    unit.id = units[id].id;
-    unit.consult = units[id].consult;
-    unit.learnedId = units[id].learnedId;
-    unit.level = units[id].level;
-    unit.char = units[id].char;
-    unit.pronunciation = units[id].pronunciation;
-    unit.combinations.short = units[id].combinations.short;
-    unit.combinations.long = units[id].combinations.long;
-    unit.definitions.single = units[id].definitions.single;
-    unit.definitions.short = units[id].definitions.short;
-    unit.definitions.long = units[id].definitions.long;
-  
-    //balancing comb->def empty array size
-    var lenCs = unit.combinations.short.length;
-    var lenCl = unit.combinations.long.length;
-    if (lenCs > 0 && unit.definitions.short == '') {
-      let a = [];
-      for (let i = 0; i < lenCs; i++)
-        a.push('')
-      unit.definitions.short = a;
-    }
-    if (lenCl > 0 && unit.definitions.long == '') {
-      let a = [];
-      for (let i = 0; i < lenCl; i++)
-        a.push('')
-      unit.definitions.long = a;
-    }
-    updatePopover();
-    //set review level
-    for (let i = 0; i < 5; i++) {
-      rLevel = document.querySelector('#rLevel' + i);
-      if (i != reviewLevel)
-        rLevel.removeAttribute('selected');
-      else
-        rLevel.setAttribute('selected', '');
-    }
-    //for btnHint
-    aDefNchar = [];
-    aDefNchar.push(unit.char);
-    aDefNchar = aDefNchar.concat(unit.definitions.single);
-    index = { defNChar: 0, shortComb: 0, longComb: 0 }
-    //console.log(aDefNchar);
-    pinyin.style.color = 'transparent';
-    //pinyin.innerHTML = unit.pronunciation
-    $("#pinyin").html(unit.pronunciation);
-    $(pinyin).animate({ color: 'black' }, 1000);
-    pDefNchar.innerHTML = '&nbsp;';
-    pComb.innerHTML = '&nbsp;';
-    pHint.innerHTML = '&nbsp;';
-    idDisplay.innerHTML = unit.id; 
-  }
-    /**
-     * Used by loadChar on load and popover click events
-     */
-    function updatePopover() {
-      var sLevel = document.createElement('select');
-      sLevel.setAttribute('id', 'sLvl');
-      sLevel.classList.add('form-control-sm')
-      for (let i = 0; i < 4; i++) {
-        var option = document.createElement('option');
-        option.setAttribute('value', i)
-        if (units[unit.id].level != i) {
-          option.removeAttribute('selected');
-        } else {
-          option.setAttribute('selected', '');
-        }
-        option.innerHTML = i;
-        sLevel.appendChild(option);
-      }
-      //checkbox creation and attrs
-      var cbConsult = document.createElement('input');
-      cbConsult.setAttribute('id', 'cbConsult');
-      cbConsult.setAttribute('type', 'checkbox');
-      if (units[unit.id].consult == true) {
-        cbConsult.setAttribute('checked', '')
-      } else {
-        cbConsult.removeAttribute('checked');
-      }
-      Object.assign(cbConsult.style, {
-        width: '20px',
-        height: '20px',
-        position: 'relative',
-        top: '5px'
-      });
-      //add to popover
-      $(pinyin).popover();
-      pinyin.setAttribute('data-content',
-        '<span>Level: </span>' +
-        sLevel.outerHTML +
-        '<span>&nbsp;&nbsp;&nbsp; Consult: </span>' +
-        cbConsult.outerHTML
-      )
-    }
+
   var index;
   checkDbExists(dbName).then(res => {
     if (res) {//exist 
@@ -343,25 +215,119 @@ window.onload = function () {
       var level = parseInt(getCookie('rLevel'));
       var levelId = parseInt(getCookie(`rLevel${level}Id`));
       loadFromIndexedDB(dbName)
-      .then(db => { units = db })
-      .catch(()=>{ //db is corrupted delete cookies, db and start from scratch
-        var cookies = document.cookie.split(";");
+        .then(db => { units = db })
+        .catch(() => { //db is corrupted delete cookies, db and start from scratch
+          var cookies = document.cookie.split(";");
 
-        for (var i = 0; i < cookies.length; i++) {
+          for (var i = 0; i < cookies.length; i++) {
             var cookie = cookies[i];
             var eqPos = cookie.indexOf("=");
             var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
             document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-        }
-        var del = window.indexedDB.deleteDatabase(dbName)
-        del.onerror((err)=> console.log(err))
-        del.onsuccess(()=>window.location.reload())
-      })
+          }
+          var del = window.indexedDB.deleteDatabase(dbName)
+          del.onerror((err) => console.log(err))
+          del.onsuccess(() => window.location.reload())
+        })
         .then(() => {
+          function loadChar(id, reviewLevel) {
+            unit.id = units[id].id;
+            unit.consult = units[id].consult;
+            unit.learnedId = units[id].learnedId;
+            unit.level = units[id].level;
+            unit.char = units[id].char;
+            unit.pronunciation = units[id].pronunciation;
+            unit.combinations.short = units[id].combinations.short;
+            unit.combinations.long = units[id].combinations.long;
+            unit.definitions.single = units[id].definitions.single;
+            unit.definitions.short = units[id].definitions.short;
+            unit.definitions.long = units[id].definitions.long;
+
+            //balancing comb->def empty array size
+            var lenCs = unit.combinations.short.length;
+            var lenCl = unit.combinations.long.length;
+            if (lenCs > 0 && unit.definitions.short == '') {
+              let a = [];
+              for (let i = 0; i < lenCs; i++)
+                a.push('')
+              unit.definitions.short = a;
+            }
+            if (lenCl > 0 && unit.definitions.long == '') {
+              let a = [];
+              for (let i = 0; i < lenCl; i++)
+                a.push('')
+              unit.definitions.long = a;
+            }
+            updatePopover();
+            //set review level
+            for (let i = 0; i < 5; i++) {
+              rLevel = document.querySelector('#rLevel' + i);
+              if (i != reviewLevel)
+                rLevel.removeAttribute('selected');
+              else
+                rLevel.setAttribute('selected', '');
+            }
+            //for btnHint
+            aDefNchar = [];
+            aDefNchar.push(unit.char);
+            aDefNchar = aDefNchar.concat(unit.definitions.single);
+            index = { defNChar: 0, shortComb: 0, longComb: 0 }
+            //console.log(aDefNchar);
+            pinyin.style.color = 'transparent';
+            //pinyin.innerHTML = unit.pronunciation
+            $("#pinyin").html(unit.pronunciation);
+            $(pinyin).animate({ color: 'black' }, 1000);
+            pDefNchar.innerHTML = '&nbsp;';
+            pComb.innerHTML = '&nbsp;';
+            pHint.innerHTML = '&nbsp;';
+            idDisplay.innerHTML = unit.id;
+          }
+          /**
+           * Used by loadChar on load and popover click events
+           */
+          function updatePopover() {
+            var sLevel = document.createElement('select');
+            sLevel.setAttribute('id', 'sLvl');
+            sLevel.classList.add('form-control-sm')
+            for (let i = 0; i < 4; i++) {
+              var option = document.createElement('option');
+              option.setAttribute('value', i)
+              if (units[unit.id].level != i) {
+                option.removeAttribute('selected');
+              } else {
+                option.setAttribute('selected', '');
+              }
+              option.innerHTML = i;
+              sLevel.appendChild(option);
+            }
+            //checkbox creation and attrs
+            var cbConsult = document.createElement('input');
+            cbConsult.setAttribute('id', 'cbConsult');
+            cbConsult.setAttribute('type', 'checkbox');
+            if (units[unit.id].consult == true) {
+              cbConsult.setAttribute('checked', '')
+            } else {
+              cbConsult.removeAttribute('checked');
+            }
+            Object.assign(cbConsult.style, {
+              width: '20px',
+              height: '20px',
+              position: 'relative',
+              top: '5px'
+            });
+            //add to popover
+            $(pinyin).popover();
+            pinyin.setAttribute('data-content',
+              '<span>Level: </span>' +
+              sLevel.outerHTML +
+              '<span>&nbsp;&nbsp;&nbsp; Consult: </span>' +
+              cbConsult.outerHTML
+            )
+          }
           loadChar(levelId, level)
           //console.log(unit)
           //to be send to nextIdx by event handler
-          
+
           //load handwriting tool and hide the result box
           enableHWIme('txt_word');
           //handwriting panel events
@@ -372,100 +338,6 @@ window.onload = function () {
 
 
           unitState = new UnitState();
-          function loadChar(id, reviewLevel) {
-  unit.id = units[id].id;
-  unit.consult = units[id].consult;
-  unit.learnedId = units[id].learnedId;
-  unit.level = units[id].level;
-  unit.char = units[id].char;
-  unit.pronunciation = units[id].pronunciation;
-  unit.combinations.short = units[id].combinations.short;
-  unit.combinations.long = units[id].combinations.long;
-  unit.definitions.single = units[id].definitions.single;
-  unit.definitions.short = units[id].definitions.short;
-  unit.definitions.long = units[id].definitions.long;
-
-  //balancing comb->def empty array size
-  var lenCs = unit.combinations.short.length;
-  var lenCl = unit.combinations.long.length;
-  if (lenCs > 0 && unit.definitions.short == '') {
-    let a = [];
-    for (let i = 0; i < lenCs; i++)
-      a.push('')
-    unit.definitions.short = a;
-  }
-  if (lenCl > 0 && unit.definitions.long == '') {
-    let a = [];
-    for (let i = 0; i < lenCl; i++)
-      a.push('')
-    unit.definitions.long = a;
-  }
-  updatePopover();
-  //set review level
-  for (let i = 0; i < 5; i++) {
-    rLevel = document.querySelector('#rLevel' + i);
-    if (i != reviewLevel)
-      rLevel.removeAttribute('selected');
-    else
-      rLevel.setAttribute('selected', '');
-  }
-  //for btnHint
-  aDefNchar = [];
-  aDefNchar.push(unit.char);
-  aDefNchar = aDefNchar.concat(unit.definitions.single);
-  index = { defNChar: 0, shortComb: 0, longComb: 0 }
-  //console.log(aDefNchar);
-  pinyin.style.color = 'transparent';
-  //pinyin.innerHTML = unit.pronunciation
-  $("#pinyin").html(unit.pronunciation);
-  $(pinyin).animate({ color: 'black' }, 1000);
-  pDefNchar.innerHTML = '&nbsp;';
-  pComb.innerHTML = '&nbsp;';
-  pHint.innerHTML = '&nbsp;';
-  idDisplay.innerHTML = unit.id; 
-}
-  /**
-   * Used by loadChar on load and popover click events
-   */
-  function updatePopover() {
-    var sLevel = document.createElement('select');
-    sLevel.setAttribute('id', 'sLvl');
-    sLevel.classList.add('form-control-sm')
-    for (let i = 0; i < 4; i++) {
-      var option = document.createElement('option');
-      option.setAttribute('value', i)
-      if (units[unit.id].level != i) {
-        option.removeAttribute('selected');
-      } else {
-        option.setAttribute('selected', '');
-      }
-      option.innerHTML = i;
-      sLevel.appendChild(option);
-    }
-    //checkbox creation and attrs
-    var cbConsult = document.createElement('input');
-    cbConsult.setAttribute('id', 'cbConsult');
-    cbConsult.setAttribute('type', 'checkbox');
-    if (units[unit.id].consult == true) {
-      cbConsult.setAttribute('checked', '')
-    } else {
-      cbConsult.removeAttribute('checked');
-    }
-    Object.assign(cbConsult.style, {
-      width: '20px',
-      height: '20px',
-      position: 'relative',
-      top: '5px'
-    });
-    //add to popover
-    $(pinyin).popover();
-    pinyin.setAttribute('data-content',
-      '<span>Level: </span>' +
-      sLevel.outerHTML +
-      '<span>&nbsp;&nbsp;&nbsp; Consult: </span>' +
-      cbConsult.outerHTML
-    )
-  }
           //window events
           //same but runs on onload
           if (window.innerWidth < 651) {
@@ -580,85 +452,85 @@ window.onload = function () {
 
             // private property
             _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
-        
+
             // public method for encoding
             , encode: function (input) {
               var output = "";
               var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
               var i = 0;
-        
+
               input = Base64._utf8_encode(input);
-        
+
               while (i < input.length) {
                 chr1 = input.charCodeAt(i++);
                 chr2 = input.charCodeAt(i++);
                 chr3 = input.charCodeAt(i++);
-        
+
                 enc1 = chr1 >> 2;
                 enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
                 enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
                 enc4 = chr3 & 63;
-        
+
                 if (isNaN(chr2)) {
                   enc3 = enc4 = 64;
                 }
                 else if (isNaN(chr3)) {
                   enc4 = 64;
                 }
-        
+
                 output = output +
                   this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
                   this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
               } // Whend 
-        
+
               return output;
             } // End Function encode 
-        
-        
+
+
             // public method for decoding
             , decode: function (input) {
               var output = "";
               var chr1, chr2, chr3;
               var enc1, enc2, enc3, enc4;
               var i = 0;
-        
+
               input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
               while (i < input.length) {
                 enc1 = this._keyStr.indexOf(input.charAt(i++));
                 enc2 = this._keyStr.indexOf(input.charAt(i++));
                 enc3 = this._keyStr.indexOf(input.charAt(i++));
                 enc4 = this._keyStr.indexOf(input.charAt(i++));
-        
+
                 chr1 = (enc1 << 2) | (enc2 >> 4);
                 chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
                 chr3 = ((enc3 & 3) << 6) | enc4;
-        
+
                 output = output + String.fromCharCode(chr1);
-        
+
                 if (enc3 != 64) {
                   output = output + String.fromCharCode(chr2);
                 }
-        
+
                 if (enc4 != 64) {
                   output = output + String.fromCharCode(chr3);
                 }
-        
+
               } // Whend 
-        
+
               output = Base64._utf8_decode(output);
-        
+
               return output;
             } // End Function decode 
-        
-        
+
+
             // private method for UTF-8 encoding
             , _utf8_encode: function (string) {
               var utftext = "";
               string = string.replace(/\r\n/g, "\n");
-        
+
               for (var n = 0; n < string.length; n++) {
                 var c = string.charCodeAt(n);
-        
+
                 if (c < 128) {
                   utftext += String.fromCharCode(c);
                 }
@@ -671,22 +543,22 @@ window.onload = function () {
                   utftext += String.fromCharCode(((c >> 6) & 63) | 128);
                   utftext += String.fromCharCode((c & 63) | 128);
                 }
-        
+
               } // Next n 
-        
+
               return utftext;
             } // End Function _utf8_encode 
-        
+
             // private method for UTF-8 decoding
             , _utf8_decode: function (utftext) {
               var string = "";
               var i = 0;
               var c, c1, c2, c3;
               c = c1 = c2 = 0;
-        
+
               while (i < utftext.length) {
                 c = utftext.charCodeAt(i);
-        
+
                 if (c < 128) {
                   string += String.fromCharCode(c);
                   i++;
@@ -702,12 +574,12 @@ window.onload = function () {
                   string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
                   i += 3;
                 }
-        
+
               } // Whend 
-        
+
               return string;
             } // End Function _utf8_decode 
-        
+
           }
           document.getElementById('container').style.background =
             `
@@ -717,16 +589,12 @@ window.onload = function () {
           rgba(255,255,255,1) 79%),
           url('data:image/svg+xml;base64,${Base64.encode(mySVG)}') -61% -25% /70% 
           `
-        
-        
           //tests
-        
+
           //document.querySelector('[href="#searchCont"]').click();
           // seaIpt.value = "什么"
           // seaIpt.focus()
-          setTimeout(()=>revSent.click(),1000);
-        
-        
+          //setTimeout(() => revSent.click(), 1000);
           //Load Frames and hide secondary ones
           if (!ttg) {
             iframe1.setAttribute('src', 'https://eng.ichacha.net/m')
@@ -735,38 +603,35 @@ window.onload = function () {
             iframe2.style.display = 'none';
             iframe3.style.display = 'none';
           }
-        
         })
 
     } else {//no cookies, create uri cookie and storage from json
       while (!uri) {
-        var code = prompt('Please enter your code:', '')
+        var code = prompt('Please enter your code:', 'f9490')
         var uri = 'https://api.myjson.com/bins/' + code
-        $.getJSON(uri, (res)=>{
-          console.log(res)
-        })
-        .done((res)=>{
-          console.log(res)
-          self.charId = 0;
-          self.rLevel = 0;
-          setCookie('rLevel', self.rLevel);
-          setCookie('rLevel0Id', 0)
-          setCookie('rLevel1Id', 0)
-          setCookie('rLevel2Id', 0)
-          setCookie('rLevel3Id', 0)
-          setCookie('rLevel4Id', 0)
-          setCookie('uri', uri)
-          units = res
-          storageFromBlank(dbName)
-          .then(window.location.reload())
-        })
-        .fail((err)=> console.log(err))
+        $.getJSON(uri, (res) => {console.log(res)})
+          .done((res) => {
+            console.log(res)
+            units = res
+            storageFromBlank(dbName)
+              .then(()=>{
+                setCookie('rLevel', 0);
+                setCookie('rLevel0Id', 0)
+                setCookie('rLevel1Id', 0)
+                setCookie('rLevel2Id', 0)
+                setCookie('rLevel3Id', 0)
+                setCookie('rLevel4Id', 0)
+                setCookie('uri', uri)
+                window.location.reload()
+              })
+          })
+          .fail((err) => console.log(err))
       }
     }
   })
 
 
-  
+
 
 
   /*Update view functions: current, next and prev char */
@@ -875,7 +740,7 @@ window.onload = function () {
 
 
   rLevel.onchange = function (event) {
-    
+
     var lv = event.target.value;
     setCookie('rLevel', lv)
     currentChar(lv);
