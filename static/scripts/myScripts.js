@@ -226,7 +226,12 @@ window.onload = function () {
           }
           var del = window.indexedDB.deleteDatabase(dbName)
           del.onerror((err) => console.log(err))
-          del.onsuccess(() => window.location.reload())
+          del.onsuccess(() => {
+            document.write('Loading the app ...')
+            setTimeout(() => {
+              window.location.reload()  
+            }, 5000);
+          })
         })
         .then(() => {
           
@@ -528,7 +533,11 @@ window.onload = function () {
                 setCookie('rLevel3Id', 0)
                 setCookie('rLevel4Id', 0)
                 setCookie('uri', uri)
-                window.location.reload()
+                document.write('Loading the app ...')
+
+                setTimeout(() => {
+                  window.location.reload()  
+                }, 5000);
               })
           })
           .fail((err) => console.log(err))
