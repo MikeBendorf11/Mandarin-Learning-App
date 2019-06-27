@@ -1,26 +1,11 @@
 import React from 'react';
-import { Nav, NavItem, Dropdown, DropdownItem, DropdownToggle, DropdownMenu, NavLink } from 'reactstrap';
-import IosListBox from 'react-ionicons/lib/IosList';
+import { Nav, NavItem, NavLink } from 'reactstrap';
+import '../style/main.css';
 
 export default class Example extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.toggle = this.toggle.bind(this);
-    this.state = {
-      dropdownOpen: false
-    };
-  }
-
-  toggle() {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen
-    });
-  }
-
   render() {
     return (
-      <div>
+      <div >
         <Nav tabs>
           <NavItem>
             <NavLink href="#" active>Review</NavLink>
@@ -31,17 +16,6 @@ export default class Example extends React.Component {
           <NavItem>
             <NavLink href="#" active>Links</NavLink>
           </NavItem>
-          <Dropdown nav isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-            <DropdownToggle nav caret>
-              <IosListBox />
-            </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem header>Options</DropdownItem>
-              <DropdownItem>Pronuntiation</DropdownItem>
-              {/* <DropdownItem divider /> */}
-              <DropdownItem>Sentences</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
         </Nav>
       </div>
     );
