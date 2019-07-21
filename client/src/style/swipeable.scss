@@ -1,0 +1,30 @@
+%swipeShared {
+  opacity: 0;
+}
+
+#review{
+  .swipeable{
+    position: relative;
+    left: 0;
+    top: 0;
+    transition-property: opacity, left, top;
+    transition-duration: .3s;
+  }
+
+  .swright{
+    opacity: 0;
+    left:100px
+  }
+  .swleft{
+    @extend %swipeShared;
+    left:-100px
+  }
+  .swup{
+    @extend %swipeShared;
+    top: -50px
+  }
+  .swdown{
+    @extend %swipeShared;
+    top:50px
+  }
+}
