@@ -21,10 +21,10 @@
   }
   .swup{
     @extend %swipeShared;
-    top: -50px
+    top: -30px
   }
   .swdown{
     @extend %swipeShared;
-    top:50px
+    top:30px
   }
 }
