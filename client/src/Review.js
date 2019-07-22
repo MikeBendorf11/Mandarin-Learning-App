@@ -30,6 +30,7 @@ export default class Review extends React.Component {
     return (
       <div id="review">
         <Swipeable
+          group={'short'}
           value={this.state.shortComb[index]}
           length={this.state.shortComb.length}
           index={index}
@@ -37,6 +38,7 @@ export default class Review extends React.Component {
           onIndexChange={this.handleIndexChange}
         />
         <Swipeable
+          group={'short'}
           value={this.state.shortDef[index]}
           length={this.state.shortDef.length}
           index={index}

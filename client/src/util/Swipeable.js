@@ -1,5 +1,7 @@
 import React from 'react';
 import { InputGroup, InputGroupAddon, Button, Input } from 'reactstrap'
+import '../style/swipeable.scss'
+import ReactDOM from "react-dom";
 
 /**
  * Increment and Decrement index should be triggered by swipe left and right
@@ -8,11 +10,41 @@ import { InputGroup, InputGroupAddon, Button, Input } from 'reactstrap'
 export default class Swipeable extends React.Component {
   constructor(props) {
     super(props);
+    this.group = this.props.group
     this.handleChange = this.handleChange.bind(this)
     this.incrementIndex = this.incrementIndex.bind(this)
     this.decrementIndex = this.decrementIndex.bind(this)
     this.handleTouchStart = this.handleTouchStart.bind(this)
     this.handleTouchMove = this.handleTouchMove.bind(this)
+  }
+  componentDidMount(){
+    const element = ReactDOM.findDOMNode(this)
+    element.classList.add(this.group)
+    const elements = document.querySelectorAll(`.${this.group}`)
+    console.log(elements)
+  }
+  delayCss(element, cssClass){
+    return new Promise(resolve=>{
+      setTimeout(() => {
+        element.classList.contains(cssClass) ?
+          element.classList.remove(cssClass) : 
+          element.classList.add(cssClass)
+        resolve()
+      },300);
+    })
+  }
+  delayState(){
+    return new Promise(resolve=>{
+      setTimeout(() => {
+        resolve()
+      }, 400);
+    })
+  }
+  swipeSequence(dir1, dir2, element){
+    element.classList.add('sw'+dir1)
+    this.delayCss(element, 'sw'+dir2)
+    .then(()=>this.delayCss(element, 'sw'+dir1))
+    .then(()=>this.delayCss(element, 'sw'+dir2))
   }
   handleTouchStart(evt) {
     this.xDown = evt.touches[0].clientX;
@@ -20,7 +52,7 @@ export default class Swipeable extends React.Component {
   }
   handleTouchMove(evt) {
     const element = evt.target
-    
+
     if (!this.xDown || !this.yDown) {
       return;
     }
@@ -34,10 +66,14 @@ export default class Swipeable extends React.Component {
     if (Math.abs(this.xDiff) > Math.abs(this.yDiff)) { // Most significant.
       if (this.xDiff > 0) {
         //this.onLeft();
-        this.incrementIndex()
+        this.swipeSequence('left','right', element)
+        this.delayState().then(()=>this.incrementIndex())
+        
+        
       } else {
         //this.onRight();
-        this.decrementIndex()
+        this.swipeSequence('right','left', element)
+        this.delayState().then(()=>this.decrementIndex())
       }
     } else {
       if (this.yDiff > 0) {
@@ -73,6 +109,7 @@ export default class Swipeable extends React.Component {
     return (
       <InputGroup>
         <Input
+          className='swipeable'
           value={this.props.value}
           onChange={this.handleChange}
           onTouchStart={this.handleTouchStart}
