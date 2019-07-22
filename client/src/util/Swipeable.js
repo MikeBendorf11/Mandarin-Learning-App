@@ -20,8 +20,10 @@ export default class Swipeable extends React.Component {
   componentDidMount(){
     const element = ReactDOM.findDOMNode(this)
     element.classList.add(this.group)
-    const elements = document.querySelectorAll(`.${this.group}`)
-    console.log(elements)
+    this.simpleDelay().then(()=>{
+      this.group = document.querySelectorAll(`.${this.group} input`)
+      console.log(this.group)
+    })
   }
   delayCss(element, cssClass){
     return new Promise(resolve=>{
@@ -33,7 +35,7 @@ export default class Swipeable extends React.Component {
       },300);
     })
   }
-  delayState(){
+  simpleDelay(){
     return new Promise(resolve=>{
       setTimeout(() => {
         resolve()
@@ -41,10 +43,13 @@ export default class Swipeable extends React.Component {
     })
   }
   swipeSequence(dir1, dir2, element){
-    element.classList.add('sw'+dir1)
-    this.delayCss(element, 'sw'+dir2)
-    .then(()=>this.delayCss(element, 'sw'+dir1))
-    .then(()=>this.delayCss(element, 'sw'+dir2))
+    this.group.forEach(element=>{
+      element.classList.add('sw'+dir1)
+      this.delayCss(element, 'sw'+dir2)
+      .then(()=>this.delayCss(element, 'sw'+dir1))
+      .then(()=>this.delayCss(element, 'sw'+dir2))
+    })
+    
   }
   handleTouchStart(evt) {
     this.xDown = evt.touches[0].clientX;
@@ -67,13 +72,13 @@ export default class Swipeable extends React.Component {
       if (this.xDiff > 0) {
         //this.onLeft();
         this.swipeSequence('left','right', element)
-        this.delayState().then(()=>this.incrementIndex())
+        this.simpleDelay().then(()=>this.incrementIndex())
         
         
       } else {
         //this.onRight();
         this.swipeSequence('right','left', element)
-        this.delayState().then(()=>this.decrementIndex())
+        this.simpleDelay().then(()=>this.decrementIndex())
       }
     } else {
       if (this.yDiff > 0) {
@@ -104,16 +109,23 @@ export default class Swipeable extends React.Component {
       this.props.onIndexChange(length - 1)
     else this.props.onIndexChange(index - 1)
   }
+  toggleWritable(e){
+    e.target.hasAttribute('readonly') ?
+      e.target.removeAttribute('readonly'): e.target.setAttribute('readonly', '')
+  }
+
 
   render() {
     return (
       <InputGroup>
         <Input
+          readOnly
           className='swipeable'
           value={this.props.value}
           onChange={this.handleChange}
           onTouchStart={this.handleTouchStart}
           onTouchMove={this.handleTouchMove}
+          onClick={this.toggleWritable}
         />
       </InputGroup>
 

@@ -8,42 +8,84 @@ export default class Review extends React.Component {
     super(props);
     this.handleShtCombChange = this.handleShtCombChange.bind(this)
     this.hangleShtDefChange = this.hangleShtDefChange.bind(this)
-    this.handleIndexChange = this.handleIndexChange.bind(this)
+    this.handleShtIdxChange = this.handleShtIdxChange.bind(this)
+
+    this.handleLngIdxChange = this.handleLngIdxChange.bind(this)
+    this.handleLngCombChange = this.handleLngCombChange.bind(this)
+    this.handleLngDefChange = this.handleLngDefChange.bind(this)
 
     this.state = {
       shortComb: unit.combinations.short,
       shortDef: unit.definitions.short,
-      index: 0
+      longComb: unit.combinations.long,
+      longDef: unit.definitions.long,
+      indexSht: 0,
+      indexLng: 0
     }
   }
-  handleShtCombChange(shortComb) {
-    this.setState({shortComb})
+  handleShtCombChange(value) {
+    var shortComb = this.state.shortComb
+    shortComb[this.state.indexSht] = value
+    this.setState({ shortComb })
   }
-  hangleShtDefChange(shortDef){
-    this.setState({shortDef})
+  hangleShtDefChange(value) {
+    var shortDef = this.state.shortDef
+    shortDef[this.state.indexSht] = value
+    this.setState({ shortDef })
   }
-  handleIndexChange(index){
-    this.setState({index})
+  handleShtIdxChange(indexSht) {
+    this.setState({ indexSht })
+  }
+  handleLngIdxChange(indexLng){
+    this.setState({indexLng})
+  }
+  handleLngCombChange(value){
+    var longComb = this.state.longComb
+    longComb[this.state.indexLng] = value
+    this.setState({longComb})
+  }
+  handleLngDefChange(value){
+    var longDef = this.state.longDef
+    longDef[this.state.indexLng] = value
+    this.setState({longDef})
   }
   render() {
-    const index = this.state.index
+    const indexSht = this.state.indexSht
+    const indexLng = this.state.indexLng
+
     return (
       <div id="review">
         <Swipeable
           group={'short'}
-          value={this.state.shortComb[index]}
+          value={this.state.shortComb[indexSht]}
           length={this.state.shortComb.length}
-          index={index}
+          index={indexSht}
           onTextChange={this.handleShtCombChange}
-          onIndexChange={this.handleIndexChange}
+          onIndexChange={this.handleShtIdxChange}
         />
         <Swipeable
           group={'short'}
-          value={this.state.shortDef[index]}
+          value={this.state.shortDef[indexSht]}
           length={this.state.shortDef.length}
-          index={index}
+          index={indexSht}
           onTextChange={this.hangleShtDefChange}
-          onIndexChange={this.handleIndexChange}
+          onIndexChange={this.handleShtIdxChange}
+        />
+        <Swipeable
+          group={'long'}
+          value={this.state.longComb[indexLng]}
+          length={this.state.longComb.length}
+          index={indexLng}
+          onTextChange={this.handleLngCombChange}
+          onIndexChange={this.handleLngIdxChange}
+        />
+        <Swipeable
+          group={'long'}
+          value={this.state.longDef[indexLng]}
+          length={this.state.longDef.length}
+          index={indexLng}
+          onTextChange={this.handleLngDefChange}
+          onIndexChange={this.handleLngIdxChange}
         />
       </div>
 
