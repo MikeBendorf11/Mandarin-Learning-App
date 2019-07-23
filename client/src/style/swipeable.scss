@@ -1,5 +1,15 @@
-%swipeShared {
+%opacityShare {
   opacity: 0;
+}
+%HiddenShare{
+  visibility: hidden;
+}
+%VisibleShare{
+  visibility: visible;
+}
+
+#review{
+  padding: 10%
 }
 
 #review{
@@ -7,7 +17,7 @@
     position: relative;
     left: 0;
     top: 0;
-    transition-property: opacity, left, top;
+    transition-property: opacity, left, top, visibility;
     transition-duration: .3s;
   }
 
@@ -16,15 +26,19 @@
     left:100px
   }
   .swleft{
-    @extend %swipeShared;
+    @extend %opacityShare;
     left:-100px
   }
   .swup{
-    @extend %swipeShared;
-    top: -50px
+    top: -38px
   }
   .swdown{
-    @extend %swipeShared;
-    top:50px
+    top:38px
+  }
+  .visible{
+    visibility: visible;
+  }
+  .hidden{
+    visibility: hidden;
   }
 }

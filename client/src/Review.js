@@ -1,7 +1,7 @@
 import React from 'react';
 import Swipeable from './util/Swipeable'
 
-var unit = JSON.parse(`{"id":12,"learnedId":12,"level":1,"consult":true,"char":"就","pronunciation":"jiù","combinations":{"short":["就要"," 成就", ""],"long":["#,因为就要下雨了","这不是什么大不了的成就",""]},"definitions":{"short":["will"," achieve",""],"long":[""],"single":["at once, just, go "]}}`)
+var unit = JSON.parse(`{"id":12,"learnedId":12,"level":1,"consult":true,"char":"就","pronunciation":"jiù","combinations":{"short":["就要"," 成就", ""],"long":["#,因为就要下雨了","这不是什么大不了的成就",""]},"definitions":{"short":["will"," achieve",""],"long":["","",""],"single":["at once, just, go "]}}`)
 
 export default class Review extends React.Component {
   constructor(props) {
@@ -62,6 +62,7 @@ export default class Review extends React.Component {
           index={indexSht}
           onTextChange={this.handleShtCombChange}
           onIndexChange={this.handleShtIdxChange}
+          visibility={'visible'}
         />
         <Swipeable
           group={'short'}
@@ -70,6 +71,7 @@ export default class Review extends React.Component {
           index={indexSht}
           onTextChange={this.hangleShtDefChange}
           onIndexChange={this.handleShtIdxChange}
+          visibility={'hidden'}
         />
         <Swipeable
           group={'long'}
@@ -78,6 +80,7 @@ export default class Review extends React.Component {
           index={indexLng}
           onTextChange={this.handleLngCombChange}
           onIndexChange={this.handleLngIdxChange}
+          visibility={'visible'}
         />
         <Swipeable
           group={'long'}
@@ -86,6 +89,7 @@ export default class Review extends React.Component {
           index={indexLng}
           onTextChange={this.handleLngDefChange}
           onIndexChange={this.handleLngIdxChange}
+          visibility={'hidden'}
         />
       </div>
 
