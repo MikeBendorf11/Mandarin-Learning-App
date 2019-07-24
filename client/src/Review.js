@@ -62,7 +62,7 @@ export default class Review extends React.Component {
           index={indexSht}
           onTextChange={this.handleShtCombChange}
           onIndexChange={this.handleShtIdxChange}
-          visibility={'visible'}
+          opacity={'show'}
         />
         <Swipeable
           group={'short'}
@@ -71,7 +71,7 @@ export default class Review extends React.Component {
           index={indexSht}
           onTextChange={this.hangleShtDefChange}
           onIndexChange={this.handleShtIdxChange}
-          visibility={'hidden'}
+          opacity={'hide'}
         />
         <Swipeable
           group={'long'}
@@ -80,7 +80,7 @@ export default class Review extends React.Component {
           index={indexLng}
           onTextChange={this.handleLngCombChange}
           onIndexChange={this.handleLngIdxChange}
-          visibility={'visible'}
+          opacity={'show'}
         />
         <Swipeable
           group={'long'}
@@ -89,7 +89,7 @@ export default class Review extends React.Component {
           index={indexLng}
           onTextChange={this.handleLngDefChange}
           onIndexChange={this.handleLngIdxChange}
-          visibility={'hidden'}
+          opacity={'hide'}
         />
       </div>
 

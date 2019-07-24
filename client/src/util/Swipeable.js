@@ -8,6 +8,7 @@ import ReactDOM from "react-dom";
  * Horizontal swipe returns the new index for updating the next Comb and Def 
  * Vertical swipe only changes the position of the group, a div wrapper should 
  * reveal only one input at a time
+ * @param group: only 2 inputs per group 1 comb, 1 def
  */
 export default class Swipeable extends React.Component {
   constructor(props) {
@@ -18,7 +19,6 @@ export default class Swipeable extends React.Component {
     this.decrementIndex = this.decrementIndex.bind(this)
     this.handleTouchStart = this.handleTouchStart.bind(this)
     this.handleTouchMove = this.handleTouchMove.bind(this)
-    this.horizontalCount = 0
   }
 
   componentDidMount() {
@@ -26,7 +26,7 @@ export default class Swipeable extends React.Component {
     const element = ReactDOM.findDOMNode(this)
     element.classList.add(this.group)
     //hide definitions
-    element.getElementsByTagName('input')[0].classList.add(this.props.visibility)
+    element.getElementsByTagName('input')[0].classList.add(this.props.opacity)
     this.simpleDelay().then(() => {
       this.group = document.querySelectorAll(`.${this.group} input`)
     })
@@ -53,34 +53,25 @@ export default class Swipeable extends React.Component {
   horizontalSequence(dir1, dir2) {
     this.group.forEach(element => {
       element.classList.add('sw' + dir1)
+      if(element.classList.contains('show')) element.classList.add('hide') 
       this.delayCss(element, 'sw' + dir2)
         .then(() => this.delayCss(element, 'sw' + dir1))
         .then(() => this.delayCss(element, 'sw' + dir2))
+        .then(()=>{
+          if(element.classList.contains('show')) element.classList.remove('hide') 
+        })
     })
   }
-  //for up and down regular motion
-  verticalSequence(dir) {
-    this.group.forEach(element => {
-      if (element.classList.contains('visible')) {
-        element.classList.remove('visible')
-        element.classList.add('sw' + dir, 'hidden')
-      } else if (element.classList.contains('hidden')) {
-        element.classList.remove('hidden')
-        element.classList.add('sw' + dir, 'visible')
-      }
-    })
-  }
+
   //for when roulette restarts
-  verticalSequence2(dir) {
-
-  }
-
   handleTouchStart(evt) {
     this.xDown = evt.touches[0].clientX;
     this.yDown = evt.touches[0].clientY;
   }
 
   handleTouchMove(evt) {
+    const comb = this.group[0]
+    const def = this.group[1]
     if (!this.xDown || !this.yDown) {
       return;
     }
@@ -102,21 +93,19 @@ export default class Swipeable extends React.Component {
         this.simpleDelay().then(() => this.decrementIndex())
       }
     } else {
-      if (this.yDiff > 0) {
-        console.log(this.horizontalCount)
+      if (this.yDiff > 0) {       
         //up motion
-        if (this.horizontalCount == 0) {
-          this.verticalSequence('up')
-          //this.horizontalCount++
-        }
-        else if (this.horizontalCount != 0) {
-          this.verticalSequence2('up')
-          //this.horizontalCount--
-        }
-
+        comb.classList.remove('show')
+        comb.classList.add('hide','up')
+        def.classList.remove('hide')
+        def.classList.add('show', 'up')
 
       } else {
         //down motion
+        comb.classList.remove('hide', 'up')
+        comb.classList.add('show')
+        def.classList.add('hide')
+        def.classList.remove('show','up')
       }
     }
     this.xDown = null;
@@ -142,14 +131,9 @@ export default class Swipeable extends React.Component {
       this.props.onIndexChange(length - 1)
     else this.props.onIndexChange(index - 1)
   }
-  toggleWritable(e) {
-    e.target.hasAttribute('readonly') ?
-      e.target.removeAttribute('readonly') : e.target.setAttribute('readonly', '')
-  }
-
 
   toggleWritable(e) {
-    e.target.hasAttribute('readonly') ?
+    e.target.hasAttribute('readonly') && e.target.classList.contains('show')?
       e.target.removeAttribute('readonly') : e.target.setAttribute('readonly', '')
   }
 
@@ -157,9 +141,8 @@ export default class Swipeable extends React.Component {
     return (
       <InputGroup>
         <InputGroupAddon addonType="prepend">
-          <InputGroupText
-            style={{ visibility: this.props.visibility }}
-          >{this.props.index + 1}
+          <InputGroupText style={this.props.opacity=='show'?{ opacity: 1 } : { opacity: 0 }}>
+            {this.props.index + 1}
           </InputGroupText>
         </InputGroupAddon>
         <Input
