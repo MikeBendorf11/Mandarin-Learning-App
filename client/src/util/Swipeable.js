@@ -6,9 +6,12 @@ import ReactDOM from "react-dom";
 /**
  * A initial props.value is loaded
  * Horizontal swipe returns the new index for updating the next Comb and Def 
- * Vertical swipe only changes the position of the group, a div wrapper should 
- * reveal only one input at a time
- * @param group: only 2 inputs per group 1 comb, 1 def
+ * Vertical swipe only controls comb or def input opacity and position
+ * @props { group } : only 2 inputs per group 1 comb, 1 def.
+ *  { value } : an array of combs or defs.
+ *  { length } : the length of the array.
+ *  { index } : starts at empty/last of array to hide clues
+ * @events { textChange, IndexChange } sync roulette with comb/def state array
  */
 export default class Swipeable extends React.Component {
   constructor(props) {
@@ -19,16 +22,24 @@ export default class Swipeable extends React.Component {
     this.decrementIndex = this.decrementIndex.bind(this)
     this.handleTouchStart = this.handleTouchStart.bind(this)
     this.handleTouchMove = this.handleTouchMove.bind(this)
+    this.toggleWritable = this.toggleWritable.bind(this)
+    this.state = {
+      placeholder: 'tap to add, swipe to find',
+      color: '#e9ecef' //#495057
+    }
   }
 
   componentDidMount() {
-    //assign same class to all elements of the same group
+    //assign same class to all input groups
     const element = ReactDOM.findDOMNode(this)
     element.classList.add(this.group)
     //hide definitions
     element.getElementsByTagName('input')[0].classList.add(this.props.opacity)
     this.simpleDelay().then(() => {
-      this.group = document.querySelectorAll(`.${this.group} input`)
+      this.group = document.querySelectorAll(`
+      .${this.group} input,
+      .${this.group} div[class=input-group-prepend]
+      `)
     })
   }
 
@@ -63,15 +74,15 @@ export default class Swipeable extends React.Component {
     })
   }
 
-  //for when roulette restarts
+  //swipe events
   handleTouchStart(evt) {
     this.xDown = evt.touches[0].clientX;
     this.yDown = evt.touches[0].clientY;
   }
-
+  //group 1, 3 are the input elements only, 0, 4 are the div>span number containers
   handleTouchMove(evt) {
-    const comb = this.group[0]
-    const def = this.group[1]
+    const comb = this.group[1]
+    const def = this.group[3]
     if (!this.xDown || !this.yDown) {
       return;
     }
@@ -112,6 +123,7 @@ export default class Swipeable extends React.Component {
     this.yDown = null;
   }
 
+  //state management
   handleChange(event) {
     this.props.onTextChange(event.target.value)
   }
@@ -133,16 +145,25 @@ export default class Swipeable extends React.Component {
   }
 
   toggleWritable(e) {
+    //don't toggle hidden inputs
     e.target.hasAttribute('readonly') && e.target.classList.contains('show')?
       e.target.removeAttribute('readonly') : e.target.setAttribute('readonly', '')
+    //erase placeholder after first tap
+    if(this.state.placeholder != '') this.setState({placeholder: ''})
   }
-
+  showCombCounter(){
+    if(this.state.color != '#495057') this.setState({color: "#495057"})
+  }
   render() {
+    var color = this.state.color
     return (
       <InputGroup>
+        {/* The comb counter */}
         <InputGroupAddon addonType="prepend">
-          <InputGroupText style={this.props.opacity=='show'?{ opacity: 1 } : { opacity: 0 }}>
-            {this.props.index + 1}
+          <InputGroupText 
+            style={this.props.opacity=='show'?
+              { opacity: 1, color } : { opacity: 0, color }}
+          >{this.props.index + 1}
           </InputGroupText>
         </InputGroupAddon>
         <Input
@@ -151,8 +172,9 @@ export default class Swipeable extends React.Component {
           value={this.props.value}
           onChange={this.handleChange}
           onTouchStart={this.handleTouchStart}
-          onTouchMove={this.handleTouchMove}
-          onClick={this.toggleWritable}
+          onTouchMove={(e) => {this.handleTouchMove(e); this.showCombCounter()}}
+          onClick={(e) => {this.toggleWritable(e); this.showCombCounter()}}
+          placeholder={this.state.placeholder}
         />
       </InputGroup>
     )
