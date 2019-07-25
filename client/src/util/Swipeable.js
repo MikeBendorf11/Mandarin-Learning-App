@@ -5,7 +5,7 @@ import ReactDOM from "react-dom";
 
 /**
  * A initial props.value is loaded
- * Horizontal swipe returns the new index for updating the next Comb and Def 
+ * Horizontal swipe returns the new index for updating the next Comb and Def
  * Vertical swipe only controls comb or def input opacity and position
  * @props { group } : only 2 inputs per group 1 comb, 1 def.
  *  { value } : an array of combs or defs.
@@ -27,20 +27,33 @@ export default class Swipeable extends React.Component {
       placeholder: 'tap to add, swipe to find',
       color: '#e9ecef' //#495057
     }
+
   }
 
   componentDidMount() {
     //assign same class to all input groups
-    const element = ReactDOM.findDOMNode(this)
-    element.classList.add(this.group)
+    const inputGroup = ReactDOM.findDOMNode(this)
+    inputGroup.classList.add(this.group)
     //hide definitions
-    element.getElementsByTagName('input')[0].classList.add(this.props.opacity)
+    var input = inputGroup.getElementsByTagName('input')[0]
+    input.classList.add(this.props.opacity)
     this.simpleDelay().then(() => {
       this.group = document.querySelectorAll(`
       .${this.group} input,
       .${this.group} div[class=input-group-prepend]
       `)
     })
+
+    function getWidthOfText(txt){
+      if(getWidthOfText.c === undefined){
+        getWidthOfText.c=document.createElement('canvas');
+        getWidthOfText.ctx=getWidthOfText.c.getContext('2d');
+      }
+      getWidthOfText.ctx.font = '13.3px' + ' ' + 'Arial';
+      return getWidthOfText.ctx.measureText(txt).width;
+    }
+    this.textWidth = getWidthOfText(this.props.value)
+
   }
 
   delayCss(element, cssClass) {
@@ -64,12 +77,12 @@ export default class Swipeable extends React.Component {
   horizontalSequence(dir1, dir2) {
     this.group.forEach(element => {
       element.classList.add('sw' + dir1)
-      if(element.classList.contains('show')) element.classList.add('hide') 
+      if(element.classList.contains('show')) element.classList.add('hide')
       this.delayCss(element, 'sw' + dir2)
         .then(() => this.delayCss(element, 'sw' + dir1))
         .then(() => this.delayCss(element, 'sw' + dir2))
         .then(()=>{
-          if(element.classList.contains('show')) element.classList.remove('hide') 
+          if(element.classList.contains('show')) element.classList.remove('hide')
         })
     })
   }
@@ -104,7 +117,7 @@ export default class Swipeable extends React.Component {
         this.simpleDelay().then(() => this.decrementIndex())
       }
     } else {
-      if (this.yDiff > 0) {       
+      if (this.yDiff > 0) {
         //up motion
         comb.classList.remove('show')
         comb.classList.add('hide','up')
@@ -160,7 +173,7 @@ export default class Swipeable extends React.Component {
       <InputGroup>
         {/* The comb counter */}
         <InputGroupAddon addonType="prepend">
-          <InputGroupText 
+          <InputGroupText
             style={this.props.opacity=='show'?
               { opacity: 1, color } : { opacity: 0, color }}
           >{this.props.index + 1}
