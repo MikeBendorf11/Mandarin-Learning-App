@@ -19,8 +19,8 @@ export default class Review extends React.Component {
       shortDef: unit.definitions.short,
       longComb: unit.combinations.long,
       longDef: unit.definitions.long,
-      indexSht: unit.combinations.short.length-1,
-      indexLng: unit.combinations.long.length-1
+      indexSht: unit.combinations.short.length-2,
+      indexLng: unit.combinations.long.length-2
     }
   }
   handleShtCombChange(value) {

@@ -35,8 +35,8 @@ export default class Swipeable extends React.Component {
     const inputGroup = ReactDOM.findDOMNode(this)
     inputGroup.classList.add(this.group)
     //hide definitions
-    var input = inputGroup.getElementsByTagName('input')[0]
-    input.classList.add(this.props.opacity)
+    this.input = inputGroup.getElementsByTagName('input')[0]
+    this.input.classList.add(this.props.opacity)
     this.simpleDelay().then(() => {
       this.group = document.querySelectorAll(`
       .${this.group} input,
@@ -75,6 +75,7 @@ export default class Swipeable extends React.Component {
   }
 
   horizontalSequence(dir1, dir2) {
+    
     this.group.forEach(element => {
       element.classList.add('sw' + dir1)
       if(element.classList.contains('show')) element.classList.add('hide')
@@ -94,6 +95,20 @@ export default class Swipeable extends React.Component {
   }
   //group 1, 3 are the input elements only, 0, 4 are the div>span number containers
   handleTouchMove(evt) {
+    const screenWidth = (window.innerWidth || 
+    document.documentElement.clientWidth || 
+    document.body.clientWidth) *.9
+    const textWidth = this.textWidth
+    var input = this.input
+    console.dir(input.scrollLeft + '    ' + textWidth)
+
+    const isCursorAtEnd = () => {
+      if(textWidth > screenWidth || input.selectionStart != input.selectionEnd){
+        input.selectionStart = input.selectionEnd
+        return true
+      } else return false
+    }
+    
     const comb = this.group[1]
     const def = this.group[3]
     if (!this.xDown || !this.yDown) {
@@ -103,21 +118,23 @@ export default class Swipeable extends React.Component {
     var xUp = evt.touches[0].clientX;
     var yUp = evt.touches[0].clientY;
 
-    this.xDiff = this.xDown - xUp;
-    this.yDiff = this.yDown - yUp;
+    var xDiff = this.xDown - xUp;
+    var yDiff = this.yDown - yUp;
 
-    if (Math.abs(this.xDiff) > Math.abs(this.yDiff)) { // Most significant.
-      if (this.xDiff > 0) {
+    if (Math.abs(xDiff) > Math.abs(yDiff)) { // Most significant.
+      if (xDiff > 0) {
         //left motion
+        if(!isCursorAtEnd()) return
         this.horizontalSequence('left', 'right')
         this.simpleDelay().then(() => this.incrementIndex())
       } else {
         //right motion
+        if(!isCursorAtEnd()) return
         this.horizontalSequence('right', 'left')
         this.simpleDelay().then(() => this.decrementIndex())
       }
     } else {
-      if (this.yDiff > 0) {
+      if (yDiff > 0) {
         //up motion
         comb.classList.remove('show')
         comb.classList.add('hide','up')
