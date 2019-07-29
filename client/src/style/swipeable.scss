@@ -6,6 +6,10 @@
   padding: 10%
 }
 
+.hide-overflow{
+  text-overflow: ellipsis
+}
+
 #review{
   .swipeable{
     position: relative;

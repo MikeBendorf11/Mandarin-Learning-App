@@ -57,6 +57,7 @@ export default class Review extends React.Component {
       <div id="review">
         <Swipeable
           group={'short'}
+          type={'combination'}
           value={this.state.shortComb[indexSht]}
           length={this.state.shortComb.length}
           index={indexSht}
@@ -66,6 +67,7 @@ export default class Review extends React.Component {
         />
         <Swipeable
           group={'short'}
+          type={'definition'}
           value={this.state.shortDef[indexSht]}
           length={this.state.shortDef.length}
           index={indexSht}
@@ -75,6 +77,7 @@ export default class Review extends React.Component {
         />
         <Swipeable
           group={'long'}
+          type={'combination'}
           value={this.state.longComb[indexLng]}
           length={this.state.longComb.length}
           index={indexLng}
@@ -84,6 +87,7 @@ export default class Review extends React.Component {
         />
         <Swipeable
           group={'long'}
+          type={'definition'}
           value={this.state.longDef[indexLng]}
           length={this.state.longDef.length}
           index={indexLng}
