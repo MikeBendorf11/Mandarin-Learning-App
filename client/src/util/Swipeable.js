@@ -26,6 +26,8 @@ export default class Swipeable extends React.Component {
     this.toggleWritable = this.toggleWritable.bind(this)
     this.swipeCount = 0
     this.clickCount = 0
+    this.isTextOverflow = false
+    this.shouldDisplayLabel = this.props.group != 'single'
   }
 
   componentDidMount() {
@@ -41,8 +43,8 @@ export default class Swipeable extends React.Component {
       .${this.group} .input-group-prepend
       `)
     })
-    .then(()=>{ //if text overflows
-      if(this.input.clientWidth < this.input.scrollWidth) 
+    .then(()=>{
+      if(this.isTextOverflow = this.input.clientWidth < this.input.scrollWidth)
         this.input.classList.add('hide-overflow')
     })
   }
@@ -67,7 +69,7 @@ export default class Swipeable extends React.Component {
   }
 
   horizontalSequence(dir1, dir2) {
-    
+
     this.group.forEach(element => {
       element.classList.add('sw' + dir1)
       if(element.classList.contains('show')) element.classList.add('hide')
@@ -91,7 +93,7 @@ export default class Swipeable extends React.Component {
   handleTouchMove(evt) {
     if(evt.target.classList.contains('hide')) return; //reject hidden
 
-    //console.log(this.input.style) 
+    //console.log(this.input.style)
     const comb = this.group[1]
     const def = this.group[3]
     if (!this.xDown || !this.yDown) {
@@ -109,17 +111,17 @@ export default class Swipeable extends React.Component {
         //only if text overflows
         if(this.input.clientWidth < this.input.scrollWidth){
           if(this.previousScrollLeft === 0) return
-          else if(this.previousScrollLeft === this.input.scrollLeft 
+          else if(this.previousScrollLeft === this.input.scrollLeft
             && this.swipeCount < 5){
             this.swipeCount++
-            return  
-          }  
+            return
+          }
           //forcing to evaluate once more in case previous condition became async
           else if (this.swipeCount < 5) return
         }
         this.swipeCount = 0
         this.input.style.textOverFlow = 'unset'
-        
+
         this.horizontalSequence('left', 'right')
         this.simpleDelay().then(() => this.incrementIndex())
       } else {
@@ -147,9 +149,8 @@ export default class Swipeable extends React.Component {
     this.xDown = null;
     this.yDown = null;
   }
-  //if text overflows
   reloadEllipsis(){
-    if(this.input.clientWidth < this.input.scrollWidth) 
+    if(this.isTextOverflow)
       this.input.classList.add('hide-overflow')
   }
   //state management
@@ -179,7 +180,7 @@ export default class Swipeable extends React.Component {
      //don't toggle hidden inputs
     if(!e.target.classList.contains('show')) return;
     this.clickCount++ //double click check
-    setTimeout(()=>this.clickCount = 0,500) 
+    setTimeout(()=>this.clickCount = 0,500)
     if(this.clickCount===2 && e.target.hasAttribute('readonly')){
       e.target.removeAttribute('readonly')
     } else if(this.clickCount===2 && !e.target.hasAttribute('readonly')){
@@ -191,8 +192,12 @@ export default class Swipeable extends React.Component {
     return (
       <InputGroup>
         {/* The comb counter */}
-        <InputGroupAddon addonType="prepend" 
-                         className={this.props.opacity + ' swipeable'}>
+        <InputGroupAddon
+          addonType="prepend"
+          className={
+            this.shouldDisplayLabel ?
+            this.props.opacity + ' swipeable' : 'hide'
+          }>
           <InputGroupText>{this.props.index + 1}</InputGroupText>
         </InputGroupAddon>
         <Input

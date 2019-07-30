@@ -16,7 +16,7 @@ export default class Review extends React.Component {
 
     if(unit.char.length>1 && unit.definitions.single>1){
       var singleDef = unit.definitions.single.toString()
-      var isDoubleChar = true
+      var isDoubleChar = true //single def is array
     } else {
       var singleDef = unit.definitions.single[0]
       var isDoubleChar = false
@@ -75,6 +75,7 @@ export default class Review extends React.Component {
           length={this.state.single.length}
           index={indexSgl}
           onIndexChange={this.handleSglIdxChange}
+          opacity={'show'}
         />
 
         <br></br>
