@@ -6,22 +6,35 @@ var unit = JSON.parse(`{"id":12,"learnedId":12,"level":1,"consult":true,"char":"
 export default class Review extends React.Component {
   constructor(props) {
     super(props);
+    this.handleSglIdxChange = this.handleSglIdxChange.bind(this)
     this.handleShtCombChange = this.handleShtCombChange.bind(this)
     this.hangleShtDefChange = this.hangleShtDefChange.bind(this)
     this.handleShtIdxChange = this.handleShtIdxChange.bind(this)
-
     this.handleLngIdxChange = this.handleLngIdxChange.bind(this)
     this.handleLngCombChange = this.handleLngCombChange.bind(this)
     this.handleLngDefChange = this.handleLngDefChange.bind(this)
 
+    if(unit.char.length>1 && unit.definitions.single>1){
+      var singleDef = unit.definitions.single.toString()
+      var isDoubleChar = true
+    } else {
+      var singleDef = unit.definitions.single[0]
+      var isDoubleChar = false
+    }
+
     this.state = {
+      single: [unit.pronunciation, unit.char, singleDef],
       shortComb: unit.combinations.short,
       shortDef: unit.definitions.short,
       longComb: unit.combinations.long,
       longDef: unit.definitions.long,
-      indexSht: unit.combinations.short.length-2,
-      indexLng: unit.combinations.long.length-2
+      indexSgl: 0,
+      indexSht: unit.combinations.short.length-1,
+      indexLng: unit.combinations.long.length-1
     }
+  }
+  handleSglIdxChange(indexSgl){
+    this.setState({ indexSgl })
   }
   handleShtCombChange(value) {
     var shortComb = this.state.shortComb
@@ -52,9 +65,19 @@ export default class Review extends React.Component {
   render() {
     const indexSht = this.state.indexSht
     const indexLng = this.state.indexLng
+    const indexSgl = this.state.indexSgl
 
     return (
       <div id="review">
+        <Swipeable
+          group={'single'}
+          value={this.state.single[indexSgl]}
+          length={this.state.single.length}
+          index={indexSgl}
+          onIndexChange={this.handleSglIdxChange}
+        />
+
+        <br></br>
         <Swipeable
           group={'short'}
           type={'combination'}

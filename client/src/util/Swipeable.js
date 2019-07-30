@@ -1,5 +1,5 @@
 import React from 'react';
-import { InputGroup, InputGroupAddon, InputGroupText, Button, Input } from 'reactstrap'
+import { InputGroup, InputGroupAddon, InputGroupText, Input } from 'reactstrap'
 import '../style/swipeable.scss'
 import ReactDOM from "react-dom";
 
@@ -38,7 +38,7 @@ export default class Swipeable extends React.Component {
     this.simpleDelay().then(() => {
       this.group = document.querySelectorAll(`
       .${this.group} input,
-      .${this.group} div[class=input-group-prepend]
+      .${this.group} .input-group-prepend
       `)
     })
     .then(()=>{ //if text overflows
@@ -89,7 +89,7 @@ export default class Swipeable extends React.Component {
   }
   //group 1, 3 are the input elements only, 0, 4 are the div>span number containers
   handleTouchMove(evt) {
-    if(evt.target.classList.contains('hide')) return;
+    if(evt.target.classList.contains('hide')) return; //reject hidden
 
     //console.log(this.input.style) 
     const comb = this.group[1]
@@ -105,10 +105,11 @@ export default class Swipeable extends React.Component {
 
     if (Math.abs(xDiff) > Math.abs(yDiff)) { // Most significant.
       if (xDiff > 0) {
+        //left motion
         //only if text overflows
         if(this.input.clientWidth < this.input.scrollWidth){
-          if(this.previousScrollLeft == 0) return
-          else if(this.previousScrollLeft == this.input.scrollLeft 
+          if(this.previousScrollLeft === 0) return
+          else if(this.previousScrollLeft === this.input.scrollLeft 
             && this.swipeCount < 5){
             this.swipeCount++
             return  
@@ -123,8 +124,7 @@ export default class Swipeable extends React.Component {
         this.simpleDelay().then(() => this.incrementIndex())
       } else {
         //right motion
-
-        if(this.input.scrollLeft != 0 ) return //is text scrolled to left?
+        if(this.input.scrollLeft !== 0 ) return //is text scrolled to left?
         this.horizontalSequence('right', 'left')
         this.simpleDelay().then(() => this.decrementIndex())
       }
@@ -147,7 +147,11 @@ export default class Swipeable extends React.Component {
     this.xDown = null;
     this.yDown = null;
   }
-
+  //if text overflows
+  reloadEllipsis(){
+    if(this.input.clientWidth < this.input.scrollWidth) 
+      this.input.classList.add('hide-overflow')
+  }
   //state management
   handleChange(event) {
     this.props.onTextChange(event.target.value)
@@ -159,6 +163,7 @@ export default class Swipeable extends React.Component {
     if (index + 1 > length - 1)
       this.props.onIndexChange(0)
     else this.props.onIndexChange(index + 1)
+    this.reloadEllipsis()
   }
 
   decrementIndex() {
@@ -167,6 +172,7 @@ export default class Swipeable extends React.Component {
     if (index - 1 < 0)
       this.props.onIndexChange(length - 1)
     else this.props.onIndexChange(index - 1)
+    this.reloadEllipsis()
   }
 
   toggleWritable(e) {
@@ -174,9 +180,9 @@ export default class Swipeable extends React.Component {
     if(!e.target.classList.contains('show')) return;
     this.clickCount++ //double click check
     setTimeout(()=>this.clickCount = 0,500) 
-    if(this.clickCount==2 && e.target.hasAttribute('readonly')){
+    if(this.clickCount===2 && e.target.hasAttribute('readonly')){
       e.target.removeAttribute('readonly')
-    } else if(this.clickCount==2 && !e.target.hasAttribute('readonly')){
+    } else if(this.clickCount===2 && !e.target.hasAttribute('readonly')){
       e.target.setAttribute('readonly', '')
     }
   }
@@ -185,12 +191,9 @@ export default class Swipeable extends React.Component {
     return (
       <InputGroup>
         {/* The comb counter */}
-        <InputGroupAddon addonType="prepend">
-          <InputGroupText
-            style={this.props.opacity=='show'?
-              { opacity: 1 } : { opacity: 0 }}
-          >{this.props.index + 1}
-          </InputGroupText>
+        <InputGroupAddon addonType="prepend" 
+                         className={this.props.opacity + ' swipeable'}>
+          <InputGroupText>{this.props.index + 1}</InputGroupText>
         </InputGroupAddon>
         <Input
           readOnly
@@ -198,8 +201,8 @@ export default class Swipeable extends React.Component {
           value={this.props.value}
           onChange={this.handleChange}
           onTouchStart={this.handleTouchStart}
-          onTouchMove={(e) => {this.handleTouchMove(e)}}
-          onClick={(e) => {this.toggleWritable(e)}}
+          onTouchMove={this.handleTouchMove}
+          onClick={this.toggleWritable}
           onBlur={(e)=>{if(!e.target.hasAttribute('readonly')) e.target.setAttribute('readonly', '')}}
           placeholder={'add ' + this.props.type}
         />

@@ -1,7 +1,3 @@
-%opacityShare {
-  opacity: 0;
-}
-
 #review{
   padding: 10%
 }
@@ -20,11 +16,11 @@
   }
 
   .swright{
-    @extend %opacityShare;
+    opacity: 0;
     left:100px
   }
   .swleft{
-    @extend %opacityShare;
+    opacity: 0;
     left:-100px
   }
   .show{
