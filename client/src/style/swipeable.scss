@@ -1,12 +1,4 @@
-#review{
-  padding: 10%
-}
-
-.hide-overflow{
-  text-overflow: ellipsis
-}
-
-#review{
+#review-block{
   .swipeable{
     position: relative;
     left: 0;
@@ -14,7 +6,6 @@
     transition-property: opacity, left, top;
     transition-duration: .3s;
   }
-
   .swright{
     opacity: 0;
     left:100px
@@ -23,19 +14,38 @@
     opacity: 0;
     left:-100px
   }
+}
+
+.hide-overflow{
+  text-overflow: ellipsis
+}
+
+#char-block{
+  margin: 0 auto;
+  input{
+    display: inline;
+  }
+  .swup{
+    opacity: 0;
+    top: -50px
+  }
+  .swdown{
+    opacity: 0;
+    top: 50px;
+  }
+}
+#combs-block{
+  padding: 10%;
+  .up{
+    top: -38px
+  }
+  .down{
+    top: 38px
+  }
   .show{
     opacity: 1;
   }
   .hide{
     opacity: 0;
-  }
-  .up{
-    top: -38px
-  }
-  .upmore{
-    top: -76px
-  }
-  .down{
-    top: 38px
   }
 }

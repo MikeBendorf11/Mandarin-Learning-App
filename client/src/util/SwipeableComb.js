@@ -14,7 +14,7 @@ import ReactDOM from "react-dom";
  *  { index } : starts at empty/last of array to hide clues
  * @events { textChange, IndexChange } sync roulette with comb/def state array
  */
-export default class Swipeable extends React.Component {
+export default class SwipeableComb extends React.Component {
   constructor(props) {
     super(props);
     this.group = this.props.group
