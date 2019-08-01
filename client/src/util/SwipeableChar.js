@@ -36,7 +36,8 @@ export default class SwipeableChar extends React.Component {
 
   }
   setWidthofInput(){
-    var elem = document.createElement('span')    
+    var elem = document.createElement('span')   
+    elem.style.fontSize = '2em' 
     elem.style.position = 'absolute'
     elem.style.left = -1000
     elem.style.top = -1000
@@ -79,7 +80,6 @@ export default class SwipeableChar extends React.Component {
   }
 
   verticalSequence(dir1, dir2){
-    
     var element = this.input
     element.classList.add('sw' + dir1)
     if(element.classList.contains('show')) element.classList.add('hide')
@@ -175,7 +175,8 @@ export default class SwipeableChar extends React.Component {
           onTouchStart={this.handleTouchStart}
           onTouchMove={this.handleTouchMove}
           onClick={this.toggleWritable}
-          onBlur={(e)=>{if(!e.target.hasAttribute('readonly')) e.target.setAttribute('readonly', '')}}
+          onBlur={(e)=>{if(!e.target.hasAttribute('readonly')) 
+                          e.target.setAttribute('readonly', '')}}
           placeholder={'add ' + this.props.type}
         />
       </InputGroup>

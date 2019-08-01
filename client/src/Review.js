@@ -4,6 +4,11 @@ import SwipeableChar from './util/SwipeableChar'
 
 var unit = JSON.parse(`{"id":12,"learnedId":12,"level":1,"consult":true,"char":"就是","pronunciation":"jiùshi","combinations":{"short":["就要"," 成就", ""],"long":["#,因为就要下雨了","这不是什么大不了的成就这不是什么大不了的成就",""]},"definitions":{"short":["will"," achieve",""],"long":["","",""],"single":["at once, just, go ","xxx"]}}`)
 
+/* from 19968 up 
+String.fromCharCode() //fro code get char
+String.codePointAt() //string pos get code
+*/
+
 var log = (a) => console.log(a)
 
 export default class Review extends React.Component {
@@ -26,6 +31,12 @@ export default class Review extends React.Component {
       var singleDef = unit.definitions.single[0]
       this.isDoubleChar = false
     }
+    
+    //diff review types will be handled by global
+    this.singleOrder = ['pinyin', 'hanzi', 'meaning', 'combined']
+    this.combOrder = ['combination', 'definition']
+
+    
 
     this.state = {
       single: [unit.pronunciation, unit.char].concat(singleDef),
@@ -38,7 +49,17 @@ export default class Review extends React.Component {
       indexLng: unit.combinations.long.length-1
     }
   }
-  
+
+  getFontSize(textType){
+    switch(textType){
+      case 'pinyin': case 'hanzi': case 'combination':
+        return '2em';
+      default: 
+        return '1em';
+    }
+  }
+
+
   handleSglChange(value){
     var single = this.state.single
     single[this.state.indexSgl] = value
@@ -93,7 +114,7 @@ export default class Review extends React.Component {
         <div id='combs-block'>
           <SwipeableComb
             group={'short'}
-            type={'combination'}
+            type={this.combOrder[0]}
             value={this.state.shortComb[indexSht]}
             length={this.state.shortComb.length}
             index={indexSht}
@@ -103,7 +124,7 @@ export default class Review extends React.Component {
           />
           <SwipeableComb
             group={'short'}
-            type={'definition'}
+            type={this.combOrder[1]}
             value={this.state.shortDef[indexSht]}
             length={this.state.shortDef.length}
             index={indexSht}
@@ -113,7 +134,7 @@ export default class Review extends React.Component {
           />
           <SwipeableComb
             group={'long'}
-            type={'combination'}
+            type={this.combOrder[0]}
             value={this.state.longComb[indexLng]}
             length={this.state.longComb.length}
             index={indexLng}
@@ -123,7 +144,7 @@ export default class Review extends React.Component {
           />
           <SwipeableComb
             group={'long'}
-            type={'definition'}
+            type={this.combOrder[1]}
             value={this.state.longDef[indexLng]}
             length={this.state.longDef.length}
             index={indexLng}

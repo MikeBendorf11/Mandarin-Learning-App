@@ -22,8 +22,9 @@
 
 #char-block{
   margin: 0 auto;
+   
   input{
-    display: inline;
+    font-size: 2em;
   }
   .swup{
     opacity: 0;
@@ -34,6 +35,7 @@
     top: 50px;
   }
 }
+
 #combs-block{
   padding: 10%;
   .up{
