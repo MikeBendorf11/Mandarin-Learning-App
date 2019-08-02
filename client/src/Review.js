@@ -4,6 +4,32 @@ import SwipeableChar from './util/SwipeableChar'
 
 var unit = JSON.parse(`{"id":12,"learnedId":12,"level":1,"consult":true,"char":"就是","pronunciation":"jiùshi","combinations":{"short":["就要"," 成就", ""],"long":["#,因为就要下雨了","这不是什么大不了的成就这不是什么大不了的成就",""]},"definitions":{"short":["will"," achieve",""],"long":["","",""],"single":["at once, just, go ","xxx"]}}`)
 
+
+var unit2 = {
+  id: 12,
+  learnedId: 22,
+  level: 1,
+  consult: true,
+  hanzi: '就是',
+  pinyin: 'jiùshi',
+  literal: 'just, yes',
+  figurative: 'truly',
+  short:{
+    hanzi: ["就要"," 成就", ""],
+    pinyin: ["","",""],
+    literal: ['just, want', 'finalize, just', ''],
+    figurative: [ 'will', 'achieve', ''],
+  },
+  long:{
+    hanzi: ["#,因为就要下雨了" ,
+           "这不是什么大不了的成就这不是什么大不了的成就",""],
+    pinyin: ["","",""],
+    literal: ["","",""],
+    figurative: ["","",""],
+  }
+}
+
+
 /* from 19968 up 
 String.fromCharCode() //fro code get char
 String.codePointAt() //string pos get code
@@ -23,7 +49,7 @@ export default class Review extends React.Component {
     this.handleLngCombChange = this.handleLngCombChange.bind(this)
     this.handleLngDefChange = this.handleLngDefChange.bind(this)
     
-    if(unit.char.length>1 && unit.definitions.single.length>1){      
+    if(unit2.hanzi>1){      
       var singleDef = unit.definitions.single
       this.isDoubleChar = true //single def is array
     } else {
@@ -32,21 +58,23 @@ export default class Review extends React.Component {
       this.isDoubleChar = false
     }
     
-    //diff review types will be handled by global
-    this.singleOrder = ['pinyin', 'hanzi', 'meaning', 'combined']
-    this.combOrder = ['combination', 'definition']
+    //diff review types and orders will be handled by global
+    this.reviewOrder = ['pinyin', 'hanzi', 'literal', 'figurative']
+    var unitMainArr = (()=>{
+      var arr = []; this.reviewOrder.forEach(prop=>{
+        if(unit2[prop]) arr.push(unit2[prop])
+      }) ; return arr })()
 
     
-
     this.state = {
-      single: [unit.pronunciation, unit.char].concat(singleDef),
-      shortComb: unit.combinations.short,
-      shortDef: unit.definitions.short,
-      longComb: unit.combinations.long,
-      longDef: unit.definitions.long,
+      single: unitMainArr,
+      shortHz: unit2.short.hanzi,
+      shortFig: unit2.short.figurative,
+      longHz: unit2.long.hanzi,
+      longFig: unit2.long.figurative,
       indexSgl: 0,
-      indexSht: unit.combinations.short.length-1,
-      indexLng: unit.combinations.long.length-1
+      indexSht: unit2.short.hanzi.length-1,
+      indexLng: unit2.long.hanzi.length-1
     }
   }
 
@@ -69,14 +97,14 @@ export default class Review extends React.Component {
     this.setState({ indexSgl })
   }
   handleShtCombChange(value) {
-    var shortComb = this.state.shortComb
-    shortComb[this.state.indexSht] = value
-    this.setState({ shortComb })
+    var shortHz = this.state.shortHz
+    shortHz[this.state.indexSht] = value
+    this.setState({ shortHz })
   }
   hangleShtDefChange(value) {
-    var shortDef = this.state.shortDef
-    shortDef[this.state.indexSht] = value
-    this.setState({ shortDef })
+    var shortFig = this.state.shortFig
+    shortFig[this.state.indexSht] = value
+    this.setState({ shortFig })
   }
   handleShtIdxChange(indexSht) {
     this.setState({ indexSht })
@@ -85,14 +113,14 @@ export default class Review extends React.Component {
     this.setState({ indexLng })
   }
   handleLngCombChange(value){
-    var longComb = this.state.longComb
-    longComb[this.state.indexLng] = value
-    this.setState({longComb})
+    var longHz = this.state.longHz
+    longHz[this.state.indexLng] = value
+    this.setState({longHz})
   }
   handleLngDefChange(value){
-    var longDef = this.state.longDef
-    longDef[this.state.indexLng] = value
-    this.setState({longDef})
+    var longFig = this.state.longFig
+    longFig[this.state.indexLng] = value
+    this.setState({longFig})
   }
   render() {
     const indexSht = this.state.indexSht
@@ -114,9 +142,9 @@ export default class Review extends React.Component {
         <div id='combs-block'>
           <SwipeableComb
             group={'short'}
-            type={this.combOrder[0]}
-            value={this.state.shortComb[indexSht]}
-            length={this.state.shortComb.length}
+            type={this.reviewOrder[0]}
+            value={this.state.shortHz[indexSht]}
+            length={this.state.shortHz.length}
             index={indexSht}
             onTextChange={this.handleShtCombChange}
             onIndexChange={this.handleShtIdxChange}
@@ -124,9 +152,9 @@ export default class Review extends React.Component {
           />
           <SwipeableComb
             group={'short'}
-            type={this.combOrder[1]}
-            value={this.state.shortDef[indexSht]}
-            length={this.state.shortDef.length}
+            type={this.reviewOrder[1]}
+            value={this.state.shortFig[indexSht]}
+            length={this.state.shortFig.length}
             index={indexSht}
             onTextChange={this.hangleShtDefChange}
             onIndexChange={this.handleShtIdxChange}
@@ -134,9 +162,9 @@ export default class Review extends React.Component {
           />
           <SwipeableComb
             group={'long'}
-            type={this.combOrder[0]}
-            value={this.state.longComb[indexLng]}
-            length={this.state.longComb.length}
+            type={this.reviewOrder[0]}
+            value={this.state.longHz[indexLng]}
+            length={this.state.longHz.length}
             index={indexLng}
             onTextChange={this.handleLngCombChange}
             onIndexChange={this.handleLngIdxChange}
@@ -144,9 +172,9 @@ export default class Review extends React.Component {
           />
           <SwipeableComb
             group={'long'}
-            type={this.combOrder[1]}
-            value={this.state.longDef[indexLng]}
-            length={this.state.longDef.length}
+            type={this.reviewOrder[1]}
+            value={this.state.longFig[indexLng]}
+            length={this.state.longFig.length}
             index={indexLng}
             onTextChange={this.handleLngDefChange}
             onIndexChange={this.handleLngIdxChange}
