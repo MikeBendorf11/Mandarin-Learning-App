@@ -3,19 +3,9 @@ import Nav from './components/nav'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Dropdown from './components/dropdown'
 import Review from './Review';
-import MobxTest from './mobxTest'
-import {observable, computed, autorun, reaction} from 'mobx'
-
-const appState = observable({
-  count: 0,
-  incCount: () => {
-    appState.count += 1
-  },
-  decCount: ()=>{
-    appState.count -= 1
-  }
-  
-})
+import ObservableTodoStore from './mobx-class'
+import TodoList from './mobx-views'
+const observableTodoStore = new ObservableTodoStore();
 
 function App() {
   return (
@@ -23,7 +13,7 @@ function App() {
       <Nav/>
       <Dropdown/>
       <Review/>
-      <MobxTest appState={appState}/>
+      <TodoList store={ observableTodoStore } />
     </div>
   );
 }
