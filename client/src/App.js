@@ -5,7 +5,19 @@ import Dropdown from './components/dropdown'
 import Review from './Review';
 import ObservableTodoStore from './mobx-class'
 import TodoList from './mobx-views'
+import {observable} from 'mobx'
+
+var peopleStore = observable([
+  { name: "Michel" },
+  { name: "Me" }
+]);
+
 const observableTodoStore = new ObservableTodoStore();
+observableTodoStore.addTodo('www');
+observableTodoStore.addTodo('zzz');
+observableTodoStore.todos[0].assignee = peopleStore[0];
+observableTodoStore.todos[1].assignee = peopleStore[1];
+peopleStore[0].name = "Michel Weststrate";
 
 function App() {
   return (
@@ -14,6 +26,7 @@ function App() {
       <Dropdown/>
       <Review/>
       <TodoList store={ observableTodoStore } />
+      <input onKeyUp={(event)=>{peopleStore[1].name = event.target.value} }/>
     </div>
   );
 }

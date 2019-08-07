@@ -3,18 +3,6 @@ import React from 'react';
 
 @observer
 class TodoView extends React.Component {
-  constructor(props){
-    super(props)
-    const todo = this.props.todo;
-    todo.assignee = assignee;
-    this.changeInput = this.changeInput.bind(this)
-  }
-  
-  changeInput = (evt) => {
-    console.log(assignee)
-    assignee = evt.target.value
-  }
-
   onToggleCompleted = () => {
     const todo = this.props.todo;
     todo.completed = !todo.completed;
@@ -26,6 +14,7 @@ class TodoView extends React.Component {
   }
   render() {
     const todo = this.props.todo;
+    
     return (
       <div>
 
@@ -42,7 +31,7 @@ class TodoView extends React.Component {
         }
         
         </li>
-        <input type="text" defaultValue={assignee} onChange={this.changeInput}></input>
+ 
       </div>
       
     );
@@ -50,6 +39,5 @@ class TodoView extends React.Component {
 
 }
 
-var assignee = 'anybody'
 
 export default TodoView
