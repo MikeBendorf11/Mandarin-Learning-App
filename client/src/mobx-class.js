@@ -7,7 +7,10 @@ export default class ObservableTodoStore {
     @observable pendingRequests = 0;
 
     constructor() {
-			autorun(() => console.log(this.report));
+			autorun(() => {
+				console.log(this.report)
+				//console.log(this.todos[0])
+			});
     }
 
 		@computed get completedTodosCount() {
@@ -19,16 +22,16 @@ export default class ObservableTodoStore {
 		@computed get report() {
 		if (this.todos.length === 0)
 			return "<none>";
-		return `Next todo: "${this.todos[0].task}". ` + '\n'+
+		return `Next todo: ${this.todos[0].task} ` + '\n'+
 			`Progress: ${this.completedTodosCount}/${this.todos.length}` + '\n'+
-			`Assigne: ${this.todos[0].assignee}`;
+			`Assigne: ${this.todos[0].assignee.name}`;
 	}
 
 	addTodo(task) {
 		this.todos.push({
 			task: task,
 			completed: false,
-			assignee: null
+			assignee: {name:null} //set to obj because that's what the new ref/observa has to be
 		});
 	}
 }

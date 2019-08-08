@@ -26,7 +26,7 @@ class TodoView extends React.Component {
         />
         { todo.task }
         { todo.assignee
-          ? <small>{ todo.assignee.name }</small>
+          ? <small>&nbsp;{ todo.assignee.name }</small>
           : null
         }
         
