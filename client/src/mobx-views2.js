@@ -14,7 +14,8 @@ class TodoView extends React.Component {
   }
   render() {
     const todo = this.props.todo;
-    
+    const person = this.props.person
+
     return (
       <div>
 
@@ -24,12 +25,14 @@ class TodoView extends React.Component {
           checked={ todo.report }
           onChange={ this.onToggleCompleted }
         />
-        { todo.task }
+        { todo.task }, 
         { todo.assignee
-          ? <small>&nbsp;{ todo.assignee.name }</small>
+          ? <small>&nbsp;{ todo.assignee.name }, </small>
           : null
-        }
-        
+        }<br></br>
+        <input 
+          value={person.name}  
+          onChange={(event)=>{person.name = event.target.value} }/>
         </li>
  
       </div>
