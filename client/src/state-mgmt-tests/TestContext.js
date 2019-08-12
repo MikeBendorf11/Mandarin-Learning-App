@@ -1,6 +1,9 @@
 import React from 'react';
 const Amount = React.createContext(1);
 
+//one consumer one provider only allowed 
+//provider passes amount and counter uses aamount to set it's own state. Child/Consumer is not modifiying parent/provider state
+
 class Counter extends React.Component {
   state = { count: 0 };
   increment = amount => { this.setState({ count: this.state.count + amount }); };

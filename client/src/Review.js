@@ -2,7 +2,23 @@ import React from 'react';
 import SwipeableComb from './util/SwipeableComb'
 import SwipeableChar from './util/SwipeableChar'
 
-var unit = JSON.parse(`{"id":12,"learnedId":12,"level":1,"consult":true,"char":"就是","pronunciation":"jiùshi","combinations":{"short":["就要"," 成就", ""],"long":["#,因为就要下雨了","这不是什么大不了的成就这不是什么大不了的成就",""]},"definitions":{"short":["will"," achieve",""],"long":["","",""],"single":["at once, just, go ","xxx"]}}`)
+var unit = JSON.parse(`{
+  "id":12,
+  "learnedId":12,
+  "level":1,
+  "consult":true,
+  "char":"就是",
+  "pronunciation":"jiùshi",
+  "combinations":{
+    "short":["就要"," 成就", ""],
+    "long":["#,因为就要下雨了","这不是什么大不了的成就这不是什么大不了的成就",""]
+  },
+  "definitions":{
+    "short":["will"," achieve",""],
+    "long":["","",""],
+    "single":["at once, just, go ","xxx"]
+    }
+  }`)
 
 
 var unit2 = {

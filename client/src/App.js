@@ -10,9 +10,7 @@ function App() {
     <div className="App">
       <Nav/>
       <Dropdown/>
-      <Review/>
-      
-      
+      <Review/>      
     </div>
   );
 }
