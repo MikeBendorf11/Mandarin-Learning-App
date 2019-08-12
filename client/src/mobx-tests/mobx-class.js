@@ -1,6 +1,13 @@
 
+//FOR App.js
+//import ObservableTodoStore from './mobx-class'
+//import TodoList from './mobx-views'
+// const observableTodoStore = new ObservableTodoStore();
+// observableTodoStore.addTodo('Task 1');
+// observableTodoStore.addTodo('Task 2');
+{/* <TodoList store={ observableTodoStore } /> */}
+
 import {observable, computed, autorun} from 'mobx'
-//https://mobx.js.org/getting-started.html#demo
 
 export default class ObservableTodoStore {
 	@observable todos = [];
@@ -35,5 +42,4 @@ export default class ObservableTodoStore {
 		});
 	}
 }
-
 
