@@ -5,12 +5,12 @@ import {observable} from 'mobx'
 
 var peopleStore = observable([
   { name: "Michel" },
-  { name: "Me" }.name,
+  { name: "Me" },
   { name: "Yout" },
   { name: "asdkjasldkj lksdaj" }
 ]);
 
-@observer
+
 class TodoList extends React.Component {
   constructor(props){
     super(props)

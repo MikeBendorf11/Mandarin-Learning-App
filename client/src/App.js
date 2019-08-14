@@ -3,45 +3,32 @@ import Nav from './components/nav'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Dropdown from './components/dropdown'
 import Review from './Review';
-import {observable, computed, autorun} from 'mobx'
-import Unit from './util/UnitModel'
+import ObservableTodoStore from './state-mgmt-tests/mobx-class'
+import TodoList from './state-mgmt-tests/mobx-views'
+import {observable} from 'mobx'
+
+var peopleStore = observable([
+  { name: "Michel" },
+  { name: "Me" }
+]);
+
+const observableTodoStore = new ObservableTodoStore();
+observableTodoStore.addTodo('www');
+observableTodoStore.addTodo('zzz');
+observableTodoStore.todos[0].assignee = peopleStore[0];
+observableTodoStore.todos[1].assignee = peopleStore[1];
+peopleStore[0].name = "Michel Weststrate";
 
 function App() {
   return (
     <div className="App">
       <Nav/>
       <Dropdown/>
-      <Review/>      
+      <Review/>
+      <TodoList store={ observableTodoStore } />
+      <input onKeyUp={(event)=>{peopleStore[1].name = event.target.value} }/>
     </div>
   );
 }
 
 export default App;
-
-var unit2 = {
-  id: 12,
-  learnedId: 22,
-  level: 1,
-  consult: true,
-  hanzi: '就是',
-  pinyin: 'jiùshi',
-  literal: 'just, yes',
-  figurative: 'truly',
-  short:{
-    hanzi: ["就要"," 成就", ""],
-    pinyin: ["","",""],
-    literal: ['just, want', 'finalize, just', ''],
-    figurative: [ 'will', 'achieve', ''],
-  },
-  long:{
-    hanzi: ["#,因为就要下雨了" ,
-           "这不是什么大不了的成就这不是什么大不了的成就",""],
-    pinyin: ["","",""],
-    literal: ["","",""],
-    figurative: ["","",""],
-  }
-}
-var unit = new Unit(unit2)
-unit.addComb({type1:'short',type2:'hanzi'}, '晚')
-unit.deleteComb({type1:'short', index:1})
-console.log(unit.data.short)
