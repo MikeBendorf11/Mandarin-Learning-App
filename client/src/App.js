@@ -43,4 +43,5 @@ var unit2 = {
 }
 var unit = new Unit(unit2)
 unit.addComb({type1:'short',type2:'hanzi'}, '晚')
+unit.deleteComb({type1:'short', index:1})
 console.log(unit.data.short)
