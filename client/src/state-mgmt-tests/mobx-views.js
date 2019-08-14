@@ -3,18 +3,12 @@ import React from 'react';
 import TodoView from './mobx-views2'
 import {observable} from 'mobx'
 
-var peopleStore = observable([
-  { name: "Michel" },
-  { name: "Me" },
-  { name: "Yout" },
-  { name: "asdkjasldkj lksdaj" }
-]);
-
 
 class TodoList extends React.Component {
   constructor(props){
     super(props)
     const store = this.props.store;
+    const peopleStore = this.props.peopleStore
     store.todos[0].assignee = peopleStore[0];
     store.todos[1].assignee = peopleStore[1];
     peopleStore[0].name = "Michel Weststrate";
@@ -25,15 +19,14 @@ class TodoList extends React.Component {
   }
   render() {
     const store = this.props.store;
-    // store.todos[0].assignee = peopleStore[0];
-    // store.todos[1].assignee = peopleStore[1];
-    // peopleStore[0].name = "Michel Weststrate";
+    const peopleStore = this.props.peopleStore
+
     return (
       <div>
-        { store.report }
+        {/* { store.report } */}
         <ul>
         { store.todos.map(
-          (todo, idx) => <TodoView todo={ todo } key={ idx } person={peopleStore[idx]}/>
+          (todo, idx) => <div>{todo.assignee.name}<TodoView todo={ todo } key={ idx } person={peopleStore[idx]}/></div>
         ) }
         </ul>
         { store.pendingRequests > 0 ? <marquee>Loading...</marquee> : null }
