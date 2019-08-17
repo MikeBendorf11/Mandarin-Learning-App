@@ -3,45 +3,49 @@ import Nav from './components/nav'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Dropdown from './components/dropdown'
 import Review from './Review';
-import ObservableTodoStore from './state-mgmt-tests/mobx-class'
-import TodoList from './state-mgmt-tests/mobx-views'
-import {observable} from 'mobx'
-import { observer } from 'mobx-react';
+import {observable, computed, autorun} from 'mobx'
+import Unit from './util/UnitModel'
 
-var peopleStore = observable([
-  { name: "Michel" },
-  { name: "Me" },
-  { name: "Yout" },
-  { name: "asdkjasldkj lksdaj" }
-]);
 
-const observableTodoStore = new ObservableTodoStore();
-observableTodoStore.addTodo('www');
-observableTodoStore.addTodo('zzz');
-observableTodoStore.todos[0].assignee = peopleStore[0];
-observableTodoStore.todos[1].assignee = peopleStore[1];
-peopleStore[0].name = "Michel Weststrate";
-
-@observer
-class App extends React.Component {
-  constructor(props) {
-    super(props)
+var unit = new Unit(
+  {
+    id: 12,
+    learnedId: 22,
+    level: 1,
+    consult: true,
+    hanzi: '就是', //char
+    pinyin: 'jiùshi', //pronunciation
+    literal: ['just', 'yes'], //definitions.single[0]
+    figurative: 'truly', ////definitions.single[1]
+    short:{
+      hanzi: ["就要"," 成就", ""], //combinations.short
+      pinyin: ["","",""],
+      //literal: can be derived from unit.root.literal
+      figurative: [ 'will', 'achieve', ''], //definitions.short
+    },
+    long:{
+      hanzi: ["#,因为就要下雨了" ,
+             "这不是什么大不了的成就这不是什么大不了的成就",""], //comb.long
+      pinyin: ["","",""],
+      //literal: can be derived from unit.root.literal
+      figurative: ["","",""], //definitions.long
+    }
   }
-  render() {
-    return (
-      <div className="App">
-        <Nav />
-        <Dropdown />
-        <Review />
-        <TodoList store={observableTodoStore} peopleStore={peopleStore} />
-        {observableTodoStore.todos[0].assignee.name}
-        <input value={peopleStore[1].name} onChange={(event) => {
-          console.log(peopleStore[1].name)
-          peopleStore[1].name = event.target.value
-        }} />
-      </div>
-    );
-  }
+)
+unit.addComb({type1:'short',type2:'hanzi'}, '晚')
+// unit.deleteComb({type1:'short', index:1})
+ //console.log(unit.data.short)
+
+
+function App() {
+  return (
+    <div className="App">
+      <Nav/>
+      <Dropdown/>
+      <Review unit={unit.data}/>      
+    </div>
+  );
 }
 
 export default App;
+

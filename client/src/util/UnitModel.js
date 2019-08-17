@@ -1,10 +1,17 @@
+import {observable, computed} from 'mobx'
+
 //should be part of another model?
-var types2 = ['hanzi' , 'pinyin' , 'literal' , 'figurative']
+var types2 = ['hanzi' , 'pinyin' , 'figurative']
 
-export default class Unit {
-
+class Unit {
+  
+  @observable unit = {}
   constructor(unit) {
       this.data = unit   
+  }
+
+  @computed get report(){
+    console.log(this.data)
   }
   /**
    * @param {Object} comb: { 
@@ -32,3 +39,5 @@ export default class Unit {
     )
   }
 }    
+
+export default Unit;

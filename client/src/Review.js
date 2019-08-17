@@ -1,50 +1,7 @@
 import React from 'react';
 import SwipeableComb from './util/SwipeableComb'
 import SwipeableChar from './util/SwipeableChar'
-
-var unit = JSON.parse(`{
-  "id":12,
-  "learnedId":12,
-  "level":1,
-  "consult":true,
-  "char":"就是",
-  "pronunciation":"jiùshi",
-  "combinations":{
-    "short":["就要"," 成就", ""],
-    "long":["#,因为就要下雨了","这不是什么大不了的成就这不是什么大不了的成就",""]
-  },
-  "definitions":{
-    "short":["will"," achieve",""],
-    "long":["","",""],
-    "single":["at once, just, go ","xxx"]
-    }
-  }`)
-
-
-var unit2 = {
-  id: 12,
-  learnedId: 22,
-  level: 1,
-  consult: true,
-  hanzi: '就是',
-  pinyin: 'jiùshi',
-  literal: 'just, yes',
-  figurative: 'truly',
-  short:{
-    hanzi: ["就要"," 成就", ""],
-    pinyin: ["","",""],
-    literal: ['just, want', 'finalize, just', ''],
-    figurative: [ 'will', 'achieve', ''],
-  },
-  long:{
-    hanzi: ["#,因为就要下雨了" ,
-           "这不是什么大不了的成就这不是什么大不了的成就",""],
-    pinyin: ["","",""],
-    literal: ["","",""],
-    figurative: ["","",""],
-  }
-}
-
+import {observer} from 'mobx-react'
 
 /* from 19968 up 
 String.fromCharCode() //fro code get char
@@ -53,9 +10,55 @@ String.codePointAt() //string pos get code
 
 var log = (a) => console.log(a)
 
-export default class Review extends React.Component {
+@observer
+class Review extends React.Component {
   constructor(props) {
     super(props);
+    this.unit = this.props.unit
+    var unit = this.unit
+    this.unitRoot = [unit.hanzi, unit.pinyin, unit.literal, unit.figurative]
+    
+  }
+
+  getFontSize(textType){
+    switch(textType){
+      case 'pinyin': case 'hanzi': case 'combination':
+        return '2em';
+      default: 
+        return '1em';
+    }
+  }
+
+  render() {
+    var root = this.unitRoot
+    var figurative = this.unit.figurative
+    return (
+      <div>
+        <div>
+          {this.unit.figurative} :
+            <input
+            defaultValue={root[3]}
+            onChange={(e) => {
+              root[3] = e.target.value 
+              console.log(root[3])
+            }
+          }/><br></br>
+          {this.unit.figurative} :
+          <input
+            defaultValue={figurative}
+            onChange={(e) => {
+              figurative = e.target.value 
+              // console.log(figurative)
+            }
+          }/>
+        </div>
+
+      </div>)
+  }
+}
+
+export default Review
+    /*
     this.handleSglChange = this.handleSglChange.bind(this)
     this.handleSglIdxChange = this.handleSglIdxChange.bind(this)
     this.handleShtCombChange = this.handleShtCombChange.bind(this)
@@ -65,22 +68,6 @@ export default class Review extends React.Component {
     this.handleLngCombChange = this.handleLngCombChange.bind(this)
     this.handleLngDefChange = this.handleLngDefChange.bind(this)
     
-    if(unit2.hanzi>1){      
-      var singleDef = unit.definitions.single
-      this.isDoubleChar = true //single def is array
-    } else {
-      
-      var singleDef = unit.definitions.single[0]
-      this.isDoubleChar = false
-    }
-    
-    //diff review types and orders will be handled by global
-    this.reviewOrder = ['pinyin', 'hanzi', 'literal', 'figurative']
-    var unitMainArr = (()=>{
-      var arr = []; this.reviewOrder.forEach(prop=>{
-        if(unit2[prop]) arr.push(unit2[prop])
-      }) ; return arr })()
-
     
     this.state = {
       single: unitMainArr,
@@ -93,7 +80,6 @@ export default class Review extends React.Component {
       indexLng: unit2.long.hanzi.length-1
     }
   }
-
   getFontSize(textType){
     switch(textType){
       case 'pinyin': case 'hanzi': case 'combination':
@@ -102,10 +88,8 @@ export default class Review extends React.Component {
         return '1em';
     }
   }
-
-
   handleSglChange(value){
-    var single = this.state.single
+    var single = this.props.unit.single
     single[this.state.indexSgl] = value
     this.setState({ single })
   }
@@ -203,6 +187,5 @@ export default class Review extends React.Component {
 
       </div>
 
-    )
-  }
-}
+    )*/
+  
