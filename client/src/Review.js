@@ -14,9 +14,8 @@ var log = (a) => console.log(a)
 class Review extends React.Component {
   constructor(props) {
     super(props);
-    this.unit = this.props.unit
-    var unit = this.unit
-    this.unitRoot = [unit.hanzi, unit.pinyin, unit.literal, unit.figurative]
+    var unit = this.props.unit
+    unit.single.figurative = 'asd'
     
   }
 
@@ -30,27 +29,18 @@ class Review extends React.Component {
   }
 
   render() {
-    var root = this.unitRoot
-    var figurative = this.unit.figurative
+    var unit = this.props.unit
     return (
       <div>
         <div>
-          {this.unit.figurative} :
-            <input
-            defaultValue={root[3]}
-            onChange={(e) => {
-              root[3] = e.target.value 
-              console.log(root[3])
-            }
-          }/><br></br>
-          {this.unit.figurative} :
+          {unit.single.figurative} :
           <input
-            defaultValue={figurative}
+            defaultValue={unit.single.figurative}
             onChange={(e) => {
-              figurative = e.target.value 
-              // console.log(figurative)
+              unit.single.figurative = e.target.value 
             }
           }/>
+
         </div>
 
       </div>)

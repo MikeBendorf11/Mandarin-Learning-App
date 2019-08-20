@@ -13,10 +13,12 @@ var unit = new Unit(
     learnedId: 22,
     level: 1,
     consult: true,
-    hanzi: '就是', //char
-    pinyin: 'jiùshi', //pronunciation
-    literal: ['just', 'yes'], //definitions.single[0]
-    figurative: 'truly', ////definitions.single[1]
+    single:{
+      hanzi: '就是', //char
+      pinyin: 'jiùshi', //pronunciation
+      literal: ['just', 'yes'], //definitions.single[0]
+      figurative: 'truly', ////definitions.single[1]
+    },
     short:{
       hanzi: ["就要"," 成就", ""], //combinations.short
       pinyin: ["","",""],
@@ -34,7 +36,7 @@ var unit = new Unit(
 )
 unit.addComb({type1:'short',type2:'hanzi'}, '晚')
 // unit.deleteComb({type1:'short', index:1})
- //console.log(unit.data.short)
+ console.log(unit.single.short)
 
 
 function App() {
@@ -42,7 +44,7 @@ function App() {
     <div className="App">
       <Nav/>
       <Dropdown/>
-      <Review unit={unit.data}/>      
+      <Review unit={unit}/>      
     </div>
   );
 }

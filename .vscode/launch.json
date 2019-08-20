@@ -5,19 +5,18 @@
           "name": "Launch localhost",
           "type": "chrome",
           "request": "launch",
-          "url": "http://localhost:8080/index.html",
-          "webRoot": "${workspaceFolder}/static",
+          "url": "http://localhost:3000/",
+          "webRoot": "${workspaceFolder}/client",
           "skipFiles": [
-            "${workspaceFolder}/static/bootstrap.js",
-            "${workspaceFolder}/static/jquery.min.js",
-            "${workspaceFolder}/static/popper.min.js",
+            "client/<node_internals>/**/*.js",
+            "client/!<node_internals>/events.js"
           ]
       },
       {
           "name": "Launch index.html",
           "type": "chrome",
           "request": "launch",
-          "file": "${workspaceFolder}/index.html"
+          "file": "${workspaceFolder}/App.js",
       },
   ]
 }
