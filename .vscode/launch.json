@@ -16,7 +16,6 @@
           "name": "Launch index.html",
           "type": "chrome",
           "request": "launch",
-          "file": "${workspaceFolder}/App.js",
       },
   ]
 }

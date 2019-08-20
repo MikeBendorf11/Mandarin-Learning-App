@@ -29,15 +29,16 @@ class Review extends React.Component {
   }
 
   render() {
-    var unit = this.props.unit
+    var single = this.props.unit.single
+   // log(unit)
     return (
       <div>
         <div>
-          {unit.single.figurative} :
+          {single.figurative} :
           <input
-            defaultValue={unit.single.figurative}
+            defaultValue={single.figurative}
             onChange={(e) => {
-              unit.single.figurative = e.target.value 
+              single.figurative = e.target.value 
             }
           }/>
 

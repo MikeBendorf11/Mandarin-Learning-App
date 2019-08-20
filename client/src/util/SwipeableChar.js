@@ -18,7 +18,6 @@ var log = (a) => console.log(a)
 export default class SwipeableChar extends React.Component {
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this)
     this.incrementIndex = this.incrementIndex.bind(this)
     this.decrementIndex = this.decrementIndex.bind(this)
     this.handleTouchStart = this.handleTouchStart.bind(this)
@@ -133,10 +132,6 @@ export default class SwipeableChar extends React.Component {
     this.yDown = null;
   }
 
-  //state management
-  handleChange(event) {
-    this.props.onTextChange(event.target.value)
-  }
 
   incrementIndex() {
     var index = this.props.index
