@@ -13,7 +13,7 @@ var unit = new Unit(
     learnedId: 22,
     level: 1,
     consult: true,
-    single:{
+    char:{ 
       hanzi: '就是', //char
       pinyin: 'jiùshi', //pronunciation
       literal: ['just', 'yes'], //definitions.single[0]

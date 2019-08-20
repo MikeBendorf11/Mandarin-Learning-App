@@ -6,7 +6,7 @@ var types2 = ['hanzi' , 'pinyin' , 'figurative']
 
 class Unit {
 
-  @observable single
+  @observable char
   @observable short
   @observable long
 
@@ -15,7 +15,7 @@ class Unit {
       this.learnedId = unit.learnedId
       this.level = unit.level
       this.consult = unit.consult
-      this.single = unit.single
+      this.char = unit.char
       this.short = unit.short
       this.long = unit.long
 
@@ -26,11 +26,11 @@ class Unit {
   }
 
   @computed get report(){
-    return this.single.figurative
+    return this.char.figurative
   }
   /**
    * @param {Object} comb: { 
-   *  type1 single || short || long,  
+   *  type1 char || short || long,  
    *  type2: hanzi || pinyin || literal || figurative 
    *  index: index
    * }

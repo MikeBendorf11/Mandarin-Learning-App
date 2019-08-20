@@ -5,6 +5,14 @@ import ReactDOM from "react-dom";
 
 var log = (a) => console.log(a)
 
+//globals
+var lessonOrder = {
+  hanzi: ['hanzi','pinyin','literal','figurative'],
+  pinyin: ['pinyin', 'hanzi', 'literal','figurative']
+  //translated: for double chars starts with figurative, for single starts with literal
+}
+var order = lessonOrder.pinyin
+
 /**
  * A initial props.value is loaded
  * Horizontal moves to next character in the units
@@ -18,6 +26,8 @@ var log = (a) => console.log(a)
 export default class SwipeableChar extends React.Component {
   constructor(props) {
     super(props);
+    
+    this.handleChange = this.handleChange.bind(this)
     this.incrementIndex = this.incrementIndex.bind(this)
     this.decrementIndex = this.decrementIndex.bind(this)
     this.handleTouchStart = this.handleTouchStart.bind(this)
@@ -25,8 +35,24 @@ export default class SwipeableChar extends React.Component {
     this.toggleWritable = this.toggleWritable.bind(this)
     this.swipeCount = 0
     this.clickCount = 0
+    
+    var char = this.props.value
+    this.type = char.length == 1 ? 'single' : 'combined'
+    this.length = type == 'single' ? char.length -1: char.length
+
+    this.state = {
+      index: 0,
+      value: char[order[0]],
+    }
+
   }
 
+  handleChange(e){
+    var index = this.state.index + 1
+    var value = this.props.value
+    this.setState({ index, value })
+  }
+  
   componentDidMount() {
     //assign same class to all input groups
     this.inputGroup = ReactDOM.findDOMNode(this)
@@ -134,10 +160,12 @@ export default class SwipeableChar extends React.Component {
 
 
   incrementIndex() {
-    var index = this.props.index
-    var length = this.props.length
+    var index = this.state.index
+    var length = this.props.value.length
+    
+    
     if (index + 1 > length - 1)
-      this.props.onIndexChange(0)
+
     else this.props.onIndexChange(index + 1)
   }
 
@@ -165,7 +193,7 @@ export default class SwipeableChar extends React.Component {
         <Input
           readOnly
           className='swipeable'
-          value={this.props.value}
+          defaultValue={this.state.value}
           onChange={this.handleChange}
           onTouchStart={this.handleTouchStart}
           onTouchMove={this.handleTouchMove}

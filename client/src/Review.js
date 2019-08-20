@@ -14,9 +14,7 @@ var log = (a) => console.log(a)
 class Review extends React.Component {
   constructor(props) {
     super(props);
-    var unit = this.props.unit
-    unit.single.figurative = 'asd'
-    
+      
   }
 
   getFontSize(textType){
@@ -29,25 +27,28 @@ class Review extends React.Component {
   }
 
   render() {
-    var single = this.props.unit.single
-   // log(unit)
+    var char = this.props.unit.char
+    var short = this.props.unit.short
+    var long = this.props.unit.long
+    
     return (
-      <div>
-        <div>
-          {single.figurative} :
-          <input
-            defaultValue={single.figurative}
-            onChange={(e) => {
-              single.figurative = e.target.value 
-            }
-          }/>
-
+      <div id="review-block">
+        <div id="single-block">
+          <SwipeableChar
+            value={char}
+            // length={this.state.single.length}
+            // index={indexSgl}
+            onTextChange={this.handleSglChange}
+            // onIndexChange={this.handleSglIdxChange}
+            opacity={'show'}
+          />
         </div>
-
-      </div>)
-  }
+        <div id='combs-block'>
+        </div>
+      </div>
+    )
+  } 
 }
-
 export default Review
     /*
     this.handleSglChange = this.handleSglChange.bind(this)
