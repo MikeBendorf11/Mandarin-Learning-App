@@ -38,18 +38,18 @@ export default class SwipeableChar extends React.Component {
     
     var char = this.props.value
     this.type = char.length == 1 ? 'single' : 'combined'
-    this.length = type == 'single' ? char.length -1: char.length
+    this.length = this.type == 'single' ? char.length -1: char.length
 
-    this.state = {
-      index: 0,
-      value: char[order[0]],
-    }
+    var index = 0 
+    var value = char[order[index]]
+
+    this.state = { index, value }
 
   }
 
   handleChange(e){
-    var index = this.state.index + 1
-    var value = this.props.value
+    var index = this.state.index
+    var value = this.props.value[order[index]] = e.target.value
     this.setState({ index, value })
   }
   
@@ -58,7 +58,6 @@ export default class SwipeableChar extends React.Component {
     this.inputGroup = ReactDOM.findDOMNode(this)
     this.input = this.inputGroup.getElementsByTagName('input')[0]
     this.setWidthofInput()
-
   }
   setWidthofInput(){
     var elem = document.createElement('span')   
@@ -95,7 +94,6 @@ export default class SwipeableChar extends React.Component {
   }
 
   horizontalSequence(dir1, dir2) {
-    log('here')
     var element = this.input
       element.classList.add('sw' + dir1)
       if(element.classList.contains('show')) element.classList.add('hide')
@@ -133,7 +131,6 @@ export default class SwipeableChar extends React.Component {
 
     if (Math.abs(xDiff) > Math.abs(yDiff)) { // Most significant.
       if (xDiff > 0) {
-        log('here')
         //left motion
         this.horizontalSequence('left', 'right')
       } else {
@@ -160,21 +157,19 @@ export default class SwipeableChar extends React.Component {
 
 
   incrementIndex() {
-    var index = this.state.index
-    var length = this.props.value.length
-    
-    
-    if (index + 1 > length - 1)
+    var index = this.state.index + 1 > this.length - 1 ? 
+      0 : this.state.index + 1
+    var value = this.props.value[order[index]]
+    this.setState({ index, value })
+    log(this.state.value)
 
-    else this.props.onIndexChange(index + 1)
   }
 
   decrementIndex() {
-    var index = this.props.index
-    var length = this.props.length
-    if (index - 1 < 0)
-      this.props.onIndexChange(length - 1)
-    else this.props.onIndexChange(index - 1)
+    var index = this.state.index - 1 < 0 ? 
+      this.length-1 : this.state.index -1
+    var value = this.props.value[order[index]]
+    this.setState({ index, value })
   }
 
   toggleWritable(e) {
@@ -193,14 +188,14 @@ export default class SwipeableChar extends React.Component {
         <Input
           readOnly
           className='swipeable'
-          defaultValue={this.state.value}
+          value={this.state.value}
           onChange={this.handleChange}
           onTouchStart={this.handleTouchStart}
           onTouchMove={this.handleTouchMove}
           onClick={this.toggleWritable}
           onBlur={(e)=>{if(!e.target.hasAttribute('readonly')) 
                           e.target.setAttribute('readonly', '')}}
-          placeholder={'add ' + this.props.type}
+          placeholder={'add ' + this.type}
         />
       </InputGroup>
     )

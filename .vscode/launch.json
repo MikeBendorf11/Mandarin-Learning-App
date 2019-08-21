@@ -15,7 +15,7 @@
       {
           "name": "Launch index.html",
           "type": "chrome",
-          "request": "launch",
+          "request": "launch"
       },
   ]
 }
