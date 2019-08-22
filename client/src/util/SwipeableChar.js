@@ -16,18 +16,17 @@ var order = lessonOrder.pinyin
 /**
  * A initial props.value is loaded
  * Horizontal moves to next character in the units
- * Vertical display contents of the single array
- * @props { group } : only 2 inputs per group 1 comb, 1 def.
+ * Vertical display contents of the char obj
+ * @props 
  *  { value } : an array of combs or defs.
- *  { length } : the length of the array.
  *  { index } : starts at empty/last of array to hide clues
- * @events { textChange, IndexChange } sync roulette with comb/def state array
+ * @events { OnTextChange, IndexChange } sync roulette with with type2
  */
 export default class SwipeableChar extends React.Component {
   constructor(props) {
     super(props);
     
-    this.handleChange = this.handleChange.bind(this)
+    this.OnTextChange = this.OnTextChange.bind(this)
     this.incrementIndex = this.incrementIndex.bind(this)
     this.decrementIndex = this.decrementIndex.bind(this)
     this.handleTouchStart = this.handleTouchStart.bind(this)
@@ -37,9 +36,9 @@ export default class SwipeableChar extends React.Component {
     this.clickCount = 0
     
     var char = this.props.value
-    this.type = char.length == 1 ? 'single' : 'combined'
-    this.length = this.type == 'single' ? char.length -1: char.length
-
+    this.type = char.length == 1 ? 'single' : 'combined' 
+    //single char? ignore literal
+    this.length = this.type == 'single' ? order.length -1: order.length
     var index = 0 
     var value = char[order[index]]
 
@@ -47,7 +46,7 @@ export default class SwipeableChar extends React.Component {
 
   }
 
-  handleChange(e){
+  OnTextChange(e){
     var index = this.state.index
     var value = this.props.value[order[index]] = e.target.value
     this.setState({ index, value })
@@ -60,19 +59,25 @@ export default class SwipeableChar extends React.Component {
     this.setWidthofInput()
   }
   setWidthofInput(){
-    var elem = document.createElement('span')   
-    elem.style.fontSize = '2em' 
-    elem.style.position = 'absolute'
-    elem.style.left = -1000
-    elem.style.top = -1000
-    elem.style.display = 'inline'
-    elem.style.padding = '0 auto'
-    elem.innerHTML = this.props.value
-    document.body.appendChild(elem)
-    const width = elem.clientWidth + 25
-    document.body.removeChild(elem)
-    this.inputGroup.style.width = width +'px'
-    this.inputGroup.style.margin = '0 auto'
+    if(this.state.value){
+      var elem = document.createElement('span')   
+      elem.style.fontSize = '2em' 
+      elem.style.position = 'absolute'
+      elem.style.left = -1000
+      elem.style.top = -1000
+      elem.style.display = 'inline'
+      elem.style.padding = '0 auto'
+      elem.innerHTML = this.state.value
+      document.body.appendChild(elem)
+      const width = elem.clientWidth + 25
+      document.body.removeChild(elem)
+      this.inputGroup.style.width = width +'px'
+      
+    } else {
+      this.inputGroup.style.width = '100px'
+    }
+      this.inputGroup.style.margin = '0 auto'
+    
   }
 
   delayCss(element, cssClass) {
@@ -161,8 +166,6 @@ export default class SwipeableChar extends React.Component {
       0 : this.state.index + 1
     var value = this.props.value[order[index]]
     this.setState({ index, value })
-    log(this.state.value)
-
   }
 
   decrementIndex() {
@@ -175,10 +178,10 @@ export default class SwipeableChar extends React.Component {
   toggleWritable(e) {
     this.clickCount++ //double click check
     setTimeout(()=>this.clickCount = 0,500) 
-    if(this.clickCount===2 && e.target.hasAttribute('readonly')){
-      e.target.removeAttribute('readonly')
-    } else if(this.clickCount===2 && !e.target.hasAttribute('readonly')){
-      e.target.setAttribute('readonly', '')
+    if(this.clickCount===2){
+      e.target.hasAttribute('readonly') ?
+        e.target.removeAttribute('readonly') :
+        e.target.setAttribute('readonly', '')
     }
   }
 
@@ -189,13 +192,12 @@ export default class SwipeableChar extends React.Component {
           readOnly
           className='swipeable'
           value={this.state.value}
-          onChange={this.handleChange}
+          onChange={this.OnTextChange}
           onTouchStart={this.handleTouchStart}
-          onTouchMove={this.handleTouchMove}
+          onTouchMove={(e)=>{this.handleTouchMove(e); 
+            e.target.setAttribute('readonly', '')}}
           onClick={this.toggleWritable}
-          onBlur={(e)=>{if(!e.target.hasAttribute('readonly')) 
-                          e.target.setAttribute('readonly', '')}}
-          placeholder={'add ' + this.type}
+          onBlur={(e)=>e.target.setAttribute('readonly', '')}
         />
       </InputGroup>
     )

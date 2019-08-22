@@ -36,14 +36,20 @@ class Review extends React.Component {
         <div id="single-block">
           <SwipeableChar
             value={char}
-            // length={this.state.single.length}
-            // index={indexSgl}
-            onTextChange={this.handleSglChange}
-            // onIndexChange={this.handleSglIdxChange}
             opacity={'show'}
           />
         </div>
         <div id='combs-block'>
+          <SwipeableComb
+            group={'short'}
+            // type={this.reviewOrder[0]}
+            // value={this.state.shortHz[indexSht]}
+            // length={this.state.shortHz.length}
+            // index={indexSht}
+            // onTextChange={this.handleShtCombChange}
+            // onIndexChange={this.handleShtIdxChange}
+            opacity={'show'}
+          />
         </div>
       </div>
     )
