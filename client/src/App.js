@@ -14,6 +14,7 @@ var unit = new Unit(
     level: 1,
     consult: true,
     //char single(doesn't have figurative) or multiple
+    //todo: add commas on multiple pinyin so I don't have to call api for comb pinyin
     char:{ 
       hanzi: '就是', //char
       pinyin: 'jiùshi', //pronunciation
@@ -35,7 +36,7 @@ var unit = new Unit(
     }
   }
 )
-unit.addComb({type1:'short',type2:'hanzi'}, '晚')
+//unit.addComb({type1:'short',type2:'hanzi'}, '晚')
 // unit.deleteComb({type1:'short', index:1})
  //console.log(unit.data.short)
 

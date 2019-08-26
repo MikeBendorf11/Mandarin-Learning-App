@@ -4,7 +4,7 @@ import '../style/swipeable.scss'
 import ReactDOM from "react-dom";
 import Lesson from "./Lesson"
 
-var log = (a) => console.log(a)
+var log = (a) => console.log(a)  
 
 /**
  * A initial props.value is loaded
@@ -20,8 +20,7 @@ export default class SwipeableChar extends React.Component {
     super(props);
     
     this.OnTextChange = this.OnTextChange.bind(this)
-    this.incrementOrderIndex = this.incrementOrderIndex.bind(this)
-    this.decrementOrderIndex = this.decrementOrderIndex.bind(this)
+    this.getIndex = this.getIndex.bind(this)
     this.handleTouchStart = this.handleTouchStart.bind(this)
     this.handleTouchMove = this.handleTouchMove.bind(this)
     this.toggleWritable = this.toggleWritable.bind(this)
@@ -29,22 +28,22 @@ export default class SwipeableChar extends React.Component {
     this.clickCount = 0
     
     var comb = this.props.value
-    this.order = new Lesson().combOrder('figurative', comb.figurative)
-    this.length = this.order.length
-    var orderIndex = 0
-    var combIndex =  0//comb.figurative.length-1
-    var value = comb[this.order[orderIndex]][combIndex]
+    this.order = new Lesson().combOrder('pinyin') //globals
+    this.combLength = comb.figurative.length
+    var orderIdx = 1
+    var combIndex =  0 //comb.pinyin.length-1
+    var value = comb[this.order[orderIdx]][combIndex]
 
-    this.state = { orderIndex, combIndex, value }
+    this.state = { orderIdx, combIndex, value }
 
   }
 
   OnTextChange(e){
     var combIndex = this.state.combIndex
-    var orderIndex = this.state.orderIndex
+    var orderIdx = this.state.orderIdx
 
-    var value = this.props.value[this.order[orderIndex]][combIndex] = e.target.value
-    this.setState({ orderIndex, combIndex, value })
+    var value = this.props.value[this.order[orderIdx]][combIndex] = e.target.value
+    this.setState({ orderIdx, combIndex, value })
   }
   
   componentDidMount() {
@@ -133,20 +132,24 @@ export default class SwipeableChar extends React.Component {
       if (xDiff > 0) {
         //left motion
         this.horizontalSequence('left', 'right')
+        this.simpleDelay().then(() => this.getIndex('left'))
+        .then(()=>this.setWidthofInput())
       } else {
         //right motion
         this.horizontalSequence('right', 'left')
+        this.simpleDelay().then(() => this.getIndex('right'))
+        .then(()=>this.setWidthofInput())
       }
     } else {
       if (yDiff > 0) {
         //up motion
         this.verticalSequence('up','down')
-        this.simpleDelay().then(() => this.incrementOrderIndex())
+        this.simpleDelay().then(() => this.getIndex('up'))
         .then(()=>this.setWidthofInput())
       } else {
         //down motion
         this.verticalSequence('down','up')
-        this.simpleDelay().then(() => this.decrementOrderIndex())
+        this.simpleDelay().then(() => this.getIndex('down'))
         .then(()=>this.setWidthofInput())
 
       }
@@ -155,22 +158,36 @@ export default class SwipeableChar extends React.Component {
     this.yDown = null;
   }
 
-
-  incrementOrderIndex() {
-    var orderIndex = this.state.orderIndex + 1 > this.length - 1 ? 
-      0 : this.state.orderIndex + 1
+  /**
+   * 
+   * @param {string} dir : up, down, left, right
+   */
+  getIndex(dir){
+    var orderIdx = this.state.orderIdx
     var combIndex = this.state.combIndex
-    var value = this.props.value[this.order[orderIndex]][combIndex]
-    this.setState({ orderIndex, combIndex, value })
+    switch(dir){
+      case 'up':
+          orderIdx = this.state.orderIdx + 1 > this.order.length - 1 ? 
+          0 : this.state.orderIdx + 1
+          break
+      case 'down':
+          orderIdx = this.state.orderIdx - 1 < 0 ? 
+          this.order.length-1 : this.state.orderIdx -1
+          break
+      case 'left':
+          combIndex = this.state.combIndex + 1 > this.combLength -1 ? 
+          0: this.state.combIndex + 1
+          break
+      case 'right':
+          combIndex = this.state.combIndex - 1 < 0 ?
+          this.combLength-1 : this.state.combIndex -1 
+          break
+    }
+    var value = this.props.value[this.order[orderIdx]][combIndex]
+    this.setState({ orderIdx, combIndex, value })
   }
 
-  decrementOrderIndex() {
-    var orderIndex = this.state.orderIndex - 1 < 0 ? 
-      this.length-1 : this.state.orderIndex -1
-    var combIndex = this.state.combIndex
-    var value = this.props.value[this.order[orderIndex]][combIndex]
-    this.setState({ orderIndex, combIndex, value })
-  }
+
 
   toggleWritable(e) {
     this.clickCount++ //double click check

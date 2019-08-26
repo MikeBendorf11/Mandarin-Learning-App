@@ -6,11 +6,7 @@
           "type": "chrome",
           "request": "launch",
           "url": "http://localhost:3000/",
-          "webRoot": "${workspaceFolder}/client",
-          "skipFiles": [
-            "client/<node_internals>/**/*.js",
-            "client/!<node_internals>/events.js"
-          ]
+          "webRoot": "${workspaceFolder}/client"
       },
       {
           "name": "Launch index.html",

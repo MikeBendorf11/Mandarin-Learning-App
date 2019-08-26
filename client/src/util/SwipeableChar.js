@@ -30,18 +30,17 @@ export default class SwipeableChar extends React.Component {
     
     var char = this.props.value
     this.order = new Lesson().charOrder('pinyin', char.pinyin)
-    this.length = this.order.length
-    var index = 0 
-    var value = char[this.order[index]]
+    var orderIdx = 0 
+    var value = char[this.order[orderIdx]]
 
-    this.state = { index, value }
+    this.state = { orderIdx, value }
 
   }
 
   OnTextChange(e){
-    var index = this.state.index
-    var value = this.props.value[this.order[index]] = e.target.value
-    this.setState({ index, value })
+    var orderIdx = this.state.orderIdx
+    var value = this.props.value[this.order[orderIdx]] = e.target.value
+    this.setState({ orderIdx, value })
   }
   
   componentDidMount() {
@@ -156,17 +155,17 @@ export default class SwipeableChar extends React.Component {
 
 
   incrementIndex() {
-    var index = this.state.index + 1 > this.length - 1 ? 
-      0 : this.state.index + 1
-    var value = this.props.value[this.order[index]]
-    this.setState({ index, value })
+    var orderIdx = this.state.orderIdx + 1 > this.order.length - 1 ? 
+      0 : this.state.orderIdx + 1
+    var value = this.props.value[this.order[orderIdx]]
+    this.setState({ orderIdx, value })
   }
 
   decrementIndex() {
-    var index = this.state.index - 1 < 0 ? 
-      this.length-1 : this.state.index -1
-    var value = this.props.value[this.order[index]]
-    this.setState({ index, value })
+    var orderIdx = this.state.orderIdx - 1 < 0 ? 
+      this.order.length-1 : this.state.orderIdx -1
+    var value = this.props.value[this.order[orderIdx]]
+    this.setState({ orderIdx, value })
   }
 
   toggleWritable(e) {
