@@ -14,18 +14,6 @@
     opacity: 0;
     left:-100px
   }
-}
-
-.hide-overflow{
-  text-overflow: ellipsis
-}
-
-#single-block{
-  margin: 0 auto;
-   
-  input{
-    font-size: 2em;
-  }
   .swup{
     opacity: 0;
     top: -50px
@@ -36,18 +24,22 @@
   }
 }
 
+.hide-overflow{
+  text-overflow: ellipsis
+}
+
+#single-block{
+  margin: 0 auto;
+
+  input{
+    font-size: 2em;
+  }
+
+}
+
 #combs-block{
   padding: 10%;
-  .up{
-    top: -38px
-  }
-  .down{
-    top: 38px
-  }
-  .show{
-    opacity: 1;
-  }
-  .hide{
-    opacity: 0;
+  input{
+    font-size: 1.5em;
   }
 }

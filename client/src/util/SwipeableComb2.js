@@ -4,13 +4,13 @@ import '../style/swipeable.scss'
 import ReactDOM from "react-dom";
 import Lesson from "./Lesson"
 
-var log = (a) => console.log(a)  
+var log = (a) => console.log(a)
 
 /**
  * A initial props.value is loaded
  * Horizontal moves to next character in the units
  * Vertical display contents of the comb obj
- * @props 
+ * @props
  *  { value } : an array of combs or defs.
  *  { index } : starts at empty/last of array to hide clues
  * @events { OnTextChange, IndexChange } sync roulette with with type2
@@ -18,7 +18,7 @@ var log = (a) => console.log(a)
 export default class SwipeableChar extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.OnTextChange = this.OnTextChange.bind(this)
     this.getIndex = this.getIndex.bind(this)
     this.handleTouchStart = this.handleTouchStart.bind(this)
@@ -26,26 +26,26 @@ export default class SwipeableChar extends React.Component {
     this.toggleWritable = this.toggleWritable.bind(this)
     this.swipeCount = 0
     this.clickCount = 0
-    
+
     var comb = this.props.value
     this.order = new Lesson().combOrder('pinyin') //globals
     this.combLength = comb.figurative.length
-    var orderIdx = 1
-    var combIndex =  0 //comb.pinyin.length-1
-    var value = comb[this.order[orderIdx]][combIndex]
+    var orderIdx = 0
+    var combIdx =  0 //comb.pinyin.length-1
+    var value = comb[this.order[orderIdx]][combIdx]
 
-    this.state = { orderIdx, combIndex, value }
+    this.state = { orderIdx, combIdx, value }
 
   }
 
   OnTextChange(e){
-    var combIndex = this.state.combIndex
+    var combIdx = this.state.combIdx
     var orderIdx = this.state.orderIdx
 
-    var value = this.props.value[this.order[orderIdx]][combIndex] = e.target.value
-    this.setState({ orderIdx, combIndex, value })
+    var value = this.props.value[this.order[orderIdx]][combIdx] = e.target.value
+    this.setState({ orderIdx, combIdx, value })
   }
-  
+
   componentDidMount() {
     //assign same class to all input groups
     this.inputGroup = ReactDOM.findDOMNode(this)
@@ -54,8 +54,8 @@ export default class SwipeableChar extends React.Component {
   }
   setWidthofInput(){
     if(this.state.value){
-      var elem = document.createElement('span')   
-      elem.style.fontSize = '2em' 
+      var elem = document.createElement('span')
+      elem.style.fontSize = '2em'
       elem.style.position = 'absolute'
       elem.style.left = -1000
       elem.style.top = -1000
@@ -66,12 +66,12 @@ export default class SwipeableChar extends React.Component {
       const width = elem.clientWidth + 25
       document.body.removeChild(elem)
       this.inputGroup.style.width = width +'px'
-      
+
     } else {
       this.inputGroup.style.width = '100px'
     }
       this.inputGroup.style.margin = '0 auto'
-    
+
   }
 
   delayCss(element, cssClass) {
@@ -98,7 +98,7 @@ export default class SwipeableChar extends React.Component {
       if(element.classList.contains('show')) element.classList.add('hide')
       this.delayCss(element, 'sw' + dir2)
         .then(() => this.delayCss(element, 'sw' + dir1))
-        .then(() => this.delayCss(element, 'sw' + dir2))   
+        .then(() => this.delayCss(element, 'sw' + dir2))
   }
 
   verticalSequence(dir1, dir2){
@@ -108,7 +108,7 @@ export default class SwipeableChar extends React.Component {
     this.delayCss(element, 'sw' + dir2)
       .then(() => this.delayCss(element, 'sw' + dir1))
       .then(() => this.delayCss(element, 'sw' + dir2))
-      
+
   }
 
   //swipe events
@@ -117,7 +117,7 @@ export default class SwipeableChar extends React.Component {
     this.yDown = evt.touches[0].clientY;
     this.previousScrollLeft = this.input.scrollLeft
   }
-  
+
   handleTouchMove(evt) {
     if (!this.xDown || !this.yDown) {
       return;
@@ -159,39 +159,39 @@ export default class SwipeableChar extends React.Component {
   }
 
   /**
-   * 
+   *
    * @param {string} dir : up, down, left, right
    */
   getIndex(dir){
     var orderIdx = this.state.orderIdx
-    var combIndex = this.state.combIndex
+    var combIdx = this.state.combIdx
     switch(dir){
       case 'up':
-          orderIdx = this.state.orderIdx + 1 > this.order.length - 1 ? 
+          orderIdx = this.state.orderIdx + 1 > this.order.length - 1 ?
           0 : this.state.orderIdx + 1
           break
       case 'down':
-          orderIdx = this.state.orderIdx - 1 < 0 ? 
+          orderIdx = this.state.orderIdx - 1 < 0 ?
           this.order.length-1 : this.state.orderIdx -1
           break
       case 'left':
-          combIndex = this.state.combIndex + 1 > this.combLength -1 ? 
-          0: this.state.combIndex + 1
+          combIdx = this.state.combIdx + 1 > this.combLength -1 ?
+          0: this.state.combIdx + 1
           break
       case 'right':
-          combIndex = this.state.combIndex - 1 < 0 ?
-          this.combLength-1 : this.state.combIndex -1 
+          combIdx = this.state.combIdx - 1 < 0 ?
+          this.combLength-1 : this.state.combIdx -1
           break
     }
-    var value = this.props.value[this.order[orderIdx]][combIndex]
-    this.setState({ orderIdx, combIndex, value })
+    var value = this.props.value[this.order[orderIdx]][combIdx]
+    this.setState({ orderIdx, combIdx, value })
   }
 
 
 
   toggleWritable(e) {
     this.clickCount++ //double click check
-    setTimeout(()=>this.clickCount = 0,500) 
+    setTimeout(()=>this.clickCount = 0,500)
     if(this.clickCount===2){
       e.target.hasAttribute('readonly') ?
         e.target.removeAttribute('readonly') :
@@ -208,7 +208,7 @@ export default class SwipeableChar extends React.Component {
           value={this.state.value}
           onChange={this.OnTextChange}
           onTouchStart={this.handleTouchStart}
-          onTouchMove={(e)=>{this.handleTouchMove(e); 
+          onTouchMove={(e)=>{this.handleTouchMove(e);
             e.target.setAttribute('readonly', '')}}
           onClick={this.toggleWritable}
           onBlur={(e)=>e.target.setAttribute('readonly', '')}

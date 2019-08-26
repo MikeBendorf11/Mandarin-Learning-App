@@ -2,13 +2,14 @@ export default class Lesson {
   constructor() {
   }
   /**
-   * 
-   * @param {string} type char or comb 
+   *
+   * @param {string} type char or comb
    * @param {string} startFrom hanzi, pinyin, literal, figurative
    * @param {string} hanzi for type char use char.hanzi
    */
   order(type, startFrom, hanzi){
-    var result, properties = []
+    var result = [];
+    var properties = []
     result.push(startFrom)
 
     switch(type){
