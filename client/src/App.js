@@ -13,6 +13,7 @@ var unit = new Unit(
     learnedId: 22,
     level: 1,
     consult: true,
+    //char single(doesn't have figurative) or multiple
     char:{ 
       hanzi: '就是', //char
       pinyin: 'jiùshi', //pronunciation

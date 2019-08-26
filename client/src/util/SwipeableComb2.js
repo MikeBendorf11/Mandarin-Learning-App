@@ -9,7 +9,7 @@ var log = (a) => console.log(a)
 /**
  * A initial props.value is loaded
  * Horizontal moves to next character in the units
- * Vertical display contents of the char obj
+ * Vertical display contents of the comb obj
  * @props 
  *  { value } : an array of combs or defs.
  *  { index } : starts at empty/last of array to hide clues
@@ -20,28 +20,31 @@ export default class SwipeableChar extends React.Component {
     super(props);
     
     this.OnTextChange = this.OnTextChange.bind(this)
-    this.incrementIndex = this.incrementIndex.bind(this)
-    this.decrementIndex = this.decrementIndex.bind(this)
+    this.incrementOrderIndex = this.incrementOrderIndex.bind(this)
+    this.decrementOrderIndex = this.decrementOrderIndex.bind(this)
     this.handleTouchStart = this.handleTouchStart.bind(this)
     this.handleTouchMove = this.handleTouchMove.bind(this)
     this.toggleWritable = this.toggleWritable.bind(this)
     this.swipeCount = 0
     this.clickCount = 0
     
-    var char = this.props.value
-    this.order = new Lesson().charOrder('pinyin', char.pinyin)
+    var comb = this.props.value
+    this.order = new Lesson().combOrder('figurative', comb.figurative)
     this.length = this.order.length
-    var index = 0 
-    var value = char[this.order[index]]
+    var orderIndex = 0
+    var combIndex =  0//comb.figurative.length-1
+    var value = comb[this.order[orderIndex]][combIndex]
 
-    this.state = { index, value }
+    this.state = { orderIndex, combIndex, value }
 
   }
 
   OnTextChange(e){
-    var index = this.state.index
-    var value = this.props.value[this.order[index]] = e.target.value
-    this.setState({ index, value })
+    var combIndex = this.state.combIndex
+    var orderIndex = this.state.orderIndex
+
+    var value = this.props.value[this.order[orderIndex]][combIndex] = e.target.value
+    this.setState({ orderIndex, combIndex, value })
   }
   
   componentDidMount() {
@@ -130,22 +133,20 @@ export default class SwipeableChar extends React.Component {
       if (xDiff > 0) {
         //left motion
         this.horizontalSequence('left', 'right')
-        //next unit
       } else {
         //right motion
         this.horizontalSequence('right', 'left')
-        //previous unit
       }
     } else {
       if (yDiff > 0) {
         //up motion
         this.verticalSequence('up','down')
-        this.simpleDelay().then(() => this.incrementIndex())
+        this.simpleDelay().then(() => this.incrementOrderIndex())
         .then(()=>this.setWidthofInput())
       } else {
         //down motion
         this.verticalSequence('down','up')
-        this.simpleDelay().then(() => this.decrementIndex())
+        this.simpleDelay().then(() => this.decrementOrderIndex())
         .then(()=>this.setWidthofInput())
 
       }
@@ -155,18 +156,20 @@ export default class SwipeableChar extends React.Component {
   }
 
 
-  incrementIndex() {
-    var index = this.state.index + 1 > this.length - 1 ? 
-      0 : this.state.index + 1
-    var value = this.props.value[this.order[index]]
-    this.setState({ index, value })
+  incrementOrderIndex() {
+    var orderIndex = this.state.orderIndex + 1 > this.length - 1 ? 
+      0 : this.state.orderIndex + 1
+    var combIndex = this.state.combIndex
+    var value = this.props.value[this.order[orderIndex]][combIndex]
+    this.setState({ orderIndex, combIndex, value })
   }
 
-  decrementIndex() {
-    var index = this.state.index - 1 < 0 ? 
-      this.length-1 : this.state.index -1
-    var value = this.props.value[this.order[index]]
-    this.setState({ index, value })
+  decrementOrderIndex() {
+    var orderIndex = this.state.orderIndex - 1 < 0 ? 
+      this.length-1 : this.state.orderIndex -1
+    var combIndex = this.state.combIndex
+    var value = this.props.value[this.order[orderIndex]][combIndex]
+    this.setState({ orderIndex, combIndex, value })
   }
 
   toggleWritable(e) {

@@ -2,6 +2,7 @@ import React from 'react';
 import { InputGroup, InputGroupAddon, InputGroupText, Input } from 'reactstrap'
 import '../style/swipeable.scss'
 import ReactDOM from "react-dom";
+import Lesson from "./Lesson"
 
 /**
  * A initial props.value is loaded
@@ -26,6 +27,13 @@ export default class SwipeableComb extends React.Component {
     this.toggleWritable = this.toggleWritable.bind(this)
     this.swipeCount = 0
     this.clickCount = 0
+
+    var combs = this.props.value
+    this.order = new Lesson().combOrder('pinyin')
+    this.length = this.order.length
+    var index = 0
+    var value = combs[this.order[index]]
+    this.state={index, value}
   }
 
   componentDidMount() {
@@ -198,7 +206,7 @@ export default class SwipeableComb extends React.Component {
         <Input
           readOnly
           className='swipeable'
-          value={this.props.value}
+          value={this.state.value}
           onChange={this.handleChange}
           onTouchStart={this.handleTouchStart}
           onTouchMove={this.handleTouchMove}

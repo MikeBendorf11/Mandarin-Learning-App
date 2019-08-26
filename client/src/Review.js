@@ -1,5 +1,5 @@
 import React from 'react';
-import SwipeableComb from './util/SwipeableComb'
+import SwipeableComb2 from './util/SwipeableComb2'
 import SwipeableChar from './util/SwipeableChar'
 import {observer} from 'mobx-react'
 
@@ -38,18 +38,23 @@ class Review extends React.Component {
             value={char}
             opacity={'show'}
           />
+          <SwipeableComb2
+            value={short}
+            opacity={'show'}
+          />
         </div>
         <div id='combs-block'>
-          <SwipeableComb
+
+          {/* <SwipeableComb
             group={'short'}
             // type={this.reviewOrder[0]}
-            // value={this.state.shortHz[indexSht]}
+            value={short}
             // length={this.state.shortHz.length}
             // index={indexSht}
             // onTextChange={this.handleShtCombChange}
             // onIndexChange={this.handleShtIdxChange}
             opacity={'show'}
-          />
+          /> */}
         </div>
       </div>
     )
