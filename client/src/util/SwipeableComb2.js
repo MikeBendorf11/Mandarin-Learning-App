@@ -1,5 +1,5 @@
 import React from 'react';
-import { InputGroup, InputGroupAddon, InputGroupText, Input } from 'reactstrap'
+import { labelGroup, labelGroupAddon, labelGroupText, Input } from 'reactstrap'
 import '../style/swipeable.scss'
 import ReactDOM from "react-dom";
 import Lesson from "./Lesson"
@@ -48,8 +48,8 @@ export default class SwipeableChar extends React.Component {
 
   componentDidMount() {
     //assign same class to all input groups
-    this.inputGroup = ReactDOM.findDOMNode(this)
-    this.input = this.inputGroup.getElementsByTagName('input')[0]
+    this.labelGroup = ReactDOM.findDOMNode(this)
+    this.input = this.labelGroup.getElementsByTagName('input')[0]
     this.setWidthofInput()
   }
   setWidthofInput(){
@@ -65,12 +65,12 @@ export default class SwipeableChar extends React.Component {
       document.body.appendChild(elem)
       const width = elem.clientWidth + 25
       document.body.removeChild(elem)
-      this.inputGroup.style.width = width +'px'
+      this.labelGroup.style.width = width +'px'
 
     } else {
-      this.inputGroup.style.width = '100px'
+      this.labelGroup.style.width = '100px'
     }
-      this.inputGroup.style.margin = '0 auto'
+      this.labelGroup.style.margin = '0 auto'
 
   }
 
@@ -201,7 +201,7 @@ export default class SwipeableChar extends React.Component {
 
   render() {
     return (
-      <InputGroup>
+      <labelGroup>
         <Input
           readOnly
           className='swipeable'
@@ -213,7 +213,7 @@ export default class SwipeableChar extends React.Component {
           onClick={this.toggleWritable}
           onBlur={(e)=>e.target.setAttribute('readonly', '')}
         />
-      </InputGroup>
+      </labelGroup>
     )
   }
 }

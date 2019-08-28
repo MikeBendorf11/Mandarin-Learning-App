@@ -1,5 +1,5 @@
 import React from 'react';
-import { InputGroup, InputGroupAddon, InputGroupText, Input } from 'reactstrap'
+import { FormGroup, Input } from 'reactstrap'
 import '../style/swipeable.scss'
 import ReactDOM from "react-dom";
 import Lesson from "./Lesson"
@@ -16,11 +16,10 @@ export default class SwipeableComb extends React.Component {
     this.clickCount = 0
 
     var obj = this.props.value
-
     this.order = new Lesson().order(this.props.type, 'pinyin' , obj['pinyin'] || ''  )
     var orderIdx = 1
     var combIdx =  1//obj.pinyin.length-1
-    this.isChar = this.props.type == 'char' ? true : false
+    this.isChar = this.props.type == 'Character(s)' ? true : false
 
     if(this.isChar){
       var value = obj[this.order[orderIdx]]
@@ -47,8 +46,8 @@ export default class SwipeableComb extends React.Component {
 
   componentDidMount() {
     //assign same class to all input groups
-    this.inputGroup = ReactDOM.findDOMNode(this)
-    this.input = this.inputGroup.getElementsByTagName('input')[0]
+    this.labelGroup = ReactDOM.findDOMNode(this)
+    this.input = this.labelGroup.getElementsByTagName('input')[0]
     this.reloadEllipsis()
     
   }
@@ -210,7 +209,8 @@ export default class SwipeableComb extends React.Component {
   }
   render() {
     return (
-      <InputGroup>
+      <FormGroup>
+        <label>{this.props.type.toUpperCase()}: </label>
         <Input
           readOnly
           className='swipeable'
@@ -222,7 +222,7 @@ export default class SwipeableComb extends React.Component {
           onClick={(e)=>{this.toggleWritable(e); }}
           onBlur={(e)=>e.target.setAttribute('readonly', '')}
         />
-      </InputGroup>
+      </FormGroup>
     )
   }
 }

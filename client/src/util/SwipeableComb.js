@@ -1,5 +1,5 @@
 import React from 'react';
-import { InputGroup, InputGroupAddon, InputGroupText, Input } from 'reactstrap'
+import { labelGroup, labelGroupAddon, labelGroupText, Input } from 'reactstrap'
 import '../style/swipeable.scss'
 import ReactDOM from "react-dom";
 import Lesson from "./Lesson"
@@ -38,10 +38,10 @@ export default class SwipeableComb extends React.Component {
 
   componentDidMount() {
     //assign same class to all input groups
-    const inputGroup = ReactDOM.findDOMNode(this)
-    inputGroup.classList.add(this.group)
+    const labelGroup = ReactDOM.findDOMNode(this)
+    labelGroup.classList.add(this.group)
     //hide definitions
-    this.input = inputGroup.getElementsByTagName('input')[0]
+    this.input = labelGroup.getElementsByTagName('input')[0]
     this.input.classList.add(this.props.opacity)
     this.simpleDelay().then(() => {
       this.group = document.querySelectorAll(`
@@ -197,12 +197,12 @@ export default class SwipeableComb extends React.Component {
 
   render() {
     return (
-      <InputGroup>
+      <labelGroup>
         {/* The comb counter */}
-        <InputGroupAddon addonType="prepend" 
+        <labelGroupAddon addonType="prepend" 
                          className={this.props.opacity + ' swipeable'}>
-          <InputGroupText>{this.props.index + 1}</InputGroupText>
-        </InputGroupAddon>
+          <labelGroupText>{this.props.index + 1}</labelGroupText>
+        </labelGroupAddon>
         <Input
           readOnly
           className='swipeable'
@@ -214,7 +214,7 @@ export default class SwipeableComb extends React.Component {
           onBlur={(e)=>{if(!e.target.hasAttribute('readonly')) e.target.setAttribute('readonly', '')}}
           placeholder={'add ' + this.props.type}
         />
-      </InputGroup>
+      </labelGroup>
     )
   }
 }

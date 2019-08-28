@@ -13,7 +13,7 @@ export default class Lesson {
     result.push(startFrom)
 
     switch(type){
-      case 'char':
+      case 'Characters(s)':
         properties = ['hanzi', 'pinyin', 'literal', 'figurative']
         if (hanzi.length > 1){
           properties.forEach(prop => {
@@ -27,7 +27,7 @@ export default class Lesson {
           })
         }
         break
-      case 'comb':
+      case 'Short Combination': case 'Long Combination':
         var properties = ['hanzi', 'pinyin','figurative']
         properties.forEach(prop=>{
           if(prop != startFrom) result.push(prop)

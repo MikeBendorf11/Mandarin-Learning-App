@@ -1,4 +1,13 @@
 #review-block{
+  label{
+    margin: 0;
+    display: block;
+    padding: 2px 0 2px 5px;
+    background-image: linear-gradient(to right, rgb(199, 199, 199), transparent);
+    font-size: .75em;
+    font-stretch: 100%;
+    border-radius: 5%
+  }
   .swipeable{
     text-align: center;
     position: relative;
@@ -30,7 +39,7 @@
 }
 
 #single-block{
-  padding: 20%;
+  padding: 0 20%;
 
   margin: 10px auto;
   
@@ -41,7 +50,7 @@
 }
 
 #combs-block{
-  padding: 10%;
+  padding: 0 10%;
   input{
     // max-width: 80%;
     font-size: 1.5em;

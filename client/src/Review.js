@@ -37,19 +37,19 @@ class Review extends React.Component {
         <div id="single-block">
           <Swipeable
             value={char}
-            type={'char'}
+            type={'Character(s)'}
             opacity={'show'}
           /> <br></br>
         </div>
         <div id='combs-block'>
           <Swipeable
             value={short}
-            type={'comb'}
+            type={'Short Combination'}
             opacity={'show'}
           /><br></br>
           <Swipeable
             value={long}
-            type={'comb'}
+            type={'Long Combination'}
             opacity={'show'}
           />
         </div>
