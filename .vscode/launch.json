@@ -7,11 +7,6 @@
           "request": "launch",
           "url": "http://localhost:3000/",
           "webRoot": "${workspaceFolder}/client"
-      },
-      {
-          "name": "Launch index.html",
-          "type": "chrome",
-          "request": "launch"
-      },
+      }
   ]
 }

@@ -16,12 +16,11 @@ export default class SwipeableComb extends React.Component {
     this.clickCount = 0
 
     var obj = this.props.value
-    var type = this.props.type
 
-    this.order = new Lesson().order(type, 'pinyin' , obj['pinyin'] || ''  )
-    var orderIdx = 0
-    var combIdx =  0 //obj.pinyin.length-1
-    this.isChar = type == 'char' ? true : false
+    this.order = new Lesson().order(this.props.type, 'pinyin' , obj['pinyin'] || ''  )
+    var orderIdx = 1
+    var combIdx =  1//obj.pinyin.length-1
+    this.isChar = this.props.type == 'char' ? true : false
 
     if(this.isChar){
       var value = obj[this.order[orderIdx]]
@@ -50,29 +49,10 @@ export default class SwipeableComb extends React.Component {
     //assign same class to all input groups
     this.inputGroup = ReactDOM.findDOMNode(this)
     this.input = this.inputGroup.getElementsByTagName('input')[0]
-    this.setWidthofInput()
+    this.reloadEllipsis()
+    
   }
-  setWidthofInput(){
-    if(this.state.value){
-      var elem = document.createElement('span')
-      elem.style.fontSize = '2em'
-      elem.style.position = 'absolute'
-      elem.style.left = -1000
-      elem.style.top = -1000
-      elem.style.display = 'inline'
-      elem.style.padding = '0 auto'
-      elem.innerHTML = this.state.value
-      document.body.appendChild(elem)
-      const width = elem.clientWidth + 25
-      document.body.removeChild(elem)
-      this.inputGroup.style.width = width +'px'
 
-    } else {
-      this.inputGroup.style.width = '100px'
-    }
-      this.inputGroup.style.margin = '0 auto'
-
-  }
   delayCss(element, cssClass) {
     return new Promise(resolve => {
       setTimeout(() => {
@@ -97,6 +77,7 @@ export default class SwipeableComb extends React.Component {
       this.delayCss(element, 'sw' + dir2)
         .then(() => this.delayCss(element, 'sw' + dir1))
         .then(() => this.delayCss(element, 'sw' + dir2))
+        .then(()=>this.reloadEllipsis())
   }
 
   verticalSequence(dir1, dir2){
@@ -106,14 +87,16 @@ export default class SwipeableComb extends React.Component {
     this.delayCss(element, 'sw' + dir2)
       .then(() => this.delayCss(element, 'sw' + dir1))
       .then(() => this.delayCss(element, 'sw' + dir2))
-
+      .then(()=>this.reloadEllipsis())
   }
   //swipe events
   handleTouchStart(evt) {
     this.xDown = evt.touches[0].clientX;
     this.yDown = evt.touches[0].clientY;
     this.previousScrollLeft = this.input.scrollLeft
+    this.input.classList.remove('hide-overflow')
   }
+
   handleTouchMove(evt) {
     if (!this.xDown || !this.yDown) {
       return;
@@ -135,14 +118,29 @@ export default class SwipeableComb extends React.Component {
         //prev char
       }
       else if (xDiff > 0 && !this.isChar) {//left for combs
+        
+        //left motion
+        //if text overflows
+        if(this.input.clientWidth < this.input.scrollWidth){
+          if(this.previousScrollLeft === 0) return
+          else if(this.previousScrollLeft === this.input.scrollLeft 
+            && this.swipeCount < 5){
+            this.swipeCount++
+            return  
+          }  
+          //forcing to evaluate once more in case previous condition became async
+          else if (this.swipeCount < 5) return
+        }
+        this.swipeCount = 0
+        this.input.style.textOverFlow = 'unset'
+
         this.horizontalSequence('left', 'right')
         this.simpleDelay().then(() => this.getIndex('left'))
-        .then(()=>this.setWidthofInput())
       }
       else if(xDiff < 0 && !this.isChar){//right for combs
+        if(this.input.scrollLeft !== 0 ) return //is text scrolled to left?
         this.horizontalSequence('right', 'left')
         this.simpleDelay().then(() => this.getIndex('right'))
-        .then(()=>this.setWidthofInput())
       }
     } else {
       //vertical motion
@@ -150,11 +148,9 @@ export default class SwipeableComb extends React.Component {
 
         this.verticalSequence('up','down')
         this.simpleDelay().then(() => this.getIndex('up'))
-        .then(()=>this.setWidthofInput())
       } else { //down
         this.verticalSequence('down','up')
         this.simpleDelay().then(() => this.getIndex('down'))
-        .then(()=>this.setWidthofInput())
 
       }
     }
@@ -198,7 +194,10 @@ export default class SwipeableComb extends React.Component {
     this.setState({ orderIdx, combIdx, value })
   }
 
-
+  reloadEllipsis(){
+    if(this.input.clientWidth < this.input.scrollWidth) 
+      this.input.classList.add('hide-overflow')
+  }
 
   toggleWritable(e) {
     this.clickCount++ //double click check
@@ -220,7 +219,7 @@ export default class SwipeableComb extends React.Component {
           onTouchStart={this.handleTouchStart}
           onTouchMove={(e)=>{this.handleTouchMove(e);
             e.target.setAttribute('readonly', '')}}
-          onClick={this.toggleWritable}
+          onClick={(e)=>{this.toggleWritable(e); }}
           onBlur={(e)=>e.target.setAttribute('readonly', '')}
         />
       </InputGroup>

@@ -14,7 +14,10 @@ var unit = new Unit(
     level: 1,
     consult: true,
     //char single(doesn't have figurative) or multiple
-    //todo: add commas on multiple pinyin so I don't have to call api for comb pinyin
+    /**todo:
+     * add commas on multiple pinyin so I don't have to call api for comb pinyin
+     * match short and long comb order
+     *  */
     char:{ 
       hanzi: '就是', //char
       pinyin: 'jiùshi', //pronunciation

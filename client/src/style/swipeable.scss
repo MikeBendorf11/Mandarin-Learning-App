@@ -1,5 +1,6 @@
 #review-block{
   .swipeable{
+    text-align: center;
     position: relative;
     left: 0;
     top: 0;
@@ -29,8 +30,10 @@
 }
 
 #single-block{
-  margin: 0 auto;
+  padding: 20%;
 
+  margin: 10px auto;
+  
   input{
     font-size: 2em;
   }
@@ -40,6 +43,7 @@
 #combs-block{
   padding: 10%;
   input{
+    // max-width: 80%;
     font-size: 1.5em;
   }
 }
