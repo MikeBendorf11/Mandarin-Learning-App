@@ -16,9 +16,9 @@ export default class SwipeableComb extends React.Component {
     this.clickCount = 0
 
     var obj = this.props.value
-    this.order = new Lesson().order(this.props.type, 'pinyin' , obj['pinyin'] || ''  )
-    var orderIdx = 1
-    var combIdx =  1//obj.pinyin.length-1
+    this.order = new Lesson().order(this.props.type, 'pinyin' , obj['hanzi'] || ''  )
+    var orderIdx = 0
+    var combIdx =  0//obj.pinyin.length-1
     this.isChar = this.props.type == 'Character(s)' ? true : false
 
     if(this.isChar){
@@ -210,18 +210,27 @@ export default class SwipeableComb extends React.Component {
   render() {
     return (
       <FormGroup>
+        <div id="adviceOrder">{this.order[this.state.orderIdx]}</div>
         <label>{this.props.type.toUpperCase()}: </label>
-        <Input
-          readOnly
-          className='swipeable'
-          value={this.state.value}
-          onChange={this.OnTextChange}
-          onTouchStart={this.handleTouchStart}
-          onTouchMove={(e)=>{this.handleTouchMove(e);
-            e.target.setAttribute('readonly', '')}}
-          onClick={(e)=>{this.toggleWritable(e); }}
-          onBlur={(e)=>e.target.setAttribute('readonly', '')}
-        />
+        <div id="iptCont">
+          <div id="adviceExp"><i><b>&#8592;</b>&nbsp;explore&nbsp;<b>&#8594;</b></i></div>
+          <Input
+            readOnly
+            className='swipeable'
+            value={this.state.value}
+            onChange={this.OnTextChange}
+            onTouchStart={this.handleTouchStart}
+            onTouchMove={(e)=>{this.handleTouchMove(e);
+              e.target.setAttribute('readonly', '')}}
+            onClick={(e)=>{this.toggleWritable(e); }}
+            onBlur={(e)=>e.target.setAttribute('readonly', '')}
+          />
+        </div>
+        
+       
+        <div id="adviceNxt"><span>&#8592;</span> <i>prev | next</i> <span>&#8594;</span></div>
+      
+        
       </FormGroup>
     )
   }
