@@ -1,13 +1,67 @@
 #review-block{
+  #iptCont{
+    display: flex;
+    position: relative;
+    left: -10px;
+    background-image: 
+      linear-gradient(
+        to left, 
+        rgb(155, 149, 123), 
+        transparent
+        );
+    border-radius: 5%;
+    #adviceExp{
+      width: 10px;
+      position: relative;
+      top: 30px;
+      left: -5px;
+      transform: rotate(-90deg);
+      font-size: .9em;
+      opacity: .85;
+      b{
+        font-size: 1.5em;
+        position: relative;
+        top: 3px;
+      }
+    }
+  }
+  
   label{
     margin: 0;
     display: block;
     padding: 2px 0 2px 5px;
-    background-image: linear-gradient(to right, rgb(199, 199, 199), transparent);
+    background-image: linear-gradient(to right, rgb(226, 226, 226), transparent);
     font-size: .75em;
     font-stretch: 100%;
-    border-radius: 5%
+    border-radius: 5% 0 0 0;
+    
   }
+  #adviceOrder{
+    text-align: right;
+    padding-right: 20px;
+    position: relative;
+    top: 42px;
+    z-index: 1;
+    font-size: .9em;
+    color: rgba(155, 149, 123,.8),
+  }
+  #adviceNxt{
+
+    text-align: center;
+    font-size: .9em;
+    line-height: 0.5;
+    margin-top: 3px;
+    opacity: .9;
+    span{
+      font-size: 1.5em
+    }
+    i{
+      position: relative;
+      top: -3px;
+    }
+  }
+
+  
   .swipeable{
     text-align: center;
     position: relative;
@@ -40,9 +94,7 @@
 
 #single-block{
   padding: 0 20%;
-
   margin: 10px auto;
-  
   input{
     font-size: 2em;
   }
@@ -52,7 +104,7 @@
 #combs-block{
   padding: 0 10%;
   input{
-    // max-width: 80%;
     font-size: 1.5em;
+    min-height: 60px;
   }
 }

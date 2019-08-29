@@ -44,12 +44,12 @@ class Review extends React.Component {
         <div id='combs-block'>
           <Swipeable
             value={short}
-            type={'Short Combination'}
+            type={'Short Combination(s)'}
             opacity={'show'}
           /><br></br>
           <Swipeable
             value={long}
-            type={'Long Combination'}
+            type={'Long Combination(s)'}
             opacity={'show'}
           />
         </div>
