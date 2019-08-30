@@ -33,24 +33,21 @@ class Review extends React.Component {
     var long = this.props.unit.long
 
     return (
-      <div id="review-block">
-        <div id="single-block">
+      <div className="review">
+        <div className="character">
           <Swipeable
             value={char}
             type={'Character(s)'}
-            opacity={'show'}
           /> <br></br>
         </div>
-        <div id='combs-block'>
+        <div className='combination'>
           <Swipeable
             value={short}
             type={'Short Combination(s)'}
-            opacity={'show'}
           /><br></br>
           <Swipeable
             value={long}
             type={'Long Combination(s)'}
-            opacity={'show'}
           />
         </div>
       </div>

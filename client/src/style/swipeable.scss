@@ -1,68 +1,84 @@
-#review-block{
-  #iptCont{
-    display: flex;
-    position: relative;
-    left: -10px;
-    background-image: 
-      linear-gradient(
-        to left, 
-        rgb(155, 149, 123), 
-        transparent
-        );
-    border-radius: 5%;
-    #adviceExp{
-      width: 10px;
-      position: relative;
-      top: 30px;
-      left: -5px;
-      transform: rotate(-90deg);
-      font-size: .9em;
-      opacity: .85;
-      b{
-        font-size: 1.5em;
-        position: relative;
-        top: 3px;
-      }
-    }
-  }
-  
-  label{
-    margin: 0;
-    display: block;
-    padding: 2px 0 2px 5px;
-    background-image: linear-gradient(to right, rgb(226, 226, 226), transparent);
-    font-size: .75em;
-    font-stretch: 100%;
-    border-radius: 5% 0 0 0;
-    
-  }
-  #adviceOrder{
-    text-align: right;
-    padding-right: 20px;
-    position: relative;
-    top: 42px;
-    z-index: 1;
-    font-size: .9em;
-    color: rgba(155, 149, 123,.8),
-  }
-  #adviceNxt{
+// .block {}
+// .block__element {}
+// .block--modifier {}
 
-    text-align: center;
-    font-size: .9em;
-    line-height: 0.5;
-    margin-top: 3px;
-    opacity: .9;
-    span{
-      font-size: 1.5em
+.review{  
+  .character{
+    padding: 0 20%;
+    margin: 10px auto;
+    input{
+      font-size: 2em;
     }
-    i{
-      position: relative;
-      top: -3px;
-    }
+
   }
 
-  
-  .swipeable{
+  .combination{
+    padding: 0 10%;
+    input{
+      font-size: 1.5em;
+      min-height: 60px;
+    }
+  }
+}
+
+.swipeables--wrapper{
+  display: flex;
+  position: relative;
+  left: -10px;
+  background-image: 
+    linear-gradient(to left, rgb(155, 149, 123), transparent);
+  border-radius: 5%;
+  .swipeables__label--explore{
+    width: 10px;
+    position: relative;
+    top: 30px;
+    left: -5px;
+    transform: rotate(-90deg);
+    font-size: .9em;
+    opacity: .85;
+    b{
+      font-size: 1.5em;
+      position: relative;
+      top: 3px;
+    }
+  }
+}
+
+.swipeables__label{
+  margin: 0;
+  display: block;
+  padding: 2px 0 2px 5px;
+  background-image: linear-gradient(to right, rgb(226, 226, 226), transparent);
+  font-size: .75em;
+  font-stretch: 100%;
+  border-radius: 5% 0 0 0;
+}
+.swipeables__label--order{
+  text-align: right;
+  padding-right: 20px;
+  position: relative;
+  top: 42px;
+  z-index: 1;
+  font-size: .9em;
+  color: rgba(155, 149, 123,.8),
+}
+.swipeables__label--next{
+  text-align: center;
+  font-size: .9em;
+  line-height: 0.5;
+  margin-top: 3px;
+  opacity: .9;
+  span{
+    font-size: 1.5em
+  }
+  i{
+    position: relative;
+    top: -3px;
+  }
+}
+
+.swipeables{
+  input{
     text-align: center;
     position: relative;
     left: 0;
@@ -70,41 +86,26 @@
     transition-property: opacity, left, top;
     transition-duration: .3s;
   }
-  .swright{
+  .animate-right{
     opacity: 0;
     left:100px
   }
-  .swleft{
+  .animate-left{
     opacity: 0;
     left:-100px
   }
-  .swup{
+  .animate-up{
     opacity: 0;
     top: -50px
   }
-  .swdown{
+  .animate-down{
     opacity: 0;
     top: 50px;
   }
-}
-
-.hide-overflow{
-  text-overflow: ellipsis
-}
-
-#single-block{
-  padding: 0 20%;
-  margin: 10px auto;
-  input{
-    font-size: 2em;
-  }
-
-}
-
-#combs-block{
-  padding: 0 10%;
-  input{
-    font-size: 1.5em;
-    min-height: 60px;
+  .hide-overflow{
+    text-overflow: ellipsis
   }
 }
+
+
+

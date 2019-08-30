@@ -17,8 +17,8 @@ export default class SwipeableComb extends React.Component {
 
     var obj = this.props.value
     this.order = new Lesson().order(this.props.type, 'pinyin' , obj['hanzi'] || ''  )
-    var orderIdx = 0
-    var combIdx =  0//obj.pinyin.length-1
+    var orderIdx = 1
+    var combIdx =  1//obj.pinyin.length-1
     this.isChar = this.props.type == 'Character(s)' ? true : false
 
     if(this.isChar){
@@ -71,21 +71,21 @@ export default class SwipeableComb extends React.Component {
   }
   horizontalSequence(dir1, dir2) {
     var element = this.input
-      element.classList.add('sw' + dir1)
-      if(element.classList.contains('show')) element.classList.add('hide')
-      this.delayCss(element, 'sw' + dir2)
-        .then(() => this.delayCss(element, 'sw' + dir1))
-        .then(() => this.delayCss(element, 'sw' + dir2))
+      element.classList.add('animate-' + dir1)
+
+      this.delayCss(element, 'animate-' + dir2)
+        .then(() => this.delayCss(element, 'animate-' + dir1))
+        .then(() => this.delayCss(element, 'animate-' + dir2))
         .then(()=>this.reloadEllipsis())
   }
 
   verticalSequence(dir1, dir2){
     var element = this.input
-    element.classList.add('sw' + dir1)
-    if(element.classList.contains('show')) element.classList.add('hide')
-    this.delayCss(element, 'sw' + dir2)
-      .then(() => this.delayCss(element, 'sw' + dir1))
-      .then(() => this.delayCss(element, 'sw' + dir2))
+    element.classList.add('animate-' + dir1)
+
+    this.delayCss(element, 'animate-' + dir2)
+      .then(() => this.delayCss(element, 'animate-' + dir1))
+      .then(() => this.delayCss(element, 'animate-' + dir2))
       .then(()=>this.reloadEllipsis())
   }
   //swipe events
@@ -209,14 +209,13 @@ export default class SwipeableComb extends React.Component {
   }
   render() {
     return (
-      <FormGroup>
-        <div id="adviceOrder">{this.order[this.state.orderIdx]}</div>
-        <label>{this.props.type.toUpperCase()}: </label>
-        <div id="iptCont">
-          <div id="adviceExp"><i><b>&#8592;</b>&nbsp;explore&nbsp;<b>&#8594;</b></i></div>
+      <FormGroup className="swipeables">
+        <div className="swipeables__label--order">{this.order[this.state.orderIdx]}</div>
+        <label className="swipeables__label">{this.props.type.toUpperCase()}: </label>
+        <div className="swipeables--wrapper">
+          <div className="swipeables__label--explore"><i><b>&#8592;</b>&nbsp;explore&nbsp;<b>&#8594;</b></i></div>
           <Input
             readOnly
-            className='swipeable'
             value={this.state.value}
             onChange={this.OnTextChange}
             onTouchStart={this.handleTouchStart}
@@ -228,7 +227,7 @@ export default class SwipeableComb extends React.Component {
         </div>
         
        
-        <div id="adviceNxt"><span>&#8592;</span> <i>prev | next</i> <span>&#8594;</span></div>
+        <div className="swipeables__label--next"><span>&#8592;</span> <i>prev | next</i> <span>&#8594;</span></div>
       
         
       </FormGroup>

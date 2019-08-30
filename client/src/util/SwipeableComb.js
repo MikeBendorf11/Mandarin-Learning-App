@@ -77,11 +77,11 @@ export default class SwipeableComb extends React.Component {
   horizontalSequence(dir1, dir2) {
     
     this.group.forEach(element => {
-      element.classList.add('sw' + dir1)
+      element.classList.add('animate-' + dir1)
       if(element.classList.contains('show')) element.classList.add('hide')
-      this.delayCss(element, 'sw' + dir2)
-        .then(() => this.delayCss(element, 'sw' + dir1))
-        .then(() => this.delayCss(element, 'sw' + dir2))
+      this.delayCss(element, 'animate-' + dir2)
+        .then(() => this.delayCss(element, 'animate-' + dir1))
+        .then(() => this.delayCss(element, 'animate-' + dir2))
         .then(()=>{
           if(element.classList.contains('show')) element.classList.remove('hide')
         })
