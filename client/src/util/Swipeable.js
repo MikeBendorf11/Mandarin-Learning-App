@@ -123,12 +123,12 @@ export default class SwipeableComb extends React.Component {
         if(this.input.clientWidth < this.input.scrollWidth){
           if(this.previousScrollLeft === 0) return
           else if(this.previousScrollLeft === this.input.scrollLeft 
-            && this.swipeCount < 5){
+            && this.swipeCount < 4){
             this.swipeCount++
             return  
           }  
           //forcing to evaluate once more in case previous condition became async
-          else if (this.swipeCount < 5) return
+          else if (this.swipeCount < 4) return
         }
         this.swipeCount = 0
         this.input.style.textOverFlow = 'unset'

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Nav, NavItem, NavLink } from 'reactstrap';
-import '../style/main.css';
+import '../style/main.scss';
 
 export default class Example extends React.Component {
   render() {
@@ -8,14 +8,12 @@ export default class Example extends React.Component {
       <div >
         <Nav tabs>
           <NavItem>
-            <NavLink href="#" active>Review</NavLink>
+            <NavLink href="#main" active>&nbsp;&nbsp;</NavLink>
           </NavItem>
           <NavItem>
-            <NavLink href="#" active>Search</NavLink>
+            <NavLink href="#"></NavLink>
           </NavItem>
-          <NavItem>
-            <NavLink href="#" active>Links</NavLink>
-          </NavItem>
+          
         </Nav>
       </div>
     );

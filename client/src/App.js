@@ -1,11 +1,11 @@
 import React from 'react';
 import Nav from './components/nav'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Dropdown from './components/dropdown'
+import Menu from './components/menu'
 import Review from './Review';
 import {observable, computed, autorun} from 'mobx'
 import Unit from './util/UnitModel'
-
+import './style/App.css'
 
 var unit = new Unit(
   {
@@ -46,10 +46,16 @@ var unit = new Unit(
 
 function App() {
   return (
-    <div className="App">
-      <Nav/>
-      <Dropdown/>
+    <div className={'main-container'}>
+      
+      <Nav/> 
+      <Menu />
       <Review unit={unit}/>      
+      
+      
+        
+      
+      
     </div>
   );
 }
