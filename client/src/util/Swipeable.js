@@ -208,12 +208,13 @@ export default class SwipeableComb extends React.Component {
     }
   }
   render() {
+    var visibility = this.props.helpShows
     return (
       <FormGroup className="swipeables">
-        <div className="swipeables__label--order">{this.order[this.state.orderIdx]}</div>
-        <label className="swipeables__label">{this.props.type.toUpperCase()}: </label>
+        <div className="swipeables__label--order" >{this.order[this.state.orderIdx]}</div>
+        <label className="swipeables__label" style={{visibility}}>{this.props.type.toUpperCase()}: </label>
         <div className="swipeables--wrapper">
-          <div className="swipeables__label--explore"><i><b>&#8592;</b>&nbsp;explore&nbsp;<b>&#8594;</b></i></div>
+          <div className="swipeables__label--explore" style={{visibility}}><i><b>&#8592;</b>&nbsp;explore&nbsp;<b>&#8594;</b></i></div>
           <Input
             readOnly
             value={this.state.value}
@@ -227,7 +228,7 @@ export default class SwipeableComb extends React.Component {
         </div>
         
        
-        <div className="swipeables__label--next"><span>&#8592;</span> <i>prev | next</i> <span>&#8594;</span></div>
+        <div className="swipeables__label--next" style={{visibility}}><span>&#8592;</span> <i>prev | next</i> <span>&#8594;</span></div>
       
         
       </FormGroup>
