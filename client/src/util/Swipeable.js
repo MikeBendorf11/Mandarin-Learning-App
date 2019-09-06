@@ -17,8 +17,8 @@ export default class SwipeableComb extends React.Component {
 
     var obj = this.props.value
     this.order = new Lesson().order(this.props.type, 'pinyin' , obj['hanzi'] || ''  )
-    var orderIdx = 1
-    var combIdx =  1//obj.pinyin.length-1
+    var orderIdx = 0
+    var combIdx =  0//obj.pinyin.length-1
     this.isChar = this.props.type == 'Character(s)' ? true : false
 
     if(this.isChar){
@@ -49,7 +49,7 @@ export default class SwipeableComb extends React.Component {
     this.labelGroup = ReactDOM.findDOMNode(this)
     this.input = this.labelGroup.getElementsByTagName('input')[0]
     this.reloadEllipsis()
-    
+
   }
 
   delayCss(element, cssClass) {
@@ -117,16 +117,16 @@ export default class SwipeableComb extends React.Component {
         //prev char
       }
       else if (xDiff > 0 && !this.isChar) {//left for combs
-        
+
         //left motion
         //if text overflows
         if(this.input.clientWidth < this.input.scrollWidth){
           if(this.previousScrollLeft === 0) return
-          else if(this.previousScrollLeft === this.input.scrollLeft 
+          else if(this.previousScrollLeft === this.input.scrollLeft
             && this.swipeCount < 4){
             this.swipeCount++
-            return  
-          }  
+            return
+          }
           //forcing to evaluate once more in case previous condition became async
           else if (this.swipeCount < 4) return
         }
@@ -194,7 +194,7 @@ export default class SwipeableComb extends React.Component {
   }
 
   reloadEllipsis(){
-    if(this.input.clientWidth < this.input.scrollWidth) 
+    if(this.input.clientWidth < this.input.scrollWidth)
       this.input.classList.add('hide-overflow')
   }
 
@@ -209,9 +209,14 @@ export default class SwipeableComb extends React.Component {
   }
   render() {
     var visibility = this.props.helpShows
+    var nextOrder = this.state.orderIdx+1 > this.order.length-1 ? 0 : this.state.orderIdx +1
+    var prevOrder = this.state.orderIdx-1 < 0 ? this.order.length-1 : this.state.orderIdx-1
+
     return (
       <FormGroup className="swipeables">
-        <div className="swipeables__label--order" >{this.order[this.state.orderIdx]}</div>
+        <div className="swipeables__label--order" style={{visibility}}>{this.order[prevOrder] } <b> ↑ </b></div>
+        <div className="swipeables__label--order" style={{visibility}}>{this.order[this.state.orderIdx]} <b> - </b></div>
+        <div className="swipeables__label--order" style={{visibility}}>{this.order[nextOrder]} <b>↓</b></div>
         <label className="swipeables__label" style={{visibility}}>{this.props.type.toUpperCase()}: </label>
         <div className="swipeables--wrapper">
           <div className="swipeables__label--explore" style={{visibility}}><i><b>&#8592;</b>&nbsp;explore&nbsp;<b>&#8594;</b></i></div>
@@ -226,11 +231,11 @@ export default class SwipeableComb extends React.Component {
             onBlur={(e)=>e.target.setAttribute('readonly', '')}
           />
         </div>
-        
-       
+
+
         <div className="swipeables__label--next" style={{visibility}}><span>&#8592;</span> <i>prev | next</i> <span>&#8594;</span></div>
-      
-        
+
+
       </FormGroup>
     )
   }

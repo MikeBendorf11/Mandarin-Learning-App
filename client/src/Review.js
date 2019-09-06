@@ -35,9 +35,12 @@ class Review extends React.Component {
     var visibility = this.state.helpIsVisible ? 'visible': 'hidden'
 
     return (
-      <div className="review">
-        <QuestionIcon onClick={()=>{
-           this.setState({helpIsVisible: !this.state.helpIsVisible})
+      <div color="black" className="review">
+        <QuestionIcon onClick={(e)=>{
+          this.setState({helpIsVisible: !this.state.helpIsVisible})
+          if(!this.state.helpIsVisible) e.target.setAttribute('fill','yellow')
+          else e.target.setAttribute('fill','black')
+
           }}/>
         <div className="character">
           <Swipeable
@@ -64,4 +67,3 @@ class Review extends React.Component {
 }
 
 export default Review
- 

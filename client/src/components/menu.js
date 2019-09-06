@@ -28,7 +28,7 @@ export default class Example extends React.Component{
     swipe.onUp(()=>{})
     swipe.onDown(()=>{})
     swipe.addListener()
-    
+
   }
   hideMenu(){
     this.element.classList.remove('menu-open')
@@ -47,22 +47,22 @@ export default class Example extends React.Component{
       <div className={'menu-container'} >
 
       <div className={'menu-item-container'} onClick={()=>{
-        var doc = window.document;
+        /*var doc = window.document;
         var docEl = doc.documentElement;
-      
+
         var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
         var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
-      
+
         if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
           requestFullScreen.call(docEl);
         }
         else {
           cancelFullScreen.call(doc);
-        }
+        }*/
       }}>
-        <DrawIcon color={'#495057'} className={'menu__icon'}/>   
+        <DrawIcon color={'#495057'} className={'menu__icon'}/>
         <span className={'menu__description'}>Draw</span>
-      </div>      
+      </div>
       <div className={'menu-item-container'}>
         <SearchIcon color={'#495057'} className={'menu__icon'}/>
         <span className={'menu__description'}>Search</span>
@@ -81,8 +81,8 @@ export default class Example extends React.Component{
       </div>
 
       </div>
-    </div>  
-    
+    </div>
+
 
     )
   }
