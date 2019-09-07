@@ -26,7 +26,7 @@ class Unit {
   }
 
   @computed get report(){
-    return this.char.pinyin
+    return this.char.hanzi
   }
   /**
    * @param {Object} comb: { 

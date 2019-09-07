@@ -1,8 +1,9 @@
 import React from 'react';
-import Nav from './components/nav'
+import Nav from './components/Nav'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Menu from './components/menu'
-import Review from './Review';
+import Menu from './components/Menu'
+import Search from './components/Search'
+import Review from './components/Review';
 import {observable, computed, autorun} from 'mobx'
 import Unit from './util/UnitModel'
 import './style/App.css'
@@ -49,9 +50,9 @@ function App() {
     <div className={'main-container'}>
       
       <Nav/> 
-      <Menu />
-      <Review unit={unit}/>      
-      
+      <Menu unit={unit}/>
+      {/* <Review unit={unit}/>       */}
+      <Search unit={unit} />
       
         
       
