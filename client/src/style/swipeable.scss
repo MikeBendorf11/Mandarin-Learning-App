@@ -4,45 +4,25 @@
 
 .review{
   .character{
-    padding: 0 20%;
-    margin: 10px auto;
+    //padding: 0 10%;
+   // margin: 10px auto;
     input{
       font-size: 2em;
+      background-color: transparent; 
     }
 
   }
 
   .combination{
-    padding: 0 10%;
+    //padding: 0 10%;
     input{
       //font-size: 1.2em;
-      min-height: 60px;
+      background-color: transparent; 
     }
   }
 }
 
-.swipeables--wrapper{
-  display: flex;
-  position: relative;
-  left: -10px;
-  background-image:
-    linear-gradient(to left, rgb(155, 149, 123), transparent);
-  border-radius: 5%;
-  .swipeables__label--explore{
-    width: 10px;
-    position: relative;
-    top: 30px;
-    left: -5px;
-    transform: rotate(-90deg);
-    font-size: .9em;
-    opacity: .85;
-    b{
-      font-size: 1.5em;
-      position: relative;
-      top: 3px;
-    }
-  }
-}
+
 
 .swipeables__label{
   margin: 0;
@@ -54,17 +34,17 @@
   border-radius: 5% 0 0 0;
 }
 .swipeables__label--order{
-  text-align: right;
-  padding-right: 20px;
-  position: relative;
-  top: 82px;
-  left: 0;
-  z-index: 1;
+  float: right;
+  width: 80px;
+  margin: 0 0 -80px 0; 
   font-size: .9em;
   color: rgba(155, 149, 123,.8);
   b {
     font-size: 1.5em;
     line-height: 0;
+  }
+  div{
+    height: 30px;;
   }
 }
 .swipeables__label--next{
@@ -81,16 +61,25 @@
     top: -3px;
   }
 }
+.swipeables__label--count{
+  border: 1px solid greenyellow;
+  padding: 0 5px;
+  position: fixed;
+}
 
+.swipeables--input{
+  
+  
+  min-height: 80px;
+  text-align: center;
+  position: relative;
+  left: 0;
+  top: 0;
+  transition-property: opacity, left, top;
+  transition-duration: .3s;
+}
 .swipeables{
-  input{
-    text-align: center;
-    position: relative;
-    left: 0;
-    top: 0;
-    transition-property: opacity, left, top;
-    transition-duration: .3s;
-  }
+  margin: 0;
   .animate-right{
     opacity: 0;
     left:100px

@@ -16,7 +16,7 @@ var log = (a) => console.log(a)
 class Review extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { helpIsVisible : false}
+    this.state = { helpIsVisible : true}
   }
 
   getFontSize(textType){
@@ -43,15 +43,15 @@ class Review extends React.Component {
           this.setState({helpIsVisible: !this.state.helpIsVisible})
           if(!this.state.helpIsVisible) e.target.setAttribute('fill','yellow')
           else e.target.setAttribute('fill','black')
-
           }}/>
         <div className="character">
           <Swipeable
+            id={this.props.unit.id}
             value={char}
             type={'Character(s)'}
             helpShows={visibility}
             order={orderChar}
-          /> <br></br>
+          />
         </div>
         <div className='combination'>
           <Swipeable
@@ -59,7 +59,7 @@ class Review extends React.Component {
             type={'Short Combination(s)'}
             helpShows={visibility}
             order={orderComb}
-          /><br></br>
+          />
           <Swipeable
             value={long}
             type={'Long Combination(s)'}

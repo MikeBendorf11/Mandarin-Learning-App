@@ -17,8 +17,6 @@ export default class SwipeableComb extends React.Component {
 
     var obj = this.props.value
     var order = this.props.order
-
-    //this.order = new Lesson().order(this.props.type, 'pinyin' , obj['hanzi'] || ''  )
     var orderIdx = 0
     var combIdx =  0//obj.pinyin.length-1
     this.isChar = this.props.type == 'Character(s)' ? true : false
@@ -222,23 +220,30 @@ export default class SwipeableComb extends React.Component {
 
     return (
       <FormGroup className="swipeables">
-        <div className="swipeables__label--order" style={{visibility}}>{order[prevOrder] } <b> ↑ </b></div>
-        <div className="swipeables__label--order" style={{visibility}}>{order[this.state.orderIdx]} <b> - </b></div>
-        <div className="swipeables__label--order" style={{visibility}}>{order[nextOrder]} <b>↓</b></div>
-        <label className="swipeables__label" style={{visibility}}>{this.props.type.toUpperCase()}: </label>
-        <div className="swipeables--wrapper">
-          <div className="swipeables__label--explore" style={{visibility}}><i><b>&#8592;</b>&nbsp;explore&nbsp;<b>&#8594;</b></i></div>
-          <Input
-            readOnly
-            value={this.state.value}
-            onChange={this.OnTextChange}
-            onTouchStart={this.handleTouchStart}
-            onTouchMove={(e)=>{this.handleTouchMove(e);
-              e.target.setAttribute('readonly', '')}}
-            onClick={(e)=>{this.toggleWritable(e); }}
-            onBlur={(e)=>e.target.setAttribute('readonly', '')}
-          />
+        
+        <div className="swipeables__label--order" style={{visibility}}>
+          <div></div>
+        <b> ↑ </b> {order[prevOrder] } <br></br>
+        <b> - </b>{order[this.state.orderIdx]} <br></br>
+        <b> ↓ </b> {order[nextOrder]} <br></br>
         </div>
+
+        <label className="swipeables__label" 
+               style={{visibility}}>{this.props.type.toUpperCase()}: </label>
+        <div className="swipeables__label--count">{this.isChar? this.props.id: this.state.combIdx}
+        
+        </div>
+
+        <Input className="swipeables--input"
+          readOnly
+          value={this.state.value}
+          onChange={this.OnTextChange}
+          onTouchStart={this.handleTouchStart}
+          onTouchMove={(e)=>{this.handleTouchMove(e);
+            e.target.setAttribute('readonly', '')}}
+          onClick={(e)=>{this.toggleWritable(e); }}
+          onBlur={(e)=>e.target.setAttribute('readonly', '')}
+        />
 
 
         <div className="swipeables__label--next" style={{visibility}}><span>&#8592;</span> <i>prev | next</i> <span>&#8594;</span></div>
