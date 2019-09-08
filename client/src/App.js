@@ -6,6 +6,8 @@ import Search from './components/Search'
 import Review from './components/Review';
 import {observable, computed, autorun} from 'mobx'
 import Unit from './util/UnitModel'
+import Lesson from "./util/Lesson"
+
 import './style/App.css'
 
 var unit = new Unit(
@@ -14,7 +16,7 @@ var unit = new Unit(
     learnedId: 22,
     level: 1,
     consult: true,
-    //char single(doesn't have figurative) or multiple
+    
     /**todo:
      * add commas on multiple pinyin so I don't have to call api for comb pinyin
      * match short and long comb order
@@ -43,16 +45,17 @@ var unit = new Unit(
 //unit.addComb({type1:'short',type2:'hanzi'}, '晚')
 // unit.deleteComb({type1:'short', index:1})
  //console.log(unit.data.short)
-
+var lesson = new Lesson('pinyin')
+console.log(lesson)
 
 function App() {
   return (
     <div className={'main-container'}>
       
       <Nav/> 
-      <Menu unit={unit}/>
-      {/* <Review unit={unit}/>       */}
-      <Search unit={unit} />
+      <Menu lesson={lesson} unit={unit}/>
+      <Review lesson={lesson} unit={unit}/>      
+      {/* <Search unit={unit} /> */}
       
         
       

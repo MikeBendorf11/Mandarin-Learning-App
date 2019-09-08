@@ -33,6 +33,9 @@ class Review extends React.Component {
     var short = this.props.unit.short
     var long = this.props.unit.long
     var visibility = this.state.helpIsVisible ? 'visible': 'hidden'
+    var lesson = this.props.lesson
+    var orderChar = char.hanzi.length ==1? lesson.order.singleCh : lesson.order.doubleCh
+    var orderComb = lesson.order.combs
 
     return (
       <div color="black" className="review">
@@ -47,6 +50,7 @@ class Review extends React.Component {
             value={char}
             type={'Character(s)'}
             helpShows={visibility}
+            order={orderChar}
           /> <br></br>
         </div>
         <div className='combination'>
@@ -54,11 +58,13 @@ class Review extends React.Component {
             value={short}
             type={'Short Combination(s)'}
             helpShows={visibility}
+            order={orderComb}
           /><br></br>
           <Swipeable
             value={long}
             type={'Long Combination(s)'}
             helpShows={visibility}
+            order={orderComb}
           />
         </div>
       </div>

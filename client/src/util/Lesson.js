@@ -1,13 +1,28 @@
-export default class Lesson {
-  constructor() {
+ 
+ import {observable, computed, autorun} from 'mobx'
+
+ class Lesson {
+   @observable order
+  /**
+   * @param {string} type2 : pinyin now, later hanzi or literal
+   * props: orderSinChar, orderDouChar, orderComb
+   */
+  constructor(type2) {
+    this.order = {
+      singleCh: this.getOrder('Character(s)', type2, 's' ),
+      doubleCh: this.getOrder('Character(s)', type2, 'ss'),
+      combs: this.getOrder('Short Combination(s)', type2, ''),
+    }
   }
   /**
    *
    * @param {string} type char or comb
    * @param {string} startFrom hanzi, pinyin, literal, figurative
-   * @param {string} hanzi for type char use char.hanzi
+   * @param {string} for type char only, use char.hanzi
+   * 
+   * char single(doesn't have figurative) or multiple
    */
-  order(type, startFrom, hanzi){
+  getOrder(type, startFrom, hanzi){
     var result = [];
     var properties = []
     result.push(startFrom)
@@ -36,33 +51,6 @@ export default class Lesson {
     }
     return result
   }
-
-  charOrder(startfrom, hanzi) {
-    var result = []
-    var properties = properties = ['hanzi', 'pinyin', 'literal', 'figurative']
-
-    result.push(startfrom)
-
-    if (hanzi.length > 1){
-      properties.forEach(prop => {
-        if(prop != startfrom) result.push(prop)
-      })
-    }
-    else {
-      properties.forEach(prop => {
-        if(prop != startfrom && prop != 'figurative')
-          result.push(prop)
-      })
-    }
-    return result
-  }
-  combOrder(startfrom){
-    var properties = ['hanzi', 'pinyin','figurative']
-    var result = []
-    result.push(startfrom)
-    properties.forEach(prop=>{
-      if(prop != startfrom) result.push(prop)
-    })
-    return result
-  }
 }
+
+export default Lesson

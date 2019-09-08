@@ -1,0 +1,21 @@
+.search{
+  display: flex;
+  flex-wrap: wrap;
+  label{
+    flex-grow: 3;
+    flex-shrink: 0.5;
+    flex-basis: 100%;
+    display: block;
+  }
+  span{
+    flex: 1;
+    text-align: right;
+    padding: 0 10px;
+  }
+  input{
+    flex: 3;
+    width: unset;
+    display: unset;
+    margin: 0 10px 0 0;
+  }
+}

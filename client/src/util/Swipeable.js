@@ -16,16 +16,18 @@ export default class SwipeableComb extends React.Component {
     this.clickCount = 0
 
     var obj = this.props.value
-    this.order = new Lesson().order(this.props.type, 'pinyin' , obj['hanzi'] || ''  )
+    var order = this.props.order
+
+    //this.order = new Lesson().order(this.props.type, 'pinyin' , obj['hanzi'] || ''  )
     var orderIdx = 0
     var combIdx =  0//obj.pinyin.length-1
     this.isChar = this.props.type == 'Character(s)' ? true : false
 
     if(this.isChar){
-      var value = obj[this.order[orderIdx]]
+      var value = obj[order[orderIdx]]
     } else {
       this.combLength = obj.figurative.length
-      var value = obj[this.order[orderIdx]][combIdx]
+      var value = obj[order[orderIdx]][combIdx]
     }
 
     this.state = { orderIdx, combIdx, value }
@@ -34,12 +36,14 @@ export default class SwipeableComb extends React.Component {
   OnTextChange(e){
     var combIdx = this.state.combIdx
     var orderIdx = this.state.orderIdx
+    var order = this.props.order
+
     var value = {}
 
     if(this.isChar){
-      value = this.props.value[this.order[orderIdx]] = e.target.value
+      value = this.props.value[order[orderIdx]] = e.target.value
     } else {
-      value = this.props.value[this.order[orderIdx]][combIdx] = e.target.value
+      value = this.props.value[order[orderIdx]][combIdx] = e.target.value
     }
     this.setState({ orderIdx, combIdx, value })
   }
@@ -163,16 +167,18 @@ export default class SwipeableComb extends React.Component {
   getIndex(dir){
     var orderIdx = this.state.orderIdx
     var combIdx = this.state.combIdx
+    var order = this.props.order
+
     var value = {}
 
     switch(dir){
       case 'up':
-          orderIdx = this.state.orderIdx + 1 > this.order.length - 1 ?
+          orderIdx = this.state.orderIdx + 1 > order.length - 1 ?
           0 : this.state.orderIdx + 1
           break
       case 'down':
           orderIdx = this.state.orderIdx - 1 < 0 ?
-          this.order.length-1 : this.state.orderIdx -1
+          order.length-1 : this.state.orderIdx -1
           break
       case 'left':
           combIdx = this.state.combIdx + 1 > this.combLength -1 ?
@@ -185,9 +191,9 @@ export default class SwipeableComb extends React.Component {
     }
 
     if(this.isChar){
-      value = this.props.value[this.order[orderIdx]]
+      value = this.props.value[order[orderIdx]]
     }else{
-      value = this.props.value[this.order[orderIdx]][combIdx]
+      value = this.props.value[order[orderIdx]][combIdx]
     }
 
     this.setState({ orderIdx, combIdx, value })
@@ -209,14 +215,16 @@ export default class SwipeableComb extends React.Component {
   }
   render() {
     var visibility = this.props.helpShows
-    var nextOrder = this.state.orderIdx+1 > this.order.length-1 ? 0 : this.state.orderIdx +1
-    var prevOrder = this.state.orderIdx-1 < 0 ? this.order.length-1 : this.state.orderIdx-1
+    var order = this.props.order
+
+    var nextOrder = this.state.orderIdx+1 > order.length-1 ? 0 : this.state.orderIdx +1
+    var prevOrder = this.state.orderIdx-1 < 0 ? order.length-1 : this.state.orderIdx-1
 
     return (
       <FormGroup className="swipeables">
-        <div className="swipeables__label--order" style={{visibility}}>{this.order[prevOrder] } <b> ↑ </b></div>
-        <div className="swipeables__label--order" style={{visibility}}>{this.order[this.state.orderIdx]} <b> - </b></div>
-        <div className="swipeables__label--order" style={{visibility}}>{this.order[nextOrder]} <b>↓</b></div>
+        <div className="swipeables__label--order" style={{visibility}}>{order[prevOrder] } <b> ↑ </b></div>
+        <div className="swipeables__label--order" style={{visibility}}>{order[this.state.orderIdx]} <b> - </b></div>
+        <div className="swipeables__label--order" style={{visibility}}>{order[nextOrder]} <b>↓</b></div>
         <label className="swipeables__label" style={{visibility}}>{this.props.type.toUpperCase()}: </label>
         <div className="swipeables--wrapper">
           <div className="swipeables__label--explore" style={{visibility}}><i><b>&#8592;</b>&nbsp;explore&nbsp;<b>&#8594;</b></i></div>
