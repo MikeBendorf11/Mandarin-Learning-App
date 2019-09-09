@@ -46,7 +46,7 @@ var unit = new Unit(
 // unit.deleteComb({type1:'short', index:1})
  //console.log(unit.data.short)
 var lesson = new Lesson('pinyin')
-console.log(lesson)
+//console.log(lesson)
 
 function App() {
   return (
@@ -54,8 +54,8 @@ function App() {
       
       <Nav/> 
       <Menu lesson={lesson} unit={unit}/>
-      <Review lesson={lesson} unit={unit}/>      
-      {/* <Search unit={unit} /> */}
+      {/* <Review lesson={lesson} unit={unit}/>       */}
+      <Search lesson={lesson} unit={unit} />
       
         
       

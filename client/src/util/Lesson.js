@@ -8,11 +8,14 @@
    * props: orderSinChar, orderDouChar, orderComb
    */
   constructor(type2) {
+    this.charTypes2 = ['hanzi', 'pinyin', 'literal', 'figurative']
+    this.combTypes2 = ['hanzi', 'pinyin','figurative']
     this.order = {
       singleCh: this.getOrder('Character(s)', type2, 's' ),
       doubleCh: this.getOrder('Character(s)', type2, 'ss'),
       combs: this.getOrder('Short Combination(s)', type2, ''),
     }
+    
   }
   /**
    *
@@ -29,7 +32,7 @@
 
     switch(type){
       case 'Character(s)':
-        properties = ['hanzi', 'pinyin', 'literal', 'figurative']
+        properties = this.charTypes2
         if (hanzi.length > 1){
           properties.forEach(prop => {
             if(prop != startFrom) result.push(prop)
@@ -43,7 +46,7 @@
         }
         break
       case 'Short Combination(s)': case 'Long Combination(s)':
-        var properties = ['hanzi', 'pinyin','figurative']
+        var properties = this.combTypes2
         properties.forEach(prop=>{
           if(prop != startFrom) result.push(prop)
         })

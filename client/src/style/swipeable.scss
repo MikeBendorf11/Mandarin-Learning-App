@@ -12,7 +12,6 @@
     }
 
   }
-
   .combination{
     //padding: 0 10%;
     input{
@@ -21,8 +20,6 @@
     }
   }
 }
-
-
 
 .swipeables__label{
   margin: 0;
@@ -47,6 +44,10 @@
     height: 30px;;
   }
 }
+.swipeables__label--order-transition{
+  opacity: 0;
+  transition: 1s;
+}
 .swipeables__label--next{
   text-align: center;
   font-size: .9em;
@@ -67,9 +68,7 @@
   position: fixed;
 }
 
-.swipeables--input{
-  
-  
+.swipeables__input{
   min-height: 80px;
   text-align: center;
   position: relative;

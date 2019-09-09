@@ -230,11 +230,11 @@ export default class SwipeableComb extends React.Component {
 
         <label className="swipeables__label" 
                style={{visibility}}>{this.props.type.toUpperCase()}: </label>
-        <div className="swipeables__label--count">{this.isChar? this.props.id: this.state.combIdx}
+        <div className="swipeables__label--count">{this.isChar? this.props.id: this.state.combIdx+1}
         
         </div>
 
-        <Input className="swipeables--input"
+        <Input className="swipeables__input"
           readOnly
           value={this.state.value}
           onChange={this.OnTextChange}

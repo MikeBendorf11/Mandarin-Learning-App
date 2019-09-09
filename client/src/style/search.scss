@@ -1,21 +1,50 @@
+fieldset{
+  min-width: unset;
+    padding: 10px;
+    margin: 10px 0 0 0;
+    border: 1px solid lightblue;
+}
+legend{
+  display: initial;
+  width: initial;
+  max-width: initial;
+  padding: initial;
+  margin-bottom: initial;
+  font-size: initial;
+  line-height: initial;
+  color: initial;
+  white-space: initial;
+}
+
 .search{
+  margin: 5%;
   display: flex;
   flex-wrap: wrap;
-  label{
-    flex-grow: 3;
-    flex-shrink: 0.5;
-    flex-basis: 100%;
-    display: block;
-  }
-  span{
-    flex: 1;
-    text-align: right;
-    padding: 0 10px;
-  }
-  input{
-    flex: 3;
-    width: unset;
+}
+.search__input-char{
+    
+  // flex:.5;
+  //width: 100%;
+  display: inline-block;
+  margin: 0 10px 0 0;
+}
+.search__input-comb-sh{
+    flex:1;
+    width: 90%;
     display: unset;
     margin: 0 10px 0 0;
-  }
+}
+.search__label{
+  //width: 100px;
+  
+  // flex-grow: .5;
+  // flex-shrink: 0.5;
+  // flex-basis: 50%;
+  text-align: right;
+  padding: 0 10px;
+}
+
+.search__input-comb-lg{
+  width: 70vw;
+  display: unset;
 }
