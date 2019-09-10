@@ -21,10 +21,25 @@ legend{
   display: flex;
   flex-wrap: wrap;
 }
+
+.search-icon{
+  span{
+    font-size: 1.4em;
+    padding: 0 10px;
+  }
+}
+
+
+.input-container-group{
+  display:flex;
+  flex-wrap: wrap;
+}
+
+.input-container-single{
+  flex: 1 1 50%
+}
 .search__input-char{
-    
-  // flex:.5;
-  //width: 100%;
+  width: 90%;
   display: inline-block;
   margin: 0 10px 0 0;
 }
@@ -35,11 +50,6 @@ legend{
     margin: 0 10px 0 0;
 }
 .search__label{
-  //width: 100px;
-  
-  // flex-grow: .5;
-  // flex-shrink: 0.5;
-  // flex-basis: 50%;
   text-align: right;
   padding: 0 10px;
 }

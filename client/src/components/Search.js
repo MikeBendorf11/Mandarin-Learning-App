@@ -1,6 +1,6 @@
 import React from 'react'
 import {observer} from 'mobx-react'
-import { FormGroup, Input, Label } from 'reactstrap'
+import { InputGroup, FormGroup, Input, InputGroupAddon } from 'reactstrap'
 import '../style/search.scss'
 
 @observer
@@ -24,17 +24,22 @@ class Search extends React.Component{
     var long = this.props.unit.long
 
     return(
-
+      
       <FormGroup className="search">
+        <InputGroup className="search__top-group"> 
+        <div style={{flex: 1}}></div>
+        <InputGroupAddon className="search-icon" addonType="prepend">	&#8981;</InputGroupAddon>
+        <Input className="search__search-bar" defaultValue={char['hanzi']}/>      
+        </InputGroup>
+        
         <fieldset >
           <legend>Character(s): </legend>
-          <div style={{display:'flex', flexWrap:'wrap'}}>
+          <div className='input-container-group'>
             {this.props.lesson.charTypes2.map((value, i)=> 
-              <div style={{flex:1, flexShrink:1}}>
+              <div className='input-container-single'>
                 <span className='search__label'>{this.capitalize(value)}: </span>
                 <Input 
                   className="search__input-char"
-                  key={i}
                   defaultValue={char[value]} 
                   onChange={(e)=>{this.changeValue(e, value)}}
                 />
@@ -54,7 +59,6 @@ class Search extends React.Component{
                   {short[value].map((v,i)=>
                     <Input 
                     className="search__input-comb-sh"
-                    key={i}
                     defaultValue={short[value][i]} 
                     onChange={(e)=>{this.changeValue(e, value)}}
                     />            

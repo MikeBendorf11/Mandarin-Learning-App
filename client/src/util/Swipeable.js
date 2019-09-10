@@ -2,7 +2,6 @@ import React from 'react';
 import { FormGroup, Input } from 'reactstrap'
 import '../style/swipeable.scss'
 import ReactDOM from "react-dom";
-import Lesson from "./Lesson"
 
 export default class SwipeableComb extends React.Component {
   constructor(props) {
