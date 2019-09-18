@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Nav from './components/Nav'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -7,7 +8,6 @@ import Review from './components/Review';
 import {observable, computed, autorun} from 'mobx'
 import Unit from './util/UnitModel'
 import Lesson from "./util/Lesson"
-
 import './style/App.css'
 
 var unit = new Unit(
@@ -46,9 +46,15 @@ var unit = new Unit(
 // unit.deleteComb({type1:'short', index:1})
  //console.log(unit.data.short)
 var lesson = new Lesson('pinyin')
+
+
 //console.log(lesson)
 
 function App() {
+  fetch('/api/chars')
+  .then(res => res.json())
+  .then(data=>console.log(data))
+
   return (
     <div className={'main-container'}>
       
@@ -56,10 +62,7 @@ function App() {
       <Menu lesson={lesson} unit={unit}/>
       <Review lesson={lesson} unit={unit}/>      
       {/* <Search lesson={lesson} unit={unit} /> */}
-      
-        
-      
-      
+           
     </div>
   );
 }
