@@ -20,7 +20,7 @@ export default class Example extends React.Component{
     var swipe = new Swipe(this.element)
     swipe.onLeft(()=>{
       this.hideMenu()
-      document.body.requestFullscreen();
+      //document.body.requestFullscreen();
     })
     swipe.onRight(()=>{
       this.showMenu()

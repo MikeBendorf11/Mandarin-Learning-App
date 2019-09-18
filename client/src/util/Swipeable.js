@@ -223,7 +223,7 @@ export default class SwipeableComb extends React.Component {
         <div className="swipeables__label--order" style={{visibility}}>
           <div></div>
         <b> ↑ </b> {order[prevOrder] } <br></br>
-        <b> - </b>{order[this.state.orderIdx]} <br></br>
+        <b> -- </b>{order[this.state.orderIdx]} <br></br>
         <b> ↓ </b> {order[nextOrder]} <br></br>
         </div>
 

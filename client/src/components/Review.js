@@ -16,7 +16,7 @@ var log = (a) => console.log(a)
 class Review extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { helpIsVisible : true}
+    this.state = { helpIsVisible : false}
   }
 
   getFontSize(textType){

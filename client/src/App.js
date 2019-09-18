@@ -54,8 +54,8 @@ function App() {
       
       <Nav/> 
       <Menu lesson={lesson} unit={unit}/>
-      {/* <Review lesson={lesson} unit={unit}/>       */}
-      <Search lesson={lesson} unit={unit} />
+      <Review lesson={lesson} unit={unit}/>      
+      {/* <Search lesson={lesson} unit={unit} /> */}
       
         
       
