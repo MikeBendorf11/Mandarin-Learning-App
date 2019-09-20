@@ -184,7 +184,12 @@ function externalStorage(uri) {
     contentType: "application/json; charset=utf-8",
     dataType: "json",
     success: function (data, textStatus, jqXHR) {
-      console.log('Updated external storage.')
+      alert('Success: ' + data.status +
+      ', ' + data.statusText)
+    },
+    error: function (data) {
+      alert("Error : " + data.status +
+        ', ' + data.statusText);
     }
   });
 }
@@ -1031,7 +1036,7 @@ ionNew.onclick = () => {
 }
 ionSave.onclick = () => {
   externalStorage();
-  alert('Cloud updated')
+  //alert('Cloud updated')
 }
 /**
  * Get rid of undefined values when dealing with new chars
