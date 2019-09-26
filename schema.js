@@ -1,7 +1,15 @@
-const { GraphQLObjectType,
-        GraphQLInt,
-        GraphQLString,
-        GraphQlBool }= require('graphql')
+const axios = require('axios');
+const https = require('https')
+
+const {
+  GraphQLObjectType,
+  GraphQLInt,
+  GraphQLString,
+  GraphQLBoolean,
+  GraphQLList,
+  GraphQLSchema
+} = require('graphql');
+
 
 const CharType = new GraphQLObjectType({
   name: 'Char',
@@ -22,7 +30,7 @@ const CharType = new GraphQLObjectType({
 const ShortType = new GraphQLObjectType({
   name: 'Short',
   fields: () => ({
-    char: {type: CharType},
+    relatedChar: {type: CharType},
     hanzi: {type: GraphQLString},
     figurative: [{type: GraphQLString}],
   })
@@ -31,9 +39,36 @@ const ShortType = new GraphQLObjectType({
 const LongType = new GraphQLObjectType({
   name: 'Long',
   fields: () => ({
-    char: {type: CharType},
+    relatedChar: {type: CharType},
     hanzi: {type: GraphQLString},
     figurative: [{type: GraphQLString}]
   })
 })
 
+axios
+.get('http://api.myjson.com/bins/blpua')
+.then(res=>{
+  //units = JSON.parse(res.data)
+  //console.log(res.data)
+  units = res.data
+  units.forEach((v,i)=>{
+
+  })
+})
+
+class CharTree{
+	constructor(str){
+    this.order = str
+    this.chars = {}
+    Array.from(str).forEach(v=>this.chars[v] = new Char())
+    if(str.length>2){
+      this.getCombs(str)
+    }
+  }
+
+  getCombs(str){
+
+  }
+
+
+}

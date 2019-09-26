@@ -2,6 +2,20 @@ var express = require('express');
 var app = express();
 var path = require("path");
 const PORT = process.env.PORT || 4000
+const graphqlHTTP = require('express-graphql');
+const schema = require('./schema');
+const cors = require('cors');
+
+// Allow cross-origin
+app.use(cors());
+
+app.use(
+  '/graphql',
+  graphqlHTTP({
+    schema,
+    graphiql: true
+  })
+);
 
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/static/index.html'));
