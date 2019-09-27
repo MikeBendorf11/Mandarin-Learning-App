@@ -56,6 +56,7 @@ axios
   })
 })
 
+
 class CharTree{
 	constructor(str){
     this.order = str
@@ -69,6 +70,24 @@ class CharTree{
   getCombs(str){
 
   }
+}
 
+//the top parent
+class Single{
+  constructor(char, children){}
+}
+//one parent for every char
+class Short {
+  constructor(chars, parents, children){}
+}
+//single, and short(not repited singles)
+class Long{
+  constructor(chars, parents){}
+}
 
+/**chars: single subtlex or short subtlex */
+class Unit{
+  constructor(relevanceId, learnedId, level, consult, chars ){
+    this.tree = new CharTree(chars)
+  }
 }
