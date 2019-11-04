@@ -1,0 +1,29 @@
+mongo and static filesystem
+    by char
+      unicode - basic pinyin and meaning resource
+      strokes
+      units
+    by pinyin
+      chars
+for node
+    move functions to parse periodically
+    update db and file system for offline
+    fortune js graph support and single api for indexedDB
+    is filesystem, indexedDB and Mongo needed or just 2 out of 3?
+for graphql
+    create schema 
+    test with mongo
+    test offline
+react
+	char by level
+		drawing
+		char pinyin/literal is dropdown 
+		search bar by char / pinyin
+        suggestions
+        selection switches to lesson on search tab 
+        search by pinyin (types english but validates every vocal accents)
+	CRUD units, sentences
+	resources 
+      remember scroll
+      reload iframe
+	web workers
