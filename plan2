@@ -27,3 +27,16 @@ react
       remember scroll
       reload iframe
 	web workers
+
+  LIBRARIES
+
+graphql-genie fortune graphql graphql-tools lodash
+fortune-mongodb 
+
+  EXTRAS
+
+mongodb atlas online db
+
+node on heroku (https://medium.com/@AndreyAzimov/how-free-heroku-really-works-and-how-to-get-maximum-from-it-daa53f2b3c57)
+  static app pings to wake up
+  cloudflare free ssl
