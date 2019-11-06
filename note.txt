@@ -3,6 +3,6 @@ pinyin to accent
 https://toshuo.com/chinese-tools/pinyin-tone-tool/#
 
 Mobile external bin is updated when app reloaded
-https://api.myjson.com/bins/blpua
+https://api.myjson.com/bins/f9490
 	
 	
