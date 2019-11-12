@@ -5,8 +5,10 @@ const express = require('express'),
       app = express() ,
       path = require("path"),
       MongoClient = require('mongodb').MongoClient,
-      client = new MongoClient(process.env.mongoConn, { useNewUrlParser: true });
+      client = new MongoClient(process.env.MONGOCONN, { useNewUrlParser: true });
 const PORT = process.env.PORT || 3000
+
+console.log()
 
 app.use(bodyParser.json());
 
@@ -16,7 +18,7 @@ app.get('/', function (req, res) {
 
 app.post('/save',(rq,rs)=>{
   client.connect((err) => {
-    console.log(rq.body)
+    if(err) console.log(err)
     var dt = rq.body
 
     if(!dt || dt.id == 'undefined') 
@@ -42,6 +44,7 @@ app.post('/save',(rq,rs)=>{
 
 app.post('/load', (rq, rs)=>{
   client.connect((err) => {
+    if(err) console.log(err)
     const collection = client.db("chapp").collection("units");
     collection.find({}).toArray((err,docs)=>{
       var obj = err ? err : docs
