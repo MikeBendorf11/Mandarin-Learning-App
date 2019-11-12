@@ -1,36 +1,54 @@
-var express = require('express');
-var app = express();
-var path = require("path");
+require('dotenv').config({ silent: process.env.NODE_ENV === 'production' })
+
+const express = require('express'),
+      bodyParser = require('body-parser')
+      app = express() ,
+      path = require("path"),
+      MongoClient = require('mongodb').MongoClient,
+      config = require('./database'),
+      client = new MongoClient(process.env.mongoConn, { useNewUrlParser: true });
 const PORT = process.env.PORT || 3000
 
-const MongoClient = require('mongodb').MongoClient;
-
-const config = require('./database');
-
-const client = new MongoClient(config.database, { useNewUrlParser: true });
-
-client.connect((err, db) => {
-  const collection = client.db("test").collection("units");
-  1==2
-  // perform actions on the collection object
-  collection.updateOne({id:123}, {$set:{consult:false}})
-  collection.find({id:123}).toArray(function(err, docs) {
-      
-    console.log(docs)
-    client.close()
-    
-  });
-  
-});
+app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/static/index.html'));
 });
 
 app.post('/save',(rq,rs)=>{
+  client.connect((err) => {
+    console.log(rq.body)
+    var dt = rq.body
 
-  console.log(rq.query)
-  rs.json({aky: 'hi'})
+    if(!dt || dt.id == 'undefined') 
+      return rs.json({'resp': 'invalid data'})
+    
+    const collection = client.db("chapp").collection("units");
+    collection.updateOne({id: dt.id}, {$set:{
+      id: dt.id,
+      learnedId: dt.learnedId,
+      level: dt.level,
+      consult: dt.consult,
+      char: dt.char,
+      pronunciation: dt.pronunciation,
+      combinations: dt.combinations,
+      definitions: dt.definitions,
+    }}, (err, res)=>{ 
+      var obj = err ? err : res
+      //console.log(err,res)
+      rs.json(obj)
+    })
+  });
+})
+
+app.post('/load', (rq, rs)=>{
+  client.connect((err) => {
+    const collection = client.db("chapp").collection("units");
+    collection.find({}).toArray((err,docs)=>{
+      var obj = err ? err : docs
+      rs.json(obj)
+    })
+  })
 })
 
 app.use(express.static(__dirname + '/static'))

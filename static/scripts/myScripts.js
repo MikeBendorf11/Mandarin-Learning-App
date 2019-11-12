@@ -167,6 +167,15 @@ function pushChanges(displayUnit) {
   units[u.id].definitions.short = u.definitions.short;
   units[u.id].definitions.long = u.definitions.long;
   saveToIndexedDB(dbName, units[u.id]);
+  fetch('/save', {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    method: 'POST', 
+    body: JSON.stringify(units[u.id])})
+  .then(res=>{return res.json()})
+  .then(data=>console.log(data))
 }
 
 /**
@@ -203,8 +212,46 @@ function checkCookies() {
   }
 }
 
+function ping(ip, callback) {
+
+    if (!this.inUse) {
+        this.status = 'unchecked';
+        this.inUse = true;
+        this.callback = callback;
+        this.ip = ip;
+        var _that = this;
+        this.img = new Image();
+        this.img.onload = function () {
+            _that.inUse = false;
+            _that.callback(true);
+
+        };
+        this.img.onerror = function (e) {
+            if (_that.inUse) {
+                _that.inUse = false;
+                _that.callback(true, e);
+            }
+
+        };
+        this.start = new Date().getTime();
+        this.img.src = ip + "/?cachebreaker="+ new Date().getTime();;
+        this.timer = setTimeout(function () {
+            if (_that.inUse) {
+                _that.inUse = false;
+                _that.callback(false);
+            }
+        },100);
+    }
+}
 
 window.onload = function () {
+
+  (function herokuWakeUp(){
+    setTimeout(function () {
+      ping('http://thechapp.herokuapp.com', result=>console.log('herokuOnline',result))
+      herokuWakeUp()
+    }, 60000);
+  })()
 
   var index;
   checkDbExists(dbName).then(res => {
@@ -522,31 +569,21 @@ window.onload = function () {
         })
 
     } else {//no cookies, create uri cookie and storage from json
-      while (!uri) {
-        var code = prompt('Please enter your code:', 'f9490')
-        var uri = 'https://api.myjson.com/bins/' + code
-        $.getJSON(uri, (res) => {console.log(res)})
-          .done((res) => {
-            console.log(res)
-            units = res
-            storageFromBlank(dbName)
-              .then(()=>{
-                setCookie('rLevel', 0);
-                setCookie('rLevel0Id', 0)
-                setCookie('rLevel1Id', 0)
-                setCookie('rLevel2Id', 0)
-                setCookie('rLevel3Id', 0)
-                setCookie('rLevel4Id', 0)
-                setCookie('uri', uri)
-                document.write('Loading the app ...')
-
-                setTimeout(() => {
-                  window.location.reload()  
-                }, 5000);
-              })
-          })
-          .fail((err) => console.log(err))
-      }
+      $.post('/load', data=>{
+        units= data
+        storageFromBlank(this.dbName).then(()=>{
+            setCookie('rLevel', 0);
+            setCookie('rLevel0Id', 0)
+            setCookie('rLevel1Id', 0)
+            setCookie('rLevel2Id', 0)
+            setCookie('rLevel3Id', 0)
+            setCookie('rLevel4Id', 0)
+            document.write('Loading the app ...')
+            setTimeout(() => {
+              window.location.reload()  
+            }, 5000);
+        })
+      })
     }
   })
 
@@ -967,26 +1004,10 @@ revPron.onclick = () => {
 async function gTranslate(phrase) {
   //  console.log('here');
   if (!phrase) return new Promise(res => res(''));
-  phrase = phrase.replace('#', '')//google doesn't like #
-
-  var img = '<img src="images/GoogleTranslate1.png" width="30" height="25" alt="Google Translate" title="Google Translate"/>';
-  var url = 'https://translation.googleapis.com/language/translate/v2' + '?q=' + encodeURIComponent(phrase) + '&target=EN' + '&key=AIzaSyA8Hupp7Bd9QuzN5yMOoWJfD_hTZQDvrPo'
-
-  var xhr = new XMLHttpRequest();
+  
   return new Promise((resolve, reject) => {
-    xhr.open('POST', url);
-    xhr.onload = function () {
-      if (this.status == 200) {
-        data = JSON.parse(this.responseText);
-        //console.log(data);
-        resolve(img + data.data.translations[0].translatedText);
-      }
-    }
-    xhr.onerror = function () {
-      //console.log('error: ' + this.status);
-      reject(img + 'you are offline...');
-    }
-    xhr.send();
+    resolve('----')
+    reject('----')
   })
 }
 
