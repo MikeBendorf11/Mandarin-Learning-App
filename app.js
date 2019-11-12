@@ -5,7 +5,6 @@ const express = require('express'),
       app = express() ,
       path = require("path"),
       MongoClient = require('mongodb').MongoClient,
-      config = require('./database'),
       client = new MongoClient(process.env.mongoConn, { useNewUrlParser: true });
 const PORT = process.env.PORT || 3000
 
