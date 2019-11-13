@@ -280,11 +280,11 @@ window.onload = function () {
       ping('http://thechapp.herokuapp.com', result=>{
         if(result){
           compareUpdateDbs()
-          Console.log('heroku online', result)
+          console.log('heroku online', result)
         }
       })
       herokuWakeUp()
-    }, 6000); //ten minutes
+    }, 600000); //ten minutes
   })()
 
   var index;
