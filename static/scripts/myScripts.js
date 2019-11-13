@@ -176,6 +176,7 @@ function pushChanges(displayUnit) {
     body: JSON.stringify(units[u.id])})
   .then(res=>{return res.json()})
   .then(data=>console.log(data))
+  .catch(err=>console.log(err))
 }
 
 /**
@@ -240,17 +241,50 @@ function ping(ip, callback) {
                 _that.inUse = false;
                 _that.callback(false);
             }
-        },100);
+        },1500);
     }
+}
+//compares indexeddb and mongo
+function compareUpdateDbs() {
+  $.post('/load', units2 => {
+    units2.forEach((unit2, idx) => {
+      Object.keys(unit2).forEach(key => {
+        switch (key) {
+          case 'combinations':
+          case 'definitions':
+            Object.keys(unit2[key]).forEach(k => {
+              unit2[key][k].forEach((v, i) => {
+                if (unit2[key][k][i] != units[idx][key][k][i]) {
+                  pushChanges(units[idx])
+                  console.log(unit2[key][k][i], units[idx][key][k][i])
+                }
+              })
+            })
+            break;
+          case '_id': break;
+          default:
+            if (unit2[key] != units[idx][key]) {
+              pushChanges(units[idx])
+              console.log(unit2[key], units[idx][key])
+            }
+        }
+      })
+    })
+  })
 }
 
 window.onload = function () {
 
   (function herokuWakeUp(){
     setTimeout(function () {
-      ping('http://thechapp.herokuapp.com', result=>console.log('herokuOnline',result))
+      ping('http://thechapp.herokuapp.com', result=>{
+        if(result){
+          compareUpdateDbs()
+          Console.log('heroku online', result)
+        }
+      })
       herokuWakeUp()
-    }, 60000);
+    }, 6000); //ten minutes
   })()
 
   var index;

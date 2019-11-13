@@ -8,8 +8,6 @@ const express = require('express'),
       client = new MongoClient(process.env.MONGOCONN, { useNewUrlParser: true });
 const PORT = process.env.PORT || 3000
 
-console.log()
-
 app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
@@ -62,4 +60,3 @@ var server = app.listen(PORT, function(){
   console.log('listening ' + host +'' + port)
 })
 
-1==2
