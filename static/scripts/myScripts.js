@@ -175,8 +175,8 @@ function pushChanges(displayUnit) {
     method: 'POST', 
     body: JSON.stringify(units[u.id])})
   .then(res=>{return res.json()})
-  .then(data=>console.log(data))
-  .catch(err=>console.log(err))
+  .then(data=>console.log('success: ',data))
+  .catch(err=>console.log('error: ', err))
 }
 
 /**
@@ -256,7 +256,7 @@ function compareUpdateDbs() {
               unit2[key][k].forEach((v, i) => {
                 if (unit2[key][k][i] != units[idx][key][k][i]) {
                   pushChanges(units[idx])
-                  console.log(unit2[key][k][i], units[idx][key][k][i])
+                  console.log('updated: ',unit2[key][k][i], '|' ,units[idx][key][k][i])
                 }
               })
             })
@@ -265,7 +265,7 @@ function compareUpdateDbs() {
           default:
             if (unit2[key] != units[idx][key]) {
               pushChanges(units[idx])
-              console.log(unit2[key], units[idx][key])
+              console.log('updated: ',unit2[key],'|', units[idx][key])
             }
         }
       })
