@@ -11,8 +11,12 @@ const PORT = process.env.PORT || 3000
 app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname + '/static/index.html'));
+    res.sendFile(path.join(__dirname + '/static/index.html'));  
 });
+
+app.get('/env', (rq, rs)=>{
+  rs.send(process.env.NODE_ENV || 'production')
+})
 
 app.post('/save',(rq,rs)=>{
   client.connect((err) => {
