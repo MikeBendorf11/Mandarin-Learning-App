@@ -6,12 +6,12 @@ const express = require('express'),
       path = require("path"),
       MongoClient = require('mongodb').MongoClient,
       client = new MongoClient(process.env.MONGOCONN, { useNewUrlParser: true });
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 4000
 
 app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname + '/static/index.html'));  
+    res.sendFile(path.join(__dirname + '/client'));  
 });
 
 app.get('/env', (rq, rs)=>{
