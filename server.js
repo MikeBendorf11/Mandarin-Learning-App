@@ -53,7 +53,7 @@ app.post('/load', (rq, rs)=>{
       rs.json(obj)
     })
   })
-})
+}) 
 
 app.use(express.static(__dirname + '/static'))
 

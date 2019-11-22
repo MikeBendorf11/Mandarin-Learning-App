@@ -352,7 +352,7 @@ select{
     justify-content: flex-start;
     border-style: none;
     width: 100%; 
-    min-height: 525px;;
+    height: 100%;
     margin: 0;
     border-radius: 0;
     background: none;
@@ -370,6 +370,9 @@ select{
   #reviewCont{
     margin-top: 52px;
     min-height: 510px;
+  }
+  #root{
+    height: 510px
   }
   #pronReview{
     margin-top: 20px;

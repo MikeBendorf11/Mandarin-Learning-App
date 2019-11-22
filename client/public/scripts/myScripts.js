@@ -246,38 +246,53 @@ function ping(ip, callback) {
 }
 //compares indexeddb and mongo
 function compareUpdateDbs() {
-  $.post('/load', units2 => {
-    units2.forEach((unit2, idx) => {
-      Object.keys(unit2).forEach(key => {
-        switch (key) {
-          case 'combinations':
-          case 'definitions':
-            Object.keys(unit2[key]).forEach(k => {
-              unit2[key][k].forEach((v, i) => {
-                if (unit2[key][k][i] != units[idx][key][k][i]) {
+  let question = prompt('Do you want to update Mongo Units?')
+  if(question == 'notsecret'){
+    $.post('/load', units2 => {
+        units2.forEach((unit2, idx) => {
+          Object.keys(unit2).forEach(key => {
+            switch (key) {
+              case 'combinations':
+              case 'definitions':
+                Object.keys(unit2[key]).forEach(k => {
+                  unit2[key][k].forEach((v, i) => {
+                    if (unit2[key][k][i] != units[idx][key][k][i]) {
+                      pushChanges(units[idx])
+                      console.log('updated: ',unit2[key][k][i], '|' ,units[idx][key][k][i])
+                    }
+                  })
+                })
+                break;
+              case '_id': break;
+              default:
+                if (unit2[key] != units[idx][key]) {
                   pushChanges(units[idx])
-                  console.log('updated: ',unit2[key][k][i], '|' ,units[idx][key][k][i])
+                  console.log('updated: ',unit2[key],'|', units[idx][key])
                 }
-              })
-            })
-            break;
-          case '_id': break;
-          default:
-            if (unit2[key] != units[idx][key]) {
-              pushChanges(units[idx])
-              console.log('updated: ',unit2[key],'|', units[idx][key])
             }
-        }
+          })
+        })
       })
-    })
-  })
+  } else {
+    alert('Nice Try!')
+  }
 }
 
 window.onload = function () {
-
+  var cssUrls = [
+      "css/bootstrap.css",
+      "css/handwrite-style.css",
+      "css/myCss.css"
+    ]
+    cssUrls.forEach((v, i) => {
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = cssUrls[i]+ '?v=' + Date.now();
+      document.head.appendChild(link);
+    })
   $.get('/env', data=>{
-    if(data=='prod'){
-      console.log('here')
+    if(data=='production'){
+      console.log('Prod Env: Will update Mongo')
       (function herokuWakeUp(){
         setTimeout(function () {
           ping('http://thechapp.herokuapp.com', result=>{
@@ -289,7 +304,7 @@ window.onload = function () {
           herokuWakeUp()
         }, 600000); //ten minutes
       })()
-    }
+    } else console.log('Dev Env: Won\'t update Mongo')
   })
 
   var index;

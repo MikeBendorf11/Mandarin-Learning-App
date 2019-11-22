@@ -38,17 +38,7 @@
       document.head.appendChild(script);
     })
 
-    var cssUrls = [
-      "css/bootstrap.css",
-      "css/handwrite-style.css",
-      "css/myCss.css"
-    ]
-    cssUrls.forEach((v, i) => {
-      var link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = cssUrls[i]+ '?v=' + Date.now();
-      document.head.appendChild(link);
-    })
+    
   </script>
 
 </head>
@@ -170,7 +160,7 @@
 
         </div>
 
-      </div>
+      </div> 
     </div>
     <div id="root" class="tab-pane"></div>
     <div id="searchCont" class="tab-pane">
