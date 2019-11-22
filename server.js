@@ -6,7 +6,7 @@ const express = require('express'),
       path = require("path"),
       MongoClient = require('mongodb').MongoClient,
       client = new MongoClient(process.env.MONGOCONN, { useNewUrlParser: true });
-const PORT = process.env.PORT || 4000
+const PORT = process.env.PORT || 3000
 
 app.use(bodyParser.json());
 
