@@ -29,12 +29,12 @@
     "fortune": "^5.5.17",
     "graphql": "^14.5.8",
     "graphql-genie": "^0.4.23",
-    "graphql-tools": "^4.0.6"
+    "graphql-tools": "^4.0.6",
+    "dotenv": "^8.2.0",
+    "mongodb": "^3.3.3"
   },
   "devDependencies": {
     "nodemon": "^1.19.4",
-    "body-parser": "^1.19.0",
-    "dotenv": "^8.2.0",
-    "mongodb": "^3.3.3"
+    "body-parser": "^1.19.0"
   }
 }
