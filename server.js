@@ -10,7 +10,14 @@ const PORT = process.env.PORT || 3000
 
 app.use(bodyParser.json());
 
+process.env.NODE_ENV === 'production' ? app.use(express.static('client/build')): null
+
 app.get('/', function (req, res) {
+  if( process.env.NODE_ENV === 'production' ){
+    res.sendFile(path.join(__dirname + '/client/build/index.html'))
+    console.log(__dirname + '/client/build')
+  }
+  else
     res.sendFile(path.join(__dirname + '/client'));  
 });
 
