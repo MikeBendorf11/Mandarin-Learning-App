@@ -1,7 +1,7 @@
 import React from 'react';
 // import SwipeableComb2 from './util/SwipeableComb2'
 // import SwipeableChar from './util/SwipeableChar'
-import Swipeable from '../util/Swipeable'
+import Swipeable from '../util/swipeable'
 import {observer} from 'mobx-react'
 import QuestionIcon from 'react-ionicons/lib/IosHelpCircleOutline'
 
