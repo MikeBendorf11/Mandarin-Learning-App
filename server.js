@@ -6,20 +6,9 @@ const express = require('express'),
       path = require("path"),
       MongoClient = require('mongodb').MongoClient,
       client = new MongoClient(process.env.MONGOCONN, { useNewUrlParser: true });
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 4000
 
 app.use(bodyParser.json());
-
-process.env.NODE_ENV === 'production' ? app.use(express.static('client/build')): null
-
-app.get('/', function (req, res) {
-  if( process.env.NODE_ENV === 'production' ){
-    res.sendFile(path.join(__dirname + '/client/build/index.html'))
-    console.log(__dirname + '/client/build')
-  }
-  else
-    res.sendFile(path.join(__dirname + '/client'));  
-});
 
 app.get('/env', (rq, rs)=>{
   rs.send(process.env.NODE_ENV || 'production')
@@ -62,13 +51,19 @@ app.post('/load', (rq, rs)=>{
   })
 }) 
 
-app.use(express.static(__dirname + '/static'))
-
 app.get('/api/chars', (req, res) => {
   const chars = 'asd'
   res.json(chars)
 })
  
+if(process.env.NODE_ENV === 'production'){
+  app.use(express.static('client/build'))
+
+  app.get('*', (req,res)=>{
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+  })
+} 
+
 var server = app.listen(PORT, function(){
   var host = server.address().address;
   var port = server.address().port;
