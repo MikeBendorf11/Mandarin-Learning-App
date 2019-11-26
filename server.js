@@ -5,7 +5,8 @@ const express = require('express'),
       app = express() ,
       path = require("path"),
       MongoClient = require('mongodb').MongoClient,
-      client = new MongoClient(process.env.MONGOCONN, { useNewUrlParser: true });
+      client = new MongoClient(process.env.MONGOCONN, { useNewUrlParser: true }),
+      fs = require('fs')
 const PORT = process.env.PORT || 4000
 
 app.use(bodyParser.json());
@@ -50,6 +51,16 @@ app.post('/load', (rq, rs)=>{
     })
   })
 }) 
+
+app.post('/hanzi*', (rq,rs)=>{
+  console.log(rq.params[0])
+  if(rq.url=='/hanzi/all'){
+    rs.json(JSON.parse(fs.readFileSync('hanzi-writer/strokes-subtlex-1500.json.min')))
+  } else {
+    let char = rq.params[0].replace('/','')
+    rs.json(JSON.parse(fs.readFileSync('hanzi-writer/'+char+'.json')))
+  }
+})
 
 app.get('/api/chars', (req, res) => {
   const chars = 'asd'

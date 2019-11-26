@@ -5,7 +5,7 @@ import IchachaIcon from 'react-ionicons/lib/MdBook' //for ichacha
 import MdbgIcon from '../images/mdbg-small.png'
 import CpodIcon from '../images/cpod-small.png'
 import '../style/review.scss'
-import Swipe from '../util/Swipe'
+import Swipe from '../util/swipe'
 
 
 export default class Example extends React.Component{
