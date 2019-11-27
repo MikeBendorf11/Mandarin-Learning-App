@@ -632,10 +632,46 @@ window.onload = function () {
             setCookie('rLevel2Id', 0)
             setCookie('rLevel3Id', 0)
             setCookie('rLevel4Id', 0)
-            document.write('Loading the app ...')
-            setTimeout(() => {
-              window.location.reload()  
-            }, 5000);
+            document.body.innerHTML = '<p align="center"><img src="../images/loading2.gif"/></p>'
+            document.body.innerHTML += '<p align="center">Loading the app units ...</p>'
+        })
+        .then(()=>{
+          new Promise((res,rej)=>{$.post('/hanzi/all', data=>res(data))})
+          .then((data)=>{
+            let dbStkName = 'strokesDb', db, transaction, store, index
+            , request = window.indexedDB.open(dbStkName, 1);
+            request.onload = ()=>console.log('Strokes loaded')
+            request.onupgradeneeded = ()=> {
+              db = request.result
+              store = db.createObjectStore(dbStkName, { keyPath: 'id' })
+              index = store.createIndex('char', 'char', {unique: false})
+            }
+            request.onerror = (e)=>{
+              console.log(e, 'Error creating strokes db'); 
+            }
+            request.onsuccess = (e)=>{
+              db = request.result
+              transaction = db.transaction(dbStkName,'readwrite')
+              store = transaction.objectStore(dbStkName)   
+              index = store.index('char')
+              // store.put({
+              //   id: 0,
+              //   char: 'asd',
+              //   data: 'asdasd'
+              // })      
+              document.body.innerHTML += '<p  align="center">Loading the app char strokes ...</p>'
+              Object.keys(data).forEach((char,i)=>{
+                store.put({
+                  id: i,
+                  char: char,
+                  data: data[char]
+                })
+              })
+              setTimeout(() => {
+                window.location.reload()  
+              }, 5000);
+            }
+          })
         })
       })
     }

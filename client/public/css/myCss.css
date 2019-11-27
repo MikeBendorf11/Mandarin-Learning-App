@@ -558,3 +558,7 @@ select{
 picture{
   display:none;
 }
+
+#loadOverlay{
+  display: none;
+}
