@@ -278,6 +278,22 @@ function compareUpdateDbs() {
   }
 }
 
+//load stroke char data from indexedDB
+function loadStroke(char){
+  return new Promise((res,rej)=>{
+    let openRequest = window.indexedDB.open('strokesDb',1)
+    openRequest.onsuccess=()=>{
+      let request = openRequest.result
+        .transaction('strokesDb')
+        .objectStore('strokesDb')
+        .get(char)
+      request.onerror = (e)=>rej(e)
+      request.onsuccess = () => res(request.result.data)
+    }
+  })
+}
+
+
 window.onload = function () {
   var cssUrls = [
       "css/bootstrap.css",
@@ -643,8 +659,7 @@ window.onload = function () {
             request.onload = ()=>console.log('Strokes loaded')
             request.onupgradeneeded = ()=> {
               db = request.result
-              store = db.createObjectStore(dbStkName, { keyPath: 'id' })
-              index = store.createIndex('char', 'char', {unique: false})
+              store = db.createObjectStore(dbStkName, { keyPath: 'char' })
             }
             request.onerror = (e)=>{
               console.log(e, 'Error creating strokes db'); 
@@ -653,16 +668,10 @@ window.onload = function () {
               db = request.result
               transaction = db.transaction(dbStkName,'readwrite')
               store = transaction.objectStore(dbStkName)   
-              index = store.index('char')
-              // store.put({
-              //   id: 0,
-              //   char: 'asd',
-              //   data: 'asdasd'
-              // })      
               document.body.innerHTML += '<p  align="center">Loading the app char strokes ...</p>'
+              
               Object.keys(data).forEach((char,i)=>{
                 store.put({
-                  id: i,
                   char: char,
                   data: data[char]
                 })
