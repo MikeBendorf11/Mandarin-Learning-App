@@ -8,7 +8,6 @@ import Review from './components/review';
 import {observable, computed, autorun} from 'mobx'
 import unit from './util/unitModel'
 import lesson from "./util/lesson"
-import './style/app.css'
 
 var theunit = new unit(
   {

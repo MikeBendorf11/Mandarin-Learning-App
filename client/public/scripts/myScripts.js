@@ -295,6 +295,7 @@ function loadStroke(char){
 
 
 window.onload = function () {
+ 
   var cssUrls = [
       "css/bootstrap.css",
       "css/handwrite-style.css",
@@ -390,9 +391,9 @@ window.onload = function () {
           width = window.innerWidth;
           height = window.innerHeight;
 
-          var mySVG = ''
-          if (!ttg) {
-            mySVG = `
+         
+          
+          var mySVG = `
             <svg width="25cm" height="40cm" version="1.1"
               xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink">
           
@@ -480,7 +481,7 @@ window.onload = function () {
               <tspan x="0" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
             </text>
           </svg>`;
-          }
+          
           var Base64 = {
 
             // private property
@@ -629,13 +630,16 @@ window.onload = function () {
           // seaIpt.focus()
           //setTimeout(() => revSent.click(), 1000);
           //Load Frames and hide secondary ones
-          if (!ttg) {
-            iframe1.setAttribute('src', 'https://eng.ichacha.net/m')
-            iframe2.setAttribute('src', 'https://www.mdbg.net/chinese/dictionary#');
-            iframe3.setAttribute('src', 'https://chinesepod.com/dictionary/english-chinese/');
-            iframe2.style.display = 'none';
-            iframe3.style.display = 'none';
-          }
+          
+          $.get('/env', env=>{
+            if(env=='production'){
+              iframe1.setAttribute('src', 'https://eng.ichacha.net/m')
+              iframe2.setAttribute('src', 'https://www.mdbg.net/chinese/dictionary#');
+              iframe3.setAttribute('src', 'https://chinesepod.com/dictionary/english-chinese/');
+              iframe2.style.display = 'none';
+              iframe3.style.display = 'none';
+            }
+          })
         })
 
     } else {//no cookies, create uri cookie and storage from json
@@ -1047,7 +1051,7 @@ window.onload = function () {
   }
 }//ends window.onload
 //testing
-var ttg = false;
+
 /**Sentence Review */
 var loaded = false;
 var wait = 0;
