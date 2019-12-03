@@ -52,6 +52,7 @@
     "react-dev-utils": "^9.0.1",
     "react-dom": "^16.8.6",
     "react-ionicons": "^3.0.1",
+    "react-modal": "^3.11.1",
     "reactstrap": "^8.0.0",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",

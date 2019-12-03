@@ -1,3 +1,15 @@
 #react-draw{
   display: inline-block
 }
+
+#hzchar{
+  border: dotted 2px grey;
+  //background-image: url(../images/cpod-small.png);
+}
+
+.writer__button__container{
+  button{
+    display: inline;
+    width: unset
+  }
+}

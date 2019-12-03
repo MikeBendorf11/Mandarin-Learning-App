@@ -9,6 +9,7 @@ import {observable, computed, autorun} from 'mobx'
 import unit from './util/unitModel'
 import lesson from "./util/lesson"
 
+
 var theunit = new unit(
   {
     id: 12,
@@ -50,6 +51,7 @@ var thelesson = new lesson('pinyin')
 //console.log(lesson)
 
 function App() {
+
   fetch('/api/chars')
   .then(res => res.json())
   .then(data=>console.log(data))
