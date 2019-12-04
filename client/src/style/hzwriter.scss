@@ -8,8 +8,9 @@
 }
 
 .writer__button__container{
+  display: flex;
   button{
-    display: inline;
-    width: unset
+    flex:1;
+    width: '25%'
   }
 }

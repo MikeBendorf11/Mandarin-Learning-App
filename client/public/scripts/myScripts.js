@@ -212,37 +212,14 @@ function checkCookies() {
       setCookie(`rLevel${i}Id`, 0)
   }
 }
-
-function ping(ip, callback) {
-
-    if (!this.inUse) {
-        this.status = 'unchecked';
-        this.inUse = true;
-        this.callback = callback;
-        this.ip = ip;
-        var _that = this;
-        this.img = new Image();
-        this.img.onload = function () {
-            _that.inUse = false;
-            _that.callback(true);
-
-        };
-        this.img.onerror = function (e) {
-            if (_that.inUse) {
-                _that.inUse = false;
-                _that.callback(true, e);
-            }
-
-        };
-        this.start = new Date().getTime();
-        this.img.src = ip + "/?cachebreaker="+ new Date().getTime();;
-        this.timer = setTimeout(function () {
-            if (_that.inUse) {
-                _that.inUse = false;
-                _that.callback(false);
-            }
-        },1500);
-    }
+//a way to ping heroku
+function fetchTimeout(ms, promise) {
+  return new Promise(function(resolve, reject) {
+    setTimeout(function() {
+      reject(new Error("timeout"))
+    }, ms)
+    promise.then(resolve, reject)
+  })
 }
 //compares indexeddb and mongo
 function compareUpdateDbs() {
@@ -309,14 +286,15 @@ window.onload = function () {
     })
   $.get('/env', data=>{
     if(data=='production'){
-      console.log('Prod Env: Will update Mongo')
+      console.log('Prod Env: Will update Mongo');
       (function herokuWakeUp(){
         setTimeout(function () {
-          ping('http://thechapp.herokuapp.com', result=>{
-            if(result){
-              compareUpdateDbs()
-              console.log('heroku online', result)
-            }
+          fetchTimeout(5000, fetch('http://thechapp.herokuapp.com'))
+          .then(function(response) {
+            console.log('heroku online, comparing Dbs')
+            compareUpdateDbs()
+          }).catch(function(error) {
+            console.log('heroku offline or no internet')
           })
           herokuWakeUp()
         }, 600000); //ten minutes

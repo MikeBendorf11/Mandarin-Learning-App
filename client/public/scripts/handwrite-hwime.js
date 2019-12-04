@@ -272,8 +272,8 @@ MdbgHwIme.prototype.sendStrokesToServer = function() {
 	
 	this.loadingIndicator.fadeIn(100);
 
-	clearTimeout(timeout)	
-	timeout = setTimeout(()=>{
+	clearTimeout(fetchTimeout)	
+	fetchTimeout = setTimeout(()=>{
 		
 		var strokeData = this.getStrokeData();
 		var self = this;
@@ -284,7 +284,7 @@ MdbgHwIme.prototype.sendStrokesToServer = function() {
 }
 //for use above
 //TODO: clear this delay once character discovery is done on own server
-var timeout;
+var fetchTimeout;
 
 MdbgHwIme.prototype.finishStroke = function() {
 	this.resetPaging();
