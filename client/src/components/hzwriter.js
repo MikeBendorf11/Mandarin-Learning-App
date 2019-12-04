@@ -8,17 +8,17 @@ import Modal from 'react-modal';
 import HanziWriter from 'hanzi-writer'
 
 const customStyles = {
-    // content : {
-    //   top                   : '50%',
-    //   left                  : '50%',
-    //   right                 : 'auto',
-    //   bottom                : 'auto',
-    //   marginRight           : '-50%',
-    //   transform             : 'translate(-50%, -50%)'
-    // }
+    content : {
+      top                   : '50%',
+      left                  : '50%',
+      right                 : 'auto',
+      bottom                : 'auto',
+      marginRight           : '-50%',
+      transform             : 'translate(-50%, -50%)'
+    }
   };
   
-export default class hawriter extends React.Component {
+export default class hzwriter extends React.Component {
     constructor(props) {
         super(props)
         this.writer = {}
@@ -26,25 +26,31 @@ export default class hawriter extends React.Component {
         this.state = {
             showModal: false,
             charIndex: 0,
-            charLength: 0
+            charLength: 0,
+            pinyin: []
         };
     }
     handleNextChar=()=>{
         
         let charIndex =  this.state.charIndex+1 > this.state.charLength-1 ? 0 : this.state.charIndex +1
-        this.setState({ charIndex })
-        this.quizChar(this.char[this.state.charIndex])
+        this.setState({ charIndex }, 
+            ()=>this.quizChar(this.char[this.state.charIndex])
+        )
+        
     }
     handlePrevChar=()=>{
         
         let charIndex = this.state.charIndex-1 < 0 ? this.state.charLength-1 :    this.state.charIndex-1 
-        this.setState({ charIndex })
-        this.quizChar(this.char[this.state.charIndex])
+        this.setState({ charIndex },
+            ()=>this.quizChar(this.char[this.state.charIndex])
+        )
+        
     }
     quizChar=(char)=>{
         
         window.loadStroke(char)
         .then(data=>{
+            document.getElementById('hzchar').innerHTML = ''
             this.writer = HanziWriter.create('hzchar', 
             char, {
                 charDataLoader: (char, onComplete)=>{
@@ -62,9 +68,11 @@ export default class hawriter extends React.Component {
     }
     handleOpenModal=()=>{
         this.char = window.unit.char
+        let pinyin = window.unit.pronunciation.split(',')
         this.setState({ 
             showModal: true, 
-            charLength: this.char.length
+            charLength: this.char.length,
+            pinyin: pinyin
         });
         this.quizChar(this.char[this.state.charIndex])
     }
@@ -72,7 +80,12 @@ export default class hawriter extends React.Component {
         this.writer.quiz()
     }
     handleCloseModal=()=>{
-        this.setState({ showModal: false });
+        this.setState({
+            showModal: false,
+            charIndex: 0,
+            charLength: 0,
+            pinyin: []
+        })
     }
     
     
@@ -93,23 +106,25 @@ export default class hawriter extends React.Component {
                         >
                             <MdRfresh/>
                         </button>
-                        <button
-                            className="form-control"
-                            onClick={this.handleCloseModal}>
-                            <MdClose />
-                        </button>   
-                        <button
-                            className="form-control"
-                            onClick={this.handleNextChar}>
-                            <MdNext />
-                        </button>   
+                        
                         <button
                             className="form-control"
                             onClick={this.handlePrevChar}>
                             <MdPrev />
-                        </button>   
+                        </button>
+                        <button
+                            className="form-control"
+                            onClick={this.handleNextChar}>
+                            <MdNext />
+                        </button> 
+                        <button
+                            className="form-control"
+                            onClick={this.handleCloseModal}>
+                            <MdClose />
+                        </button>     
+                        
                     </div>
-                    
+                    {this.state.pinyin[this.state.charIndex]}
                     <div id='hzchar'></div>
                 </Modal>
                 <button
