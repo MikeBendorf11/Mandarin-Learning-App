@@ -175,7 +175,7 @@ function pushChanges(displayUnit) {
     method: 'POST', 
     body: JSON.stringify(units[u.id])})
   .then(res=>{return res.json()})
-  .then(data=>console.log('success: ',data))
+  .then(data=>console.log('success: unit-> ',units[u.id]))
   .catch(err=>console.log('error: ', err))
 }
 
@@ -226,33 +226,31 @@ function compareUpdateDbs() {
   let question = prompt('Do you want to update Mongo Units?')
   if(question == 'notsecret'){
     $.post('/load', units2 => {
-        units2.forEach((unit2, idx) => {
-          Object.keys(unit2).forEach(key => {
-            switch (key) {
-              case 'combinations':
-              case 'definitions':
-                Object.keys(unit2[key]).forEach(k => {
-                  unit2[key][k].forEach((v, i) => {
-                    if (unit2[key][k][i] != units[idx][key][k][i]) {
-                      pushChanges(units[idx])
-                      console.log('updated: ',unit2[key][k][i], '|' ,units[idx][key][k][i])
-                    }
-                  })
+      units2.forEach((unit2, idx) => {
+        Object.keys(unit2).forEach(key => {
+          switch (key) {
+            case 'combinations':
+            case 'definitions':
+              Object.keys(unit2[key]).forEach(k => {
+                unit2[key][k].forEach((v, i) => {
+                  if (unit2[key][k][i] != units[unit2.id][key][k][i]) {
+                    pushChanges(units[unit2.id])
+                    console.log('1. updated: ',unit2[key][k][i], '|' ,units[unit2.id][key][k][i])
+                  }
                 })
-                break;
-              case '_id': break;
-              default:
-                if (unit2[key] != units[idx][key]) {
-                  pushChanges(units[idx])
-                  console.log('updated: ',unit2[key],'|', units[idx][key])
-                }
+              })
+              break;
+            case '_id': break;
+            default:
+              if (unit2[key] != units[unit2.id][key]) {
+                pushChanges(units[unit2.id])
+                console.log('2. updated: ',unit2[key],'|', units[unit2.id][key])
+              }
             }
           })
         })
       })
-  } else {
-    alert('Nice Try!')
-  }
+  } 
 }
 
 //load stroke char data from indexedDB
