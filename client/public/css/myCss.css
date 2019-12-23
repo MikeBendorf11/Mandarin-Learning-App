@@ -176,6 +176,10 @@ h2{
 .ion-nav:before{
   display:none;
 }
+.ion-refresh:before{
+  font-family: "Ionicons";
+  content: "\f21c"
+}
 
 .input-group-text, #seaIpt{
   background-color:rgba(255, 255, 255, 0.25);
@@ -517,13 +521,12 @@ select{
   background-color: white;
   z-index: 99;
 }
-#nav li{
-  width: 100px;
-  
+.nav-justified .nav-item{
+  width: 163px;
 }
-#navLinks li{
-  width: 90px;
-}
+ #navLinks li{
+  width: 185px;
+} 
 #nav .nav-tabs .nav-link{
   border: 1px solid #DDDDDD;
 }
@@ -551,4 +554,13 @@ picture{
 
 #loadOverlay{
   display: none;
+}
+
+.iframeCont{
+  display: none;
+}
+.iframeCont button{
+  display: inline-block;
+  margin: -3px;
+  width: 34%
 }

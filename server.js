@@ -15,7 +15,8 @@ app.use(bodyParser.json());
 var server = app.listen(PORT, function () {
   MongoClient.connect(process.env.MONGOCONN, {useNewUrlParse:true}, (error,client)=>{
     if(error) throw error
-    database = client.db('chapp')
+    database = process.env.NODE_ENV=='development'? 
+      client.db('test'):client.db('chapp') 
     collection = database.collection("units")
   })
   var host = server.address().address;

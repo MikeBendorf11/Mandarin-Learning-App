@@ -179,30 +179,6 @@ function pushChanges(displayUnit) {
   .catch(err=>console.log('error: ', err))
 }
 
-/**
-   * Updated when the cloud button is pressed
-   */
-function externalStorage(uri) {
-  var uri = getCookie('uri');
-  var myData = JSON.stringify(units)
-  console.log(uri);
-  //uri = uri.slice(8,uri.length-2)
-  $.ajax({
-    url: uri,
-    type: "PUT",
-    data: myData,
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    success: function (data, textStatus, jqXHR) {
-      alert('Success: ' + data.status +
-      ', ' + data.statusText)
-    },
-    error: function (data) {
-      alert("Error : " + data.status +
-        ', ' + data.statusText);
-    }
-  });
-}
 function checkCookies() {
   if (!getCookie('rLevel')) {
     setCookie('rLevel', 0);
@@ -600,8 +576,10 @@ window.onload = function () {
           url('data:image/svg+xml;base64,${Base64.encode(mySVG)}') -61% -25% /70% 
           `
           //tests
-
-          //document.querySelector('[href="#searchCont"]').click();
+          // setTimeout(()=>{
+          //   document.getElementById('nav').children[2].querySelector('a').click(), 
+          // console.log('here')},2500)
+            //document.querySelector('[href="#searchCont"]').click();
           // seaIpt.value = "什么"
           // seaIpt.focus()
           //setTimeout(() => revSent.click(), 1000);
@@ -611,9 +589,6 @@ window.onload = function () {
             if(env=='production'){
               iframe1.setAttribute('src', 'https://eng.ichacha.net/m')
               iframe2.setAttribute('src', 'https://www.mdbg.net/chinese/dictionary#');
-              iframe3.setAttribute('src', 'https://chinesepod.com/dictionary/english-chinese/');
-              iframe2.style.display = 'none';
-              iframe3.style.display = 'none';
             }
           })
         })
@@ -1134,10 +1109,7 @@ ionNew.onclick = () => {
   prepareResults();
   displaySearch(results, 0);
 }
-ionSave.onclick = () => {
-  externalStorage();
-  //alert('Cloud updated')
-}
+
 /**
  * Get rid of undefined values when dealing with new chars
  * Prepares the search results to be added to db when focusout
@@ -1406,32 +1378,25 @@ function prevIdx(index, array) {
   if (index - 1 < 0) return array.length - 1;
   else return index - 1;
 }
-//handler for iframes display
-links.onclick = (event) => {
-  switch (event.target) {
-    case (ichachaLink):
-      showFrame(1);
-      break;
-    case (mdbgLink):
-      showFrame(2);
-      break;
-    case (cpodLink):
-      showFrame(3);
-      break;
-    // case(yebrLink):
-    //   showFrame(5);
-    //   break;
+
+function navigatorClick(e, type){
+  var theframe = e.parentNode.querySelector('iframe').contentWindow
+  window.ee=e
+  console.log(e, type)
+  switch(type){
+    case 'back': theframe.history.back(); break;
+    case 'next': theframe.history.forward(); break;
+    case 'refresh': theframe.location.reload(); break;
   }
 }
 
-//clear frames except the one calling this method
-function showFrame(number) {
-  for (i = 1; i < 4; i++) {
-    var fr = document.getElementById('iframe' + i);
-    if (i == number) {
-      fr.style.display = 'block';
-      continue;
-    }
-    fr.style.display = 'none'
-  }
+function ichachaClick(){
+  iframeConts = document.querySelectorAll('.iframeCont')
+  iframeConts[0].style.display="block"
+  iframeConts[1].style.display="none"
+}
+function mdbgClick(){
+  iframeConts = document.querySelectorAll('.iframeCont')
+  iframeConts[0].style.display="none"
+  iframeConts[1].style.display="block"
 }

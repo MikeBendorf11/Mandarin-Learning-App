@@ -86,9 +86,6 @@
     <li class="nav-item">
       <a class="nav-link" data-toggle="tab" href="#links" onclick="return false;">Links</a>
     </li>
-    <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#root" onclick="return false;">React</a>
-    </li>
   </ul>
 
   <div id="container" >
@@ -100,6 +97,7 @@
           <span>&nbsp;&nbsp;Review:</span>
           <a class="dropdown-item" id="revPron">Pronunciation</a>
           <a class="dropdown-item" id="revSent">Sentences</a>
+          
         </div>
 
       </div>
@@ -177,10 +175,7 @@
           <span id="ionNew" class="input-group-text ion-new"></span>
 
         </div>
-        <div class="input-group-prepend">
-          <span id="ionSave" class="input-group-text ion-save"></span>
-
-        </div>
+        
 
       </div>
 
@@ -216,31 +211,26 @@
       <p id="seaSen"></p>
     </div>
     <div id="links" class="tab-pane">
-      <ul id="navLinks" class="nav nav-tabs ">
+      <ul id="navLinks" class="nav nav-tabs nav-justified">
         <li>
-          <a class="nav-link active" id="ichachaLink">Icha</a>
+          <a class="nav-link active" onclick="ichachaClick()">Icha</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="mdbgLink">Mdbg</a>
+          <a class="nav-link" onclick="mdbgClick()">Mdbg</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" id="cpodLink">CPod</a>
-        </li>
-        <!-- <li class="nav-item">
-            <a class="nav-link" id="yebrLink">YeBr</a>
-          </li> -->
       </ul>
-      <!-- <div id="gSearch">
-            <gcse:search></gcse:search>
-        </div> -->
-
+    <div class="iframeCont">
+        <button onclick="navigatorClick(this, 'back')"><span class="ion ion-back"></span></button>
+        <button onclick="navigatorClick(this, 'next')"><span class="ion ion-next"></span></button>
+        <button onclick="iframe1.setAttribute('src', 'https://eng.ichacha.net/m')"><span class="ion ion-refresh"></span></button>
       <iframe id="iframe1" src="" frameborder="0"></iframe>
-      <iframe id="iframe2" src="" frameborder="0"></iframe>
-      <iframe id="iframe3" src="" frameborder="0"></iframe>
-      <!-- <iframe id="iframe4" src="" frameborder="0"></iframe> -->
-      <!-- <iframe id="iframe5" src="" frameborder="0"></iframe> -->
-
     </div>
+    <div class="iframeCont">
+      <button onclick="navigatorClick(this, 'back')"><span class="ion ion-back"></span></button>
+      <button onclick="navigatorClick(this, 'next')"><span class="ion ion-next"></span></button>
+      <button onclick="iframe2.setAttribute('src', 'https://www.mdbg.net/chinese/dictionary#')"><span class="ion ion-refresh"></span></button>
+    <iframe id="iframe2" src="" frameborder="0"></iframe>
+  </div>
     <div id="footer2">
       <img id="git2" alt="GitHub" title="GitHub" src="images/github.png" alt="GitHub">
       <span>More info at <a href="https://github.com/mikebendorf11/Chinese-Learning-App">GitHub.com </a><br> Copyright
