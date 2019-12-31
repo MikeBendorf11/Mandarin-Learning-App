@@ -13,12 +13,12 @@ const PORT = process.env.PORT || 4000
 app.use(bodyParser.json());
 
 var server = app.listen(PORT, function () {
-  MongoClient.connect(process.env.MONGOCONN, {useNewUrlParse:true}, (error,client)=>{
-    if(error) throw error
+  MongoClient.connect(process.env.MONGOCONN, { useUnifiedTopology: true },(error,client)=>{
+    if(error) throw error 
     database = process.env.NODE_ENV=='development'? 
       client.db('test'):client.db('chapp') 
-    collection = database.collection("units")
-  })
+    collection = database.collection("units2.1")
+  }) 
   var host = server.address().address;
   var port = server.address().port;
   console.log('listening ' + host + '' + port)
