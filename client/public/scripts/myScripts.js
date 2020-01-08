@@ -1115,8 +1115,9 @@ ionNew.onclick = () => {
  * Prepares the search results to be added to db when focusout
  */
 function prepareResults() {
-  results[seaIdx].learnedId = getLearned() + 1;
-  results[seaIdx].level = 3;
+  //results[seaIdx].learnedId = getLearned() + 1;
+  //results[seaIdx].level = 3;
+  //results[seaIdx].pronunciation = '----'
   results[seaIdx].combinations.short = [''];
   results[seaIdx].combinations.long = [''];
   results[seaIdx].definitions.long = [''];
@@ -1135,19 +1136,31 @@ function checkSeaChanges(event) {
   if ( //known chars
     elem.id == 'seaChar' &&
     content != results[seaIdx].char
-  ) { results[seaIdx].char = content }
+  ) { results[seaIdx].char = content; lastOne()}
   else if (
     elem.id == 'sDef0' &&
     content != results[seaIdx].definitions.single[0]
-  ) { results[seaIdx].definitions.single[0] = content }
+  ) { results[seaIdx].definitions.single[0] = content ; 
+    results[seaIdx].level = 3
+    results[seaIdx].learnedId = getLearned() +1
+    pushChanges(results[seaIdx]);
+  }
   else if (
     elem.id == 'sDef1' &&
     content != results[seaIdx].definitions.single[1]
-  ) { results[seaIdx].definitions.single[1] = content }
+  ) { results[seaIdx].definitions.single[1] = content; 
+    results[seaIdx].level = 3
+    results[seaIdx].learnedId = getLearned() +1
+    pushChanges(results[seaIdx]);
+  }
   else if (
     elem.id == 'seaPron' &&
     content != results[seaIdx].pronunciation
-  ) { results[seaIdx].pronunciation = content; }
+  ) { results[seaIdx].pronunciation = content; 
+    results[seaIdx].level = 3
+    results[seaIdx].learnedId = getLearned() +1
+    pushChanges(results[seaIdx]);
+  }
   else if (
     elem.id.includes('senComb') &&
     content != results[seaIdx].combinations.long[numb]
@@ -1156,7 +1169,7 @@ function checkSeaChanges(event) {
     //console.log(lgth + " " + numb);
     results[seaIdx].combinations.long[numb] = content;
     lgth - 1 == numb ? //last member of array? increase size
-      results[seaIdx].combinations.long.push('') : null;
+      results[seaIdx].combinations.long.push('') : null; lastOne()
   }
   else if (
     elem.id.includes('expComb') &&
@@ -1165,23 +1178,29 @@ function checkSeaChanges(event) {
     var lgth = results[seaIdx].combinations.short.length;
     results[seaIdx].combinations.short[numb] = content;
     lgth - 1 == numb ?
-      results[seaIdx].combinations.short.push('') : null;
+      results[seaIdx].combinations.short.push('') : null; lastOne()
   }
   else if (
     elem.id.includes('senDef') &&
     content != results[seaIdx].definitions.long[numb]
-  ) { results[seaIdx].definitions.long[numb] = content; }
+  ) { results[seaIdx].definitions.long[numb] = content; lastOne()}
   else if (
     elem.id.includes('expDef') &&
     content != results[seaIdx].definitions.short[numb]
-  ) { results[seaIdx].definitions.short[numb] = content; }
+  ) { results[seaIdx].definitions.short[numb] = content; lastOne() }
   else {
     console.log('no matching paragraph, or no changes');
   }
   clearSeaDisplay();
   displaySearch(results, seaIdx);
-  pushChanges(results[seaIdx]);
+  
   //console.log(results[seaIdx]);
+}
+
+function lastOne(){
+  results[seaIdx].level = 3
+  results[seaIdx].learnedId = getLearned() +1
+  pushChanges(results[seaIdx]);
 }
 
 seaLevel.onchange = () => {

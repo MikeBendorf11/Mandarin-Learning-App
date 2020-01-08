@@ -50,7 +50,8 @@ export default class hzwriter extends React.Component {
         
         window.loadStroke(char)
         .then(data=>{
-            document.getElementById('hzchar').innerHTML = ''
+            //redraw char to delete the preious quiz result
+            document.getElementById('hzchar').innerHTML = '<line x1="0" y1="0" x2="230" y2="230" stroke="#DDD" /><line x1="230" y1="0" x2="0" y2="230" stroke="#DDD" /><line x1="115" y1="0" x2="115" y2="230" stroke="#DDD" /><line x1="0" y1="115" x2="230" y2="115" stroke="#DDD" />'
             this.writer = HanziWriter.create('hzchar', 
             char, {
                 charDataLoader: (char, onComplete)=>{
@@ -124,8 +125,16 @@ export default class hzwriter extends React.Component {
                         </button>     
                         
                     </div>
-                    {this.state.pinyin[this.state.charIndex]}
-                    <div id='hzchar'></div>
+                    {this.state.pinyin[this.state.charIndex]}<br></br>
+                    
+                    <svg id="hzchar" xmlns="http://www.w3.org/2000/svg" width="230" height="230" >
+                    <line x1="0" y1="0" x2="230" y2="230" stroke="#DDD" />
+                    <line x1="230" y1="0" x2="0" y2="230" stroke="#DDD" />
+                    <line x1="115" y1="0" x2="115" y2="230" stroke="#DDD" />
+                    <line x1="0" y1="115" x2="230" y2="115" stroke="#DDD" />
+                    </svg>
+                            
+
                 </Modal>
                 <button
                     className="form-control"
