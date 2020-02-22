@@ -263,7 +263,7 @@ window.onload = function () {
       console.log('Prod Env: Will update Mongo');
       (function herokuWakeUp(){
         setTimeout(function () {
-          fetchTimeout(5000, fetch('http://thechapp.herokuapp.com'))
+          fetchTimeout(5000, fetch('https://thechapp.herokuapp.com'))
           .then(function(response) {
             console.log('heroku online, comparing Dbs')
             compareUpdateDbs()
