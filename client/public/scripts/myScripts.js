@@ -278,6 +278,9 @@ window.onload = function () {
   })
 
   var index;
+  var loadingImg = document.createElement('img')
+  loadingImg.setAttribute('src', '../images/loading2.gif')
+  pinyin.appendChild(loadingImg)
   delay(15000).then(_=>{
     checkDbExists(dbName).then(res => {
       if (res) {//exist 
