@@ -254,9 +254,12 @@ select{
 /* preserves bgcolor when hidding def*/
 #dvPcombHint{
   margin-top: 20px;
-  height: 33px;
+  
   overflow: hidden;
   background-color: rgb(255, 255, 255, 0.3);
+}
+#pHint{
+  margin-bottom: 0px;
 }
 
 #reviewCont #dvConsult{
