@@ -281,7 +281,8 @@ window.onload = function () {
   var loadingImg = document.createElement('img')
   loadingImg.setAttribute('src', '../images/loading2.gif')
   pinyin.appendChild(loadingImg)
-  delay(15000).then(_=>{
+  delay(15000)
+  .then(_=>{
     checkDbExists(dbName).then(res => {
       if (res) {//exist 
         checkCookies();
@@ -1101,8 +1102,9 @@ ionNew.onclick = () => {
  * Prepares the search results to be added to db when focusout
  */
 function prepareResults() {
-  //results[seaIdx].learnedId = getLearned() + 1;
-  //results[seaIdx].level = 3;
+  results[seaIdx].learnedId = getLearned() + 1;
+  results[seaIdx].level = 3;
+  $('#seaLevel').val(3);
   //results[seaIdx].pronunciation = '----'
   results[seaIdx].combinations.short = [''];
   results[seaIdx].combinations.long = [''];
@@ -1122,60 +1124,49 @@ function checkSeaChanges(event) {
   if ( //known chars
     elem.id == 'seaChar' &&
     content != results[seaIdx].char
-  ) { results[seaIdx].char = content; //lastOne()
+  ) { results[seaIdx].char = content; 
   }
   else if (
     elem.id == 'sDef0' &&
     content != results[seaIdx].definitions.single[0]
   ) { results[seaIdx].definitions.single[0] = content ; 
-    //     results[seaIdx].level = 3
-    //     results[seaIdx].learnedId = getLearned() +1
-    pushChanges(results[seaIdx]);
   }
   else if (
     elem.id == 'sDef1' &&
     content != results[seaIdx].definitions.single[1]
-  ) { results[seaIdx].definitions.single[1] = content; 
-    //     results[seaIdx].level = 3
-    //     results[seaIdx].learnedId = getLearned() +1
+  ) { 
+    results[seaIdx].definitions.single[1] = content; 
     pushChanges(results[seaIdx]);
   }
-  else if (
-    elem.id == 'seaPron' &&
-    content != results[seaIdx].pronunciation
-  ) { results[seaIdx].pronunciation = content; 
-    //     results[seaIdx].level = 3
-    //     results[seaIdx].learnedId = getLearned() +1
+  else if (elem.id == 'seaPron' && content != results[seaIdx].pronunciation ) { 
+    results[seaIdx].pronunciation = content; 
     pushChanges(results[seaIdx]);
   }
-  else if (
-    elem.id.includes('senComb') &&
-    content != results[seaIdx].combinations.long[numb]
+  else if (elem.id.includes('senComb') && content != results[seaIdx].combinations.long[numb]
   ) {
     var lgth = results[seaIdx].combinations.long.length;
     //console.log(lgth + " " + numb);
     results[seaIdx].combinations.long[numb] = content;
     lgth - 1 == numb ? //last member of array? increase size
-      results[seaIdx].combinations.long.push('') : null; //lastOne()
+      results[seaIdx].combinations.long.push('') : null; 
+      pushChanges(results[seaIdx]);
   }
-  else if (
-    elem.id.includes('expComb') &&
-    content != results[seaIdx].combinations.short[numb]
+  else if (elem.id.includes('expComb') && content != results[seaIdx].combinations.short[numb]
   ) {
     var lgth = results[seaIdx].combinations.short.length;
     results[seaIdx].combinations.short[numb] = content;
     lgth - 1 == numb ?
-      results[seaIdx].combinations.short.push('') : null; //lastOne()
+      results[seaIdx].combinations.short.push('') : null; 
+      pushChanges(results[seaIdx]);
   }
-  else if (
-    elem.id.includes('senDef') &&
-    content != results[seaIdx].definitions.long[numb]
-  ) { results[seaIdx].definitions.long[numb] = content; //lastOne()
+  else if (elem.id.includes('senDef') && content != results[seaIdx].definitions.long[numb]
+  ) { results[seaIdx].definitions.long[numb] = content; 
+    pushChanges(results[seaIdx]);
   }
-  else if (
-    elem.id.includes('expDef') &&
-    content != results[seaIdx].definitions.short[numb]
-  ) { results[seaIdx].definitions.short[numb] = content; //lastOne() 
+  else if (elem.id.includes('expDef') && content != results[seaIdx].definitions.short[numb]
+  ) { 
+    results[seaIdx].definitions.short[numb] = content; 
+    pushChanges(results[seaIdx]);
   }
   else {
     console.log('no matching paragraph, or no changes');
@@ -1186,19 +1177,15 @@ function checkSeaChanges(event) {
   //console.log(results[seaIdx]);
 }
 
-function lastOne(){
-  results[seaIdx].level = 3
-  results[seaIdx].learnedId = getLearned() +1
-  pushChanges(results[seaIdx]);
-}
-
-seaLevel.onchange = () => {
+seaLevel.onchange = (e) => {
   var lv = $('#seaLevel').val();
   results[seaIdx] ? results[seaIdx].level = parseInt(lv) : null;
+  pushChanges(results[seaIdx]);
 }
 seaConsult.onclick = () => {
   var vl = seaConsult.checked;
   results[seaIdx] ? results[seaIdx].consult = vl : null;
+  pushChanges(results[seaIdx]);
 } //end of search event handlers
 
 /**
