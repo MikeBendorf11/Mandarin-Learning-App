@@ -1,0 +1,38 @@
+back references
+first loop 
+	pile up all hanzi per unit id
+second loop	
+	if match unit.json /[pile]/gm
+		add id list to related field for this unit
+will need a method per unit updated to keep track of this
+
+
+on launch
+	check online
+	IDB exists
+		no - prompt reload, check https
+	sync mongo and IDB
+
+on launch
+	name cookie ?
+		no - loading indicator 10s, reload
+		name cookie?
+		no - prompt name 
+			name exists?
+			no - tie name and char db to user db with uuid
+			yes - 
+				loading indicator
+					pull db tied to name
+					IDB chars, strokes
+					char time
+						lastChar cookie 
+					reload
+		yes 
+			check online offline
+			load lastChar 
+			online 
+				sync cookie 
+				write on both mongo and IDB
+			offline
+				write only on IDB
+				upda sync cookie (list)

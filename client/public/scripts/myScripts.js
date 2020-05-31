@@ -198,8 +198,9 @@ function fetchTimeout(ms, promise) {
   })
 }
 //compares indexeddb and mongo
+var question 
 function compareUpdateDbs() {
-  let question = prompt('Do you want to update Mongo Units?')
+  if(!question) question = prompt('Do you want to update Mongo Units?')
   if(question == 'notsecret'){
     $.post('/load', units2 => {
       units2.forEach((unit2, idx) => {
@@ -246,7 +247,7 @@ function loadStroke(char){
 
 
 window.onload = function () {
- 
+  const delay = t => new Promise(resolve => setTimeout(resolve, t));
   var cssUrls = [
       "css/bootstrap.css",
       "css/handwrite-style.css",
@@ -263,7 +264,7 @@ window.onload = function () {
       console.log('Prod Env: Will update Mongo');
       (function herokuWakeUp(){
         setTimeout(function () {
-          fetchTimeout(5000, fetch('https://thechapp.herokuapp.com'))
+          insertTimeout(5000, fetch('https://thechapp.herokuapp.com'))
           .then(function(response) {
             console.log('heroku online, comparing Dbs')
             compareUpdateDbs()
@@ -277,369 +278,351 @@ window.onload = function () {
   })
 
   var index;
-  checkDbExists(dbName).then(res => {
-    if (res) {//exist 
-
-      checkCookies();
-      // $('#mLoading').modal('show'); 
-      // setTimeout(()=>{ 
-      //   if(units.length>0)
-      //     $('#mLoading').modal('hide'); 
-      // },5000)
-      var level = parseInt(getCookie('rLevel'));
-      var levelId = parseInt(getCookie(`rLevel${level}Id`));
-      loadFromIndexedDB(dbName)
-        .then(db => { units = db })
-        .catch(() => { //db is corrupted delete cookies, db and start from scratch
-          var cookies = document.cookie.split(";");
-
-          for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i];
-            var eqPos = cookie.indexOf("=");
-            var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-          }
-          var del = window.indexedDB.deleteDatabase(dbName)
-          del.onerror((err) => console.log(err))
-          del.onsuccess(() => {
-            document.write('Loading the app ...')
-            setTimeout(() => {
-              window.location.reload()  
-            }, 5000);
-          })
-        })
-        .then(() => {
-          
-          loadChar(levelId, level)
-          //console.log(unit)
-          //to be send to nextIdx by event handler
-
-          //load handwriting tool and hide the result box
-          enableHWIme('txt_word');
-          //handwriting panel events
-          $(document.body).on('click', '#btnHintDraw', function () {
-            hwimeResult = document.querySelector('.mdbghwime-result');
-            toggleDiv(hwimeResult);
-          })
-
-
-          unitState = new UnitState();
-          //window events
-          //same but runs on onload
-          if (window.innerWidth < 651) {
-
-            container.classList.add('tab-content');
-            // var hwimeResult = document.querySelector('.mdbghwime-result');
-            // hwimeResult.style.display = 'none';
-          } else {
-            container.classList.remove('tab-content');
-          }
-
-          $(".nav-tabs a").click(function () {
-            $(this).tab('show');
-            mdbgHwIme.adjustMdbgHwImeGridOffsets()
-            //setTimeout(() => window.scrollTo(0, 0), 10);
-          });
-          width = window.innerWidth;
-          height = window.innerHeight;
-
-         
-          
-          var mySVG = `
-            <svg width="25cm" height="40cm" version="1.1"
-              xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink">
-          
-            <text x="0" y="0" font-size="100" style="fill:grey">
-              <tspan x="0" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
-              <tspan x="0" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
-              <tspan x="0" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
-              <tspan x="0" dy="1.2em">由用户自行负责解决与第三人的</tspan>
-              <tspan x="0" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
-              <tspan x="0" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
-              <tspan x="0" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
-              <tspan x="0" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
-              <tspan x="0" dy="1.2em">由用户自行负责解决与第三人的</tspan>
-            </text>
-          
-            <text x="60" y="70" font-size="20" style="fill:red;">
-              <tspan x="60" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
-              <tspan x="60" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
-              <tspan x="60" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
-              <tspan x="60" dy="1.2em">由用户自行负责解决与第三人的</tspan>
-              <tspan x="60" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
-              <tspan x="60" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
-              <tspan x="60" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
-              <tspan x="60" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
-              <tspan x="60" dy="1.2em">百科一般要求和方式进行审核</tspan>
-              <tspan x="60" dy="1.2em">容需强制规则。</tspan>
-              <tspan x="60" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-              <tspan x="60" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-            </text>
-          
-              <text x="500" y="100" style="fill:red;">
-              <tspan x="500" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
-              <tspan x="500" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
-              <tspan x="500" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
-              <tspan x="500" dy="1.2em">由用户自行负责解决与第三人的</tspan>
-              <tspan x="500" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
-              <tspan x="500" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
-              <tspan x="500" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
-              <tspan x="500" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
-              <tspan x="500" dy="1.2em">百科一般要求和方式进行审核</tspan>
-              <tspan x="500" dy="1.2em">容需强制规则。</tspan>
-              <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-              <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-            </text>
-                <text x="500" y="400" style="fill:red;">
-              <tspan x="500" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
-              <tspan x="500" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
-              <tspan x="500" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
-              <tspan x="500" dy="1.2em">由用户自行负责解决与第三人的</tspan>
-              <tspan x="500" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
-              <tspan x="500" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
-              <tspan x="500" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
-              <tspan x="500" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
-              <tspan x="500" dy="1.2em">百科一般要求和方式进行审核</tspan>
-              <tspan x="500" dy="1.2em">容需强制规则。</tspan>
-              <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-              <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-            </text>
-              <text x="100" y="500" style="fill:red;">
-              <tspan x="100" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
-              <tspan x="100" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
-              <tspan x="100" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
-              <tspan x="100" dy="1.2em">由用户自行负责解决与第三人的</tspan>
-              <tspan x="100" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
-              <tspan x="100" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
-              <tspan x="100" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
-              <tspan x="100" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
-              <tspan x="100" dy="1.2em">百科一般要求和方式进行审核</tspan>
-              <tspan x="100" dy="1.2em">容需强制规则。</tspan>
-              <tspan x="100" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-              <tspan x="100" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-            </text>
-              <text x="0" y="820" font-size="20" style="fill:red;">
-              <tspan x="0" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
-              <tspan x="0" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
-              <tspan x="0" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
-              <tspan x="0" dy="1.2em">由用户自行负责解决与第三人的</tspan>
-              <tspan x="0" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
-              <tspan x="0" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
-              <tspan x="0" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
-              <tspan x="0" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
-              <tspan x="0" dy="1.2em">百科一般要求和方式进行审核</tspan>
-              <tspan x="0" dy="1.2em">容需强制规则。</tspan>
-              <tspan x="0" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-              <tspan x="0" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
-            </text>
-          </svg>`;
-          
-          var Base64 = {
-
-            // private property
-            _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
-
-            // public method for encoding
-            , encode: function (input) {
-              var output = "";
-              var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
-              var i = 0;
-
-              input = Base64._utf8_encode(input);
-
-              while (i < input.length) {
-                chr1 = input.charCodeAt(i++);
-                chr2 = input.charCodeAt(i++);
-                chr3 = input.charCodeAt(i++);
-
-                enc1 = chr1 >> 2;
-                enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
-                enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
-                enc4 = chr3 & 63;
-
-                if (isNaN(chr2)) {
-                  enc3 = enc4 = 64;
-                }
-                else if (isNaN(chr3)) {
-                  enc4 = 64;
-                }
-
-                output = output +
-                  this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
-                  this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
-              } // Whend 
-
-              return output;
-            } // End Function encode 
-
-
-            // public method for decoding
-            , decode: function (input) {
-              var output = "";
-              var chr1, chr2, chr3;
-              var enc1, enc2, enc3, enc4;
-              var i = 0;
-
-              input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
-              while (i < input.length) {
-                enc1 = this._keyStr.indexOf(input.charAt(i++));
-                enc2 = this._keyStr.indexOf(input.charAt(i++));
-                enc3 = this._keyStr.indexOf(input.charAt(i++));
-                enc4 = this._keyStr.indexOf(input.charAt(i++));
-
-                chr1 = (enc1 << 2) | (enc2 >> 4);
-                chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
-                chr3 = ((enc3 & 3) << 6) | enc4;
-
-                output = output + String.fromCharCode(chr1);
-
-                if (enc3 != 64) {
-                  output = output + String.fromCharCode(chr2);
-                }
-
-                if (enc4 != 64) {
-                  output = output + String.fromCharCode(chr3);
-                }
-
-              } // Whend 
-
-              output = Base64._utf8_decode(output);
-
-              return output;
-            } // End Function decode 
-
-
-            // private method for UTF-8 encoding
-            , _utf8_encode: function (string) {
-              var utftext = "";
-              string = string.replace(/\r\n/g, "\n");
-
-              for (var n = 0; n < string.length; n++) {
-                var c = string.charCodeAt(n);
-
-                if (c < 128) {
-                  utftext += String.fromCharCode(c);
-                }
-                else if ((c > 127) && (c < 2048)) {
-                  utftext += String.fromCharCode((c >> 6) | 192);
-                  utftext += String.fromCharCode((c & 63) | 128);
-                }
-                else {
-                  utftext += String.fromCharCode((c >> 12) | 224);
-                  utftext += String.fromCharCode(((c >> 6) & 63) | 128);
-                  utftext += String.fromCharCode((c & 63) | 128);
-                }
-
-              } // Next n 
-
-              return utftext;
-            } // End Function _utf8_encode 
-
-            // private method for UTF-8 decoding
-            , _utf8_decode: function (utftext) {
-              var string = "";
-              var i = 0;
-              var c, c1, c2, c3;
-              c = c1 = c2 = 0;
-
-              while (i < utftext.length) {
-                c = utftext.charCodeAt(i);
-
-                if (c < 128) {
-                  string += String.fromCharCode(c);
-                  i++;
-                }
-                else if ((c > 191) && (c < 224)) {
-                  c2 = utftext.charCodeAt(i + 1);
-                  string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
-                  i += 2;
-                }
-                else {
-                  c2 = utftext.charCodeAt(i + 1);
-                  c3 = utftext.charCodeAt(i + 2);
-                  string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
-                  i += 3;
-                }
-
-              } // Whend 
-
-              return string;
-            } // End Function _utf8_decode 
-
-          }
-          document.getElementById('container').style.background =
-            `
-          linear-gradient(-40deg,
-          rgba(252,229,148,.65) 18%,
-          rgba(252,229,148,.95) 52%,
-          rgba(255,255,255,1) 79%),
-          url('data:image/svg+xml;base64,${Base64.encode(mySVG)}') -61% -25% /70% 
-          `
-          //tests
-          // setTimeout(()=>{
-          //   document.getElementById('nav').children[2].querySelector('a').click(), 
-          // console.log('here')},2500)
-            //document.querySelector('[href="#searchCont"]').click();
-          // seaIpt.value = "什么"
-          // seaIpt.focus()
-          //setTimeout(() => revSent.click(), 1000);
-          //Load Frames and hide secondary ones
-          
-          $.get('/env', env=>{
-            if(env=='production'){
-              iframe1.setAttribute('src', 'https://eng.ichacha.net/m')
-              iframe2.setAttribute('src', 'https://www.mdbg.net/chinese/dictionary#');
+  delay(15000).then(_=>{
+    checkDbExists(dbName).then(res => {
+      if (res) {//exist 
+        checkCookies();
+        var level = parseInt(getCookie('rLevel'));
+        var levelId = parseInt(getCookie(`rLevel${level}Id`));
+        loadFromIndexedDB(dbName)
+          .then(db => { units = db })
+          .catch(() => { //db is corrupted delete cookies, db and start from scratch
+            var cookies = document.cookie.split(";");
+            for (var i = 0; i < cookies.length; i++) {
+              var cookie = cookies[i];
+              var eqPos = cookie.indexOf("=");
+              var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+              document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
             }
-          })
-        })
-
-    } else {//no cookies, create uri cookie and storage from json
-      $.post('/load', data=>{
-        units= data
-        storageFromBlank(this.dbName).then(()=>{
-            setCookie('rLevel', 0);
-            setCookie('rLevel0Id', 0)
-            setCookie('rLevel1Id', 0)
-            setCookie('rLevel2Id', 0)
-            setCookie('rLevel3Id', 0)
-            setCookie('rLevel4Id', 0)
-            document.body.innerHTML = '<p align="center"><img src="../images/loading2.gif"/></p>'
-            document.body.innerHTML += '<p align="center">Loading the app units ...</p>'
-        })
-        .then(()=>{
-          new Promise((res,rej)=>{$.post('/hanzi/all', data=>res(data))})
-          .then((data)=>{
-            let dbStkName = 'strokesDb', db, transaction, store, index
-            , request = window.indexedDB.open(dbStkName, 1);
-            request.onload = ()=>console.log('Strokes loaded')
-            request.onupgradeneeded = ()=> {
-              db = request.result
-              store = db.createObjectStore(dbStkName, { keyPath: 'char' })
-            }
-            request.onerror = (e)=>{
-              console.log(e, 'Error creating strokes db'); 
-            }
-            request.onsuccess = (e)=>{
-              db = request.result
-              transaction = db.transaction(dbStkName,'readwrite')
-              store = transaction.objectStore(dbStkName)   
-              document.body.innerHTML += '<p  align="center">Loading the app char strokes ...</p>'
-              
-              Object.keys(data).forEach((char,i)=>{
-                store.put({
-                  char: char,
-                  data: data[char]
-                })
-              })
+            var del = window.indexedDB.deleteDatabase(dbName)
+            del.onerror((err) => console.log('corruptedDB: ', err))
+            del.onsuccess(() => {
+              document.write('Loading the app ...')
               setTimeout(() => {
                 window.location.reload()  
               }, 5000);
+            })
+          })
+          .then(() => {
+            loadChar(levelId, level)
+            //to be send to nextIdx by event handler
+            //load handwriting tool and hide the result box
+            enableHWIme('txt_word');
+            //handwriting panel events
+            $(document.body).on('click', '#btnHintDraw', function () {
+              hwimeResult = document.querySelector('.mdbghwime-result');
+              toggleDiv(hwimeResult);
+            })
+            unitState = new UnitState();
+            //window events
+            //same but runs on onload
+            if (window.innerWidth < 651) {
+              container.classList.add('tab-content');
+            } else {
+              container.classList.remove('tab-content');
             }
+            $(".nav-tabs a").click(function () {
+              $(this).tab('show');
+              mdbgHwIme.adjustMdbgHwImeGridOffsets()
+            });
+            width = window.innerWidth;
+            height = window.innerHeight;
+            var mySVG = `
+              <svg width="25cm" height="40cm" version="1.1"
+                xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink">
+            
+              <text x="0" y="0" font-size="100" style="fill:grey">
+                <tspan x="0" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
+                <tspan x="0" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+                <tspan x="0" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+                <tspan x="0" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+                <tspan x="0" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
+                <tspan x="0" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
+                <tspan x="0" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+                <tspan x="0" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+                <tspan x="0" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+              </text>
+            
+              <text x="60" y="70" font-size="20" style="fill:red;">
+                <tspan x="60" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
+                <tspan x="60" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+                <tspan x="60" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+                <tspan x="60" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+                <tspan x="60" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
+                <tspan x="60" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
+                <tspan x="60" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
+                <tspan x="60" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
+                <tspan x="60" dy="1.2em">百科一般要求和方式进行审核</tspan>
+                <tspan x="60" dy="1.2em">容需强制规则。</tspan>
+                <tspan x="60" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+                <tspan x="60" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+              </text>
+            
+                <text x="500" y="100" style="fill:red;">
+                <tspan x="500" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
+                <tspan x="500" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+                <tspan x="500" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+                <tspan x="500" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+                <tspan x="500" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
+                <tspan x="500" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
+                <tspan x="500" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
+                <tspan x="500" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
+                <tspan x="500" dy="1.2em">百科一般要求和方式进行审核</tspan>
+                <tspan x="500" dy="1.2em">容需强制规则。</tspan>
+                <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+                <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+              </text>
+                  <text x="500" y="400" style="fill:red;">
+                <tspan x="500" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
+                <tspan x="500" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+                <tspan x="500" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+                <tspan x="500" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+                <tspan x="500" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
+                <tspan x="500" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
+                <tspan x="500" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
+                <tspan x="500" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
+                <tspan x="500" dy="1.2em">百科一般要求和方式进行审核</tspan>
+                <tspan x="500" dy="1.2em">容需强制规则。</tspan>
+                <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+                <tspan x="500" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+              </text>
+                <text x="100" y="500" style="fill:red;">
+                <tspan x="100" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
+                <tspan x="100" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+                <tspan x="100" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+                <tspan x="100" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+                <tspan x="100" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
+                <tspan x="100" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
+                <tspan x="100" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
+                <tspan x="100" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
+                <tspan x="100" dy="1.2em">百科一般要求和方式进行审核</tspan>
+                <tspan x="100" dy="1.2em">容需强制规则。</tspan>
+                <tspan x="100" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+                <tspan x="100" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+              </text>
+                <text x="0" y="820" font-size="20" style="fill:red;">
+                <tspan x="0" dy="1.2em">条内容的合法性负责，名誉权等）</tspan>
+                <tspan x="0" dy="1.2em">如果您提供的任何内容涉嫌侵犯第三</tspan>
+                <tspan x="0" dy="1.2em">人合法权益（包括但不限于著作权、</tspan>
+                <tspan x="0" dy="1.2em">由用户自行负责解决与第三人的</tspan>
+                <tspan x="0" dy="1.2em">，纠纷，并承担相应的法律责任。</tspan>
+                <tspan x="0" dy="1.2em">用户使用“本人词条编辑服务”提交的内</tspan>
+                <tspan x="0" dy="1.2em">符合百科词条编辑的内容规范和</tspan>
+                <tspan x="0" dy="1.2em">通过本服务提交的词条版本将根据</tspan>
+                <tspan x="0" dy="1.2em">百科一般要求和方式进行审核</tspan>
+                <tspan x="0" dy="1.2em">容需强制规则。</tspan>
+                <tspan x="0" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+                <tspan x="0" dy="1.2em">签署承诺函，对发表的内容的真实</tspan>
+              </text>
+            </svg>`;
+            var Base64 = {
+  
+              // private property
+              _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
+  
+              // public method for encoding
+              , encode: function (input) {
+                var output = "";
+                var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+                var i = 0;
+  
+                input = Base64._utf8_encode(input);
+  
+                while (i < input.length) {
+                  chr1 = input.charCodeAt(i++);
+                  chr2 = input.charCodeAt(i++);
+                  chr3 = input.charCodeAt(i++);
+  
+                  enc1 = chr1 >> 2;
+                  enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+                  enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+                  enc4 = chr3 & 63;
+  
+                  if (isNaN(chr2)) {
+                    enc3 = enc4 = 64;
+                  }
+                  else if (isNaN(chr3)) {
+                    enc4 = 64;
+                  }
+  
+                  output = output +
+                    this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
+                    this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
+                } // Whend 
+  
+                return output;
+              } // End Function encode 
+  
+  
+              // public method for decoding
+              , decode: function (input) {
+                var output = "";
+                var chr1, chr2, chr3;
+                var enc1, enc2, enc3, enc4;
+                var i = 0;
+  
+                input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+                while (i < input.length) {
+                  enc1 = this._keyStr.indexOf(input.charAt(i++));
+                  enc2 = this._keyStr.indexOf(input.charAt(i++));
+                  enc3 = this._keyStr.indexOf(input.charAt(i++));
+                  enc4 = this._keyStr.indexOf(input.charAt(i++));
+  
+                  chr1 = (enc1 << 2) | (enc2 >> 4);
+                  chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+                  chr3 = ((enc3 & 3) << 6) | enc4;
+  
+                  output = output + String.fromCharCode(chr1);
+  
+                  if (enc3 != 64) {
+                    output = output + String.fromCharCode(chr2);
+                  }
+  
+                  if (enc4 != 64) {
+                    output = output + String.fromCharCode(chr3);
+                  }
+  
+                } // Whend 
+  
+                output = Base64._utf8_decode(output);
+  
+                return output;
+              } // End Function decode 
+  
+  
+              // private method for UTF-8 encoding
+              , _utf8_encode: function (string) {
+                var utftext = "";
+                string = string.replace(/\r\n/g, "\n");
+  
+                for (var n = 0; n < string.length; n++) {
+                  var c = string.charCodeAt(n);
+  
+                  if (c < 128) {
+                    utftext += String.fromCharCode(c);
+                  }
+                  else if ((c > 127) && (c < 2048)) {
+                    utftext += String.fromCharCode((c >> 6) | 192);
+                    utftext += String.fromCharCode((c & 63) | 128);
+                  }
+                  else {
+                    utftext += String.fromCharCode((c >> 12) | 224);
+                    utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+                    utftext += String.fromCharCode((c & 63) | 128);
+                  }
+  
+                } // Next n 
+  
+                return utftext;
+              } // End Function _utf8_encode 
+  
+              // private method for UTF-8 decoding
+              , _utf8_decode: function (utftext) {
+                var string = "";
+                var i = 0;
+                var c, c1, c2, c3;
+                c = c1 = c2 = 0;
+  
+                while (i < utftext.length) {
+                  c = utftext.charCodeAt(i);
+  
+                  if (c < 128) {
+                    string += String.fromCharCode(c);
+                    i++;
+                  }
+                  else if ((c > 191) && (c < 224)) {
+                    c2 = utftext.charCodeAt(i + 1);
+                    string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+                    i += 2;
+                  }
+                  else {
+                    c2 = utftext.charCodeAt(i + 1);
+                    c3 = utftext.charCodeAt(i + 2);
+                    string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+                    i += 3;
+                  }
+  
+                } // Whend 
+  
+                return string;
+              } // End Function _utf8_decode 
+  
+            }
+            document.getElementById('container').style.background =
+              `
+            linear-gradient(-40deg,
+            rgba(252,229,148,.65) 18%,
+            rgba(252,229,148,.95) 52%,
+            rgba(255,255,255,1) 79%),
+            url('data:image/svg+xml;base64,${Base64.encode(mySVG)}') -61% -25% /70% 
+            `
+            //tests
+            // setTimeout(()=>{
+            //   document.getElementById('nav').children[2].querySelector('a').click(), 
+            // console.log('here')},2500)
+              //document.querySelector('[href="#searchCont"]').click();
+            // seaIpt.value = "什么"
+            // seaIpt.focus()
+            //setTimeout(() => revSent.click(), 1000);
+            //Load Frames and hide secondary ones
+            
+            $.get('/env', env=>{
+              if(env=='production'){
+                iframe1.setAttribute('src', 'https://eng.ichacha.net/m')
+                iframe2.setAttribute('src', 'https://www.mdbg.net/chinese/dictionary#');
+              }
+            })
+          })
+  
+      } else {//no cookies, create uri cookie and storage from json
+        $.post('/load', data=>{
+          units= data
+          storageFromBlank(this.dbName).then(()=>{
+              setCookie('rLevel', 0);
+              setCookie('rLevel0Id', 0)
+              setCookie('rLevel1Id', 0)
+              setCookie('rLevel2Id', 0)
+              setCookie('rLevel3Id', 0)
+              setCookie('rLevel4Id', 0)
+              document.body.innerHTML = '<p align="center"><img src="../images/loading2.gif"/></p>'
+              document.body.innerHTML += '<p align="center">Loading the app units ...</p>'
+          })
+          .then(()=>{
+            new Promise((res,rej)=>{$.post('/hanzi/all', data=>res(data))})
+            .then((data)=>{
+              let dbStkName = 'strokesDb', db, transaction, store, index
+              , request = window.indexedDB.open(dbStkName, 1);
+              request.onload = ()=>console.log('Strokes loaded')
+              request.onupgradeneeded = ()=> {
+                db = request.result
+                store = db.createObjectStore(dbStkName, { keyPath: 'char' })
+              }
+              request.onerror = (e)=>{
+                console.log(e, 'Error creating strokes db'); 
+              }
+              request.onsuccess = (e)=>{
+                db = request.result
+                transaction = db.transaction(dbStkName,'readwrite')
+                store = transaction.objectStore(dbStkName)   
+                document.body.innerHTML += '<p  align="center">Loading the app char strokes ...</p>'
+                
+                Object.keys(data).forEach((char,i)=>{
+                  store.put({
+                    char: char,
+                    data: data[char]
+                  })
+                })
+                setTimeout(() => {
+                  window.location.reload()  
+                }, 5000);
+              }
+            })
           })
         })
-      })
-    }
+      }
+    })    
   })
+  
 
 
   function loadChar(id, reviewLevel) {
@@ -1136,29 +1119,30 @@ function checkSeaChanges(event) {
   if ( //known chars
     elem.id == 'seaChar' &&
     content != results[seaIdx].char
-  ) { results[seaIdx].char = content; lastOne()}
+  ) { results[seaIdx].char = content; //lastOne()
+  }
   else if (
     elem.id == 'sDef0' &&
     content != results[seaIdx].definitions.single[0]
   ) { results[seaIdx].definitions.single[0] = content ; 
-    results[seaIdx].level = 3
-    results[seaIdx].learnedId = getLearned() +1
+    //     results[seaIdx].level = 3
+    //     results[seaIdx].learnedId = getLearned() +1
     pushChanges(results[seaIdx]);
   }
   else if (
     elem.id == 'sDef1' &&
     content != results[seaIdx].definitions.single[1]
   ) { results[seaIdx].definitions.single[1] = content; 
-    results[seaIdx].level = 3
-    results[seaIdx].learnedId = getLearned() +1
+    //     results[seaIdx].level = 3
+    //     results[seaIdx].learnedId = getLearned() +1
     pushChanges(results[seaIdx]);
   }
   else if (
     elem.id == 'seaPron' &&
     content != results[seaIdx].pronunciation
   ) { results[seaIdx].pronunciation = content; 
-    results[seaIdx].level = 3
-    results[seaIdx].learnedId = getLearned() +1
+    //     results[seaIdx].level = 3
+    //     results[seaIdx].learnedId = getLearned() +1
     pushChanges(results[seaIdx]);
   }
   else if (
@@ -1169,7 +1153,7 @@ function checkSeaChanges(event) {
     //console.log(lgth + " " + numb);
     results[seaIdx].combinations.long[numb] = content;
     lgth - 1 == numb ? //last member of array? increase size
-      results[seaIdx].combinations.long.push('') : null; lastOne()
+      results[seaIdx].combinations.long.push('') : null; //lastOne()
   }
   else if (
     elem.id.includes('expComb') &&
@@ -1178,16 +1162,18 @@ function checkSeaChanges(event) {
     var lgth = results[seaIdx].combinations.short.length;
     results[seaIdx].combinations.short[numb] = content;
     lgth - 1 == numb ?
-      results[seaIdx].combinations.short.push('') : null; lastOne()
+      results[seaIdx].combinations.short.push('') : null; //lastOne()
   }
   else if (
     elem.id.includes('senDef') &&
     content != results[seaIdx].definitions.long[numb]
-  ) { results[seaIdx].definitions.long[numb] = content; lastOne()}
+  ) { results[seaIdx].definitions.long[numb] = content; //lastOne()
+  }
   else if (
     elem.id.includes('expDef') &&
     content != results[seaIdx].definitions.short[numb]
-  ) { results[seaIdx].definitions.short[numb] = content; lastOne() }
+  ) { results[seaIdx].definitions.short[numb] = content; //lastOne() 
+  }
   else {
     console.log('no matching paragraph, or no changes');
   }
