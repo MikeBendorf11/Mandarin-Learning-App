@@ -1121,20 +1121,15 @@ function checkSeaChanges(event) {
   var elem = event.target;
   var numb = parseInt(elem.id.replace(/^[^0-9]+/, ''), 10);
   var content = parseInput(elem);
-  if ( //known chars
-    elem.id == 'seaChar' &&
-    content != results[seaIdx].char
-  ) { results[seaIdx].char = content; 
+  if (elem.id == 'seaChar' && content != results[seaIdx].char) { 
+    results[seaIdx].char = content; 
+    pushChanges(results[seaIdx]);
   }
-  else if (
-    elem.id == 'sDef0' &&
-    content != results[seaIdx].definitions.single[0]
-  ) { results[seaIdx].definitions.single[0] = content ; 
+  else if (elem.id == 'sDef0' && content != results[seaIdx].definitions.single[0]) { 
+    results[seaIdx].definitions.single[0] = content ; 
+    pushChanges(results[seaIdx]);
   }
-  else if (
-    elem.id == 'sDef1' &&
-    content != results[seaIdx].definitions.single[1]
-  ) { 
+  else if (elem.id == 'sDef1' &&  content != results[seaIdx].definitions.single[1]) { 
     results[seaIdx].definitions.single[1] = content; 
     pushChanges(results[seaIdx]);
   }
@@ -1167,10 +1162,6 @@ function checkSeaChanges(event) {
   ) { 
     results[seaIdx].definitions.short[numb] = content; 
     pushChanges(results[seaIdx]);
-  }
-  else if(elem.id.includes('seaDef') && content != results[seaIdx].definitions.single){
-    results[seaIdx].definitions.single = content
-    pushChanges(results[seaIdx])
   }
   else {
     console.log('no matching paragraph, or no changes');
