@@ -264,7 +264,7 @@ window.onload = function () {
       console.log('Prod Env: Will update Mongo');
       (function herokuWakeUp(){
         setTimeout(function () {
-          insertTimeout(5000, fetch('https://thechapp.herokuapp.com'))
+          delay(5000).then(fetch('https://thechapp.herokuapp.com'))
           .then(function(response) {
             console.log('heroku online, comparing Dbs')
             compareUpdateDbs()
@@ -1167,6 +1167,10 @@ function checkSeaChanges(event) {
   ) { 
     results[seaIdx].definitions.short[numb] = content; 
     pushChanges(results[seaIdx]);
+  }
+  else if(elem.id.includes('seaDef') && content != results[seaIdx].definitions.single){
+    results[seaIdx].definitions.single = content
+    pushChanges(results[seaIdx])
   }
   else {
     console.log('no matching paragraph, or no changes');
