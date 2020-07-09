@@ -281,7 +281,7 @@ window.onload = function () {
   var loadingImg = document.createElement('img')
   loadingImg.setAttribute('src', '../images/loading2.gif')
   pinyin.appendChild(loadingImg)
-  delay(5000)
+  delay(1000)
   .then(_=>{
     checkDbExists(dbName).then(res => {
       if (res) {//exist 
@@ -1140,7 +1140,7 @@ function checkSeaChanges(event) {
   else if (elem.id.includes('senComb') && content != results[seaIdx].combinations.long[numb]
   ) {
     var lgth = results[seaIdx].combinations.long.length;
-    //console.log(lgth + " " + numb);
+    //console.log(lgth + " " + numb);  
     results[seaIdx].combinations.long[numb] = content;
     lgth - 1 == numb ? //last member of array? increase size
       results[seaIdx].combinations.long.push('') : null; 
