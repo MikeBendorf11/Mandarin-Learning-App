@@ -1042,15 +1042,7 @@ revPron.onclick = () => {
 }
 
 
-async function gTranslate(phrase) {
-  //  console.log('here');
-  if (!phrase) return new Promise(res => res(''));
-  
-  return new Promise((resolve, reject) => {
-    resolve('----')
-    reject('----')
-  })
-}
+
 
 //Search events
 var seaIdx = 0; //for chars with 2+ pronunciations
@@ -1089,7 +1081,7 @@ ionNew.onclick = () => {
       clearSeaDisplay();
       seaIpt.value = units[i].char;
       results = [];
-      results.push(units[i]);
+      results.push(JSON.parse(JSON.stringify(units[i])));
       break;
     }
   }
@@ -1102,10 +1094,10 @@ ionNew.onclick = () => {
  * Prepares the search results to be added to db when focusout
  */
 function prepareResults() {
-  results[seaIdx].learnedId = getLearned() + 1;
+  results[seaIdx].learnedId = getLearned();
   results[seaIdx].level = 3;
   $('#seaLevel').val(3);
-  //results[seaIdx].pronunciation = '----'
+  results[seaIdx].pronunciation = ''
   results[seaIdx].combinations.short = [''];
   results[seaIdx].combinations.long = [''];
   results[seaIdx].definitions.long = [''];
@@ -1193,7 +1185,7 @@ function getLearned() {
       learnedId = v.learnedId;
     }
   })
-  return learnedId;
+  return learnedId+1;
 }
 /**
  * Get's rid of tags and their contents
@@ -1245,11 +1237,7 @@ function buildCombDef(combsArr, defsArr, display) {
     if (defsArr[i]) { //is there a def
       def.innerHTML = `${defsArr[i]}`
     } else { //no? then translate
-      gTranslate(combsArr[i])
-        .then(data => {
-          def.innerHTML = data;
-        })
-        .catch(data => def.innerHTML = data)
+      def.innerHTML = '----';
     }
     display.appendChild(comb);
     display.appendChild(def);
@@ -1273,31 +1261,14 @@ function buildSingleDef(singleArr, display) {
 function displaySearch(aResult, index) {
   seaChar.innerHTML = aResult[index].char;
   seaPron.innerHTML = aResult[index].pronunciation;
-  if (!aResult[index].pronunciation) { //it's new char     
+  if (!aResult[index].pronunciation || 
+      aResult[index].definitions.single.filter(x=>!x).length!=0) { //it's new char     
     $('#seaLevel').val(3);
+    seaPron.innerHTML = '----'
     if (aResult[index].char.length > 1) { //2 char unit
-      gTranslate(aResult[index].char[0])
-        .then(data1 => gTranslate(aResult[index].char[1])
-          .then(data2 => gTranslate(aResult[index].char)
-            .then(data3 => {
-              var reg = /<[^>]*>/g; //clean gtranslate icon
-              data1 = data1.replace(reg, '')
-              data2 = data2.replace(reg, '')
-              buildSingleDef([`(${data1} ,${data2})`, `${data3}`], seaDef);
-            })))
-        .catch(data => {
-
-          buildSingleDef([data], seaDef);
-        })
+      buildSingleDef([`(----,----)`, `----`], seaDef);
     } else {
-      gTranslate(aResult[index].char)
-        .then(data => {
-          buildSingleDef([data], seaDef);
-        })
-        .catch(data => {
-          //console.log("here")
-          buildSingleDef([data], seaDef);
-        })
+      buildSingleDef( ['----'] , seaDef);
     }
     buildCombDef([''], [''], seaExp);
     buildCombDef([''], [''], seaSen);
@@ -1306,17 +1277,7 @@ function displaySearch(aResult, index) {
     $('#seaLevel').val(aResult[index].level);
     seaConsult.checked = aResult[index].consult;
     let tempDef = aResult[index].definitions.single;
-    if (tempDef == "") {
-      gTranslate(aResult[index].char)
-        .then(data => {
-          buildSingleDef([data], seaDef);
-        })
-        .catch(data => {
-          buildSingleDef([data], seaDef);
-        })
-    } else {
-      buildSingleDef(tempDef, seaDef);
-    }
+    buildSingleDef(tempDef, seaDef);
     buildCombDef(
       aResult[index].combinations.short,
       aResult[index].definitions.short,
