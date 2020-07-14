@@ -198,10 +198,11 @@ function fetchTimeout(ms, promise) {
   })
 }
 //compares indexeddb and mongo
-var question 
+var question
 function compareUpdateDbs() {
   if(!question) question = prompt('Do you want to update Mongo Units?')
   if(question == 'notsecret'){
+    setCookie('secret', 'notsecret')
     $.post('/load', units2 => {
       units2.forEach((unit2, idx) => {
         Object.keys(unit2).forEach(key => {
@@ -267,6 +268,7 @@ window.onload = function () {
           delay(5000).then(fetch('https://thechapp.herokuapp.com'))
           .then(function(response) {
             console.log('heroku online, comparing Dbs')
+            question = getCookie('secret')
             compareUpdateDbs()
           }).catch(function(error) {
             console.log('heroku offline or no internet')

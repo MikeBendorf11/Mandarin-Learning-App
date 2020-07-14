@@ -34,7 +34,7 @@
     ]
     scriptUrls.forEach((v, i) => {
       var script = document.createElement('script');
-      script.src = scriptUrls[i] //+ '?v=' + Date.now();
+      script.src = scriptUrls[i] + '?v=' + Date.now();
       document.head.appendChild(script);
     })
 
