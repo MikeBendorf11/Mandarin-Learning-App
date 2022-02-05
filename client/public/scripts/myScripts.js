@@ -576,6 +576,7 @@ window.onload = function () {
               if(env=='production'){
                 iframe1.setAttribute('src', 'https://eng.ichacha.net/m')
                 iframe2.setAttribute('src', 'https://www.mdbg.net/chinese/dictionary#');
+                iframe3.setAttribute('src', 'https://www.purpleculture.net/sample-sentences');
               }
             })
           })
@@ -1347,9 +1348,18 @@ function ichachaClick(){
   iframeConts = document.querySelectorAll('.iframeCont')
   iframeConts[0].style.display="block"
   iframeConts[1].style.display="none"
+  iframeConts[2].style.display="none"
 }
 function mdbgClick(){
   iframeConts = document.querySelectorAll('.iframeCont')
   iframeConts[0].style.display="none"
   iframeConts[1].style.display="block"
+  iframeConts[2].style.display="none"
+}
+
+function ichachaClick(){
+  iframeConts = document.querySelectorAll('.iframeCont')
+  iframeConts[0].style.display="none"
+  iframeConts[1].style.display="none"
+  iframeConts[2].style.display="block"
 }
