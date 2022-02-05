@@ -1357,7 +1357,7 @@ function mdbgClick(){
   iframeConts[2].style.display="none"
 }
 
-function ichachaClick(){
+function ppcClick(){
   iframeConts = document.querySelectorAll('.iframeCont')
   iframeConts[0].style.display="none"
   iframeConts[1].style.display="none"
