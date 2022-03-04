@@ -198,37 +198,48 @@ function fetchTimeout(ms, promise) {
   })
 }
 //compares indexeddb and mongo
-var question
 function compareUpdateDbs() {
-  if(!question) question = prompt('Do you want to update Mongo Units?')
-  if(question == 'notsecret'){
-    setCookie('secret', 'notsecret')
-    $.post('/load', units2 => {
-      units2.forEach((unit2, idx) => {
-        Object.keys(unit2).forEach(key => {
-          switch (key) {
-            case 'combinations':
-            case 'definitions':
-              Object.keys(unit2[key]).forEach(k => {
-                unit2[key][k].forEach((v, i) => {
-                  if (unit2[key][k][i] != units[unit2.id][key][k][i]) {
-                    pushChanges(units[unit2.id])
-                    console.log('1. updated: ',unit2[key][k][i], '|' ,units[unit2.id][key][k][i])
-                  }
+  if(!getCookie('secret')) {
+    setCookie('secret', prompt('Password (or anything for testing):'))
+    return
+  } else {
+    console.log('heroku online, comparing Dbs')
+    fetch('/ready', {
+      method:'POST',     
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify({password:getCookie('secret')})
+    }).then(x=>x.text()).then(res=>{
+      console.log(res)
+      $.post('/load', units2 => {
+        units2.forEach((unit2, idx) => {
+          Object.keys(unit2).forEach(key => {
+            switch (key) {
+              case 'combinations':
+              case 'definitions':
+                Object.keys(unit2[key]).forEach(k => {
+                  unit2[key][k].forEach((v, i) => {
+                    if (unit2[key][k][i] != units[unit2.id][key][k][i]) {
+                      pushChanges(units[unit2.id])
+                      console.log('1. updated: ',unit2[key][k][i], '|' ,units[unit2.id][key][k][i])
+                    }
+                  })
                 })
-              })
-              break;
-            case '_id': break;
-            default:
-              if (unit2[key] != units[unit2.id][key]) {
-                pushChanges(units[unit2.id])
-                console.log('2. updated: ',unit2[key],'|', units[unit2.id][key])
+                break;
+              case '_id': break;
+              default:
+                if (unit2[key] != units[unit2.id][key]) {
+                  pushChanges(units[unit2.id])
+                  console.log('2. updated: ',unit2[key],'|', units[unit2.id][key])
+                }
               }
-            }
+            })
           })
         })
-      })
-  } 
+    })
+  }  
 }
 
 //load stroke char data from indexedDB
@@ -267,8 +278,6 @@ window.onload = function () {
         setTimeout(function () {
           delay(5000).then(fetch('https://thechapp.herokuapp.com'))
           .then(function(response) {
-            console.log('heroku online, comparing Dbs')
-            question = getCookie('secret')
             compareUpdateDbs()
           }).catch(function(error) {
             console.log('heroku offline or no internet')
@@ -278,6 +287,14 @@ window.onload = function () {
       })()
     } else console.log('Dev Env: Won\'t update Mongo')
   })
+  .done(_=>fetch('/ready', {
+    method:'POST',     
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body:JSON.stringify({password:getCookie('secret')})
+  }).then(x=>x.text()).then(res=>console.log(res)))
 
   var index;
   var loadingImg = document.createElement('img')
