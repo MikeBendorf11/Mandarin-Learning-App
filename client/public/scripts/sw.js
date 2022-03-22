@@ -1,34 +1,34 @@
 
-const cacheName = Date.now()
+const cacheName = 'worker-1'
 const contentToCache = [
-  "./",
-  "./bootstrap.js",
-  "./handwrite-hwime.js",
-  "./jquery-1.11.2.min.js",
-  "./jsconfig.json",
-  "./parseCSV.js",
-  "./storageFromBlank.js",
-  "./handwrite-chindict.js",
-  "./jquery.min.js",
-  "./jquery-ui.js",
-  "./myScripts.js",
-  "./popper.min.js",
-  "./storageFunctions.js",
-  "../favicon.ico",
-  '../images/',
-  '../images/windows2.png',
-  '../images/mac2.png',
-  '../images/linux2.png',
-  '../images/loading2.gif',
-  '../images/github.png',
-  '../images/bg1.png',
-  '../css/bootstrap.css',
-  '../css/handwrite-style.css',
-  '../css/myCss.css'
+  "scripts/",
+  "scripts/bootstrap.js",
+  "scripts/handwrite-hwime.js",
+  "scripts/jquery-1.11.2.min.js",
+  "scripts/jsconfig.json",
+  "scripts/parseCSV.js",
+  "scripts/storageFromBlank.js",
+  "scripts/handwrite-chindict.js",
+  "scripts/jquery.min.js",
+  "scripts/jquery-ui.js",
+  "scripts/myScripts.js",
+  "scripts/popper.min.js",
+  "scripts/storageFunctions.js",
+  "favicon.ico",
+  'images/',
+  'images/windows2.png',
+  'images/mac2.png',
+  'images/linux2.png',
+  'images/loading2.gif',
+  'images/github.png',
+  'images/bg1.png',
+  'css/bootstrap.css',
+  'css/handwrite-style.css',
+  'css/myCss.css'
 ]
 
 self.addEventListener('install', (e) => {
-  console.log('[Service Worker] Install');
+  console.log('[Service Worker] Install', cacheName);
   e.waitUntil((async () => {
     const cache = await caches.open(cacheName);
     console.log('[Service Worker] Caching ', cacheName);

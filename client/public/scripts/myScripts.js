@@ -200,7 +200,6 @@ function fetchTimeout(ms, promise) {
 //compares indexeddb and mongo
 function compareUpdateDbs() {
   if(!getCookie('secret')) {
-    setCookie('secret', prompt('Password (or anything for testing):'))
     return
   } else {
     console.log('heroku online, comparing Dbs')
@@ -268,13 +267,13 @@ window.onload = function () {
     cssUrls.forEach((v, i) => {
       var link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.href = cssUrls[i]+ '?v=' + Date.now();
+      link.href = cssUrls[i]//+ '?v=' + Date.now();
       document.head.appendChild(link);
     })
   $.get('/env', data=>{
     if(data=='production'){
       console.log('Prod Env: Will update Mongo');
-      navigator.serviceWorker.register('./sw.js').then(
+      navigator.serviceWorker.register('scripts/sw.js').then(
         function(registration) {
             console.log('Service worker registration succeeded:', registration);
           },
@@ -294,14 +293,17 @@ window.onload = function () {
       })()
     } else console.log('Dev Env: Won\'t update Mongo')
   })
-  .done(_=>fetch('/ready', {
-    method:'POST',     
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body:JSON.stringify({password:getCookie('secret')})
-  }).then(x=>x.text()).then(res=>console.log(res)))
+  .done(_=>{
+    let password = getCookie('secret') || setCookie('secret', prompt('Password (or anything for testing):'))
+    fetch('/ready', {
+      method:'POST',     
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify({password})
+    }).then(x=>x.text()).then(res=>console.log(res))
+  })
 
   var index;
   var loadingImg = document.createElement('img')

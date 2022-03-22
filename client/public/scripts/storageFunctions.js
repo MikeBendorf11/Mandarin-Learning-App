@@ -16,7 +16,7 @@ function loadFromIndexedDB(dbName){
         var objectRequest = objectStore.getAll();
 
         dbRequest.onerror = function(event) {
-          reject(Error("Problem while loading from exitent db"));
+          reject(Error("Problem while loading from exitent db", event));
         }
 
         objectRequest.onsuccess = function(event) {
@@ -24,7 +24,7 @@ function loadFromIndexedDB(dbName){
             database.close();
             resolve(objectRequest.result);
           } 
-          else reject(Error('object not found'));
+          else reject(Error('object not found', event));
         };
       };
     }
