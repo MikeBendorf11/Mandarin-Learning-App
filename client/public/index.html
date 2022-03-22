@@ -3,9 +3,7 @@
 
 <head>
   <meta charset="UTF-8" manifest="cache.mf">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- LinkedIn -->
   <meta property="og:title" content="Title of the article" />
   <meta property="og:image" content="images/chapp.PNG" />
@@ -77,9 +75,6 @@
     <li class="nav-item">
       <a class="nav-link active" data-toggle="tab" href="#reviewCont" onclick="return false;">Review</a>
     </li>
-    <!-- <li class="nav-item">
-      <a class="nav-link" href="#ime_wrapper" data-toggle="tab" onclick="return false;">Draw</a>
-    </li> -->
     <li class="nav-item">
       <a class="nav-link" data-toggle="tab" href="#searchCont" onclick="return false;">Search</a> 
     </li>
@@ -138,8 +133,7 @@
         <footer id="footPc">
           <img id="git" alt="GitHub" title="GitHub" src="images/github.png" alt="GitHub">
           <span>More info at <a href="https://github.com/mikebendorf11/Chinese-Learning-App">GitHub.com </a><br>
-            Copyright &copy;
-            2018 MB</span><br>
+            Chapp Assistant. MB11 &copy; 2022</span><br>
           <p></p>
         </footer>
 
@@ -222,28 +216,28 @@
           <a class="nav-link" onclick="ppcClick()">PurpleCulture</a>
         </li>
       </ul>
-    <div class="iframeCont">
+      <div class="iframeCont">
+          <button onclick="navigatorClick(this, 'back')"><span class="ion ion-back"></span></button>
+          <button onclick="navigatorClick(this, 'next')"><span class="ion ion-next"></span></button>
+          <button onclick="iframe1.setAttribute('src', 'https://eng.ichacha.net/m')"><span class="ion ion-refresh"></span></button>
+        <iframe id="iframe1" src="" frameborder="0"></iframe>
+      </div>
+      <div class="iframeCont">
         <button onclick="navigatorClick(this, 'back')"><span class="ion ion-back"></span></button>
         <button onclick="navigatorClick(this, 'next')"><span class="ion ion-next"></span></button>
-        <button onclick="iframe1.setAttribute('src', 'https://eng.ichacha.net/m')"><span class="ion ion-refresh"></span></button>
-      <iframe id="iframe1" src="" frameborder="0"></iframe>
+        <button onclick="iframe2.setAttribute('src', 'https://www.mdbg.net/chinese/dictionary#')"><span class="ion ion-refresh"></span></button>
+        <iframe id="iframe2" src="" frameborder="0"></iframe>
+      </div>
+      <div class="iframeCont">
+        <button onclick="navigatorClick(this, 'back')"><span class="ion ion-back"></span></button>
+        <button onclick="navigatorClick(this, 'next')"><span class="ion ion-next"></span></button>
+        <button onclick="iframe3.setAttribute('src', 'https://www.purpleculture.net/sample-sentences')" ><span class="ion ion-refresh"></span></button>
+        <iframe id="iframe3" src="" frameborder="0"></iframe>
+      </div>
     </div>
-    <div class="iframeCont">
-      <button onclick="navigatorClick(this, 'back')"><span class="ion ion-back"></span></button>
-      <button onclick="navigatorClick(this, 'next')"><span class="ion ion-next"></span></button>
-      <button onclick="iframe2.setAttribute('src', 'https://www.mdbg.net/chinese/dictionary#')"><span class="ion ion-refresh"></span></button>
-    <iframe id="iframe2" src="" frameborder="0"></iframe>
-  </div>
-  <div class="iframeCont">
-    <button onclick="navigatorClick(this, 'back')"><span class="ion ion-back"></span></button>
-    <button onclick="navigatorClick(this, 'next')"><span class="ion ion-next"></span></button>
-    <button onclick="iframe3.setAttribute('src', 'https://www.purpleculture.net/sample-sentences')" ><span class="ion ion-refresh"></span></button>
-  <iframe id="iframe3" src="" frameborder="0"></iframe>
-</div>
     <div id="footer2">
-      <img id="git2" alt="GitHub" title="GitHub" src="images/github.png" alt="GitHub">
-      <span>More info at <a href="https://github.com/mikebendorf11/Chinese-Learning-App">GitHub.com </a><br> Copyright
-        &copy; 2018 MB</span><br>
+      <a href="https://github.com/mikebendorf11/Chinese-Learning-App"></a><img id="git2" alt="GitHub" title="GitHub" src="images/github.png" alt="GitHub">
+      Chapp Assistant. MB11 &copy; 2022</span><br>
       <p></p>
     </div>
   </div><!-- end container -->

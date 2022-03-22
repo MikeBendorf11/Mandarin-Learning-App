@@ -274,6 +274,13 @@ window.onload = function () {
   $.get('/env', data=>{
     if(data=='production'){
       console.log('Prod Env: Will update Mongo');
+      navigator.serviceWorker.register('./sw.js').then(
+        function(registration) {
+            console.log('Service worker registration succeeded:', registration);
+          },
+        function(error) {
+        console.log('Service worker registration failed:', error);
+      });
       (function herokuWakeUp(){
         setTimeout(function () {
           delay(5000).then(fetch('https://thechapp.herokuapp.com'))
@@ -339,11 +346,11 @@ window.onload = function () {
             unitState = new UnitState();
             //window events
             //same but runs on onload
-            if (window.innerWidth < 651) {
+            container.classList.remove('tab-content');
+            if (window.innerWidth < 1100) {
               container.classList.add('tab-content');
-            } else {
-              container.classList.remove('tab-content');
-            }
+            } 
+              
             $(".nav-tabs a").click(function () {
               $(this).tab('show');
               mdbgHwIme.adjustMdbgHwImeGridOffsets()
@@ -958,6 +965,7 @@ window.onload = function () {
   pComb.onfocus = function () {
     if (pComb.innerHTML == "&nbsp;")
       this.innerHTML = '';
+    
   }
   pHint.onfocus = function () {
     if (this.innerHTML == "&nbsp;")
@@ -981,6 +989,9 @@ window.onload = function () {
     if (this.innerHTML == '')
       this.innerHTML = '&nbsp;'
   }
+
+
+  
 
   function showCombDef(combination, definition, display1, display2) {
     //display the combination if any
@@ -1380,3 +1391,8 @@ function ppcClick(){
   iframeConts[1].style.display="none"
   iframeConts[2].style.display="block"
 }
+
+document.querySelectorAll('p').forEach(elm=>{
+  elm.addEventListener('focus',_=>footer2.style.display='none')
+  elm.addEventListener('focusout',_=>footer2.style.display='block')
+})

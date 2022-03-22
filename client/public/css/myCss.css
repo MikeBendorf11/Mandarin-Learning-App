@@ -280,7 +280,7 @@ select{
     margin: 0 0 0 -5%;
   }
 }
-@media screen and (max-width:970px){
+@media screen and (max-width:760px){
   h1{
     font-size: 2.5vw
   }
@@ -338,8 +338,9 @@ select{
   #ime_wrapper{
     margin: 155px 0
   }
+
 }
-@media screen and (max-width:640px){
+@media screen and (max-width:760px){
   body{
     background: linear-gradient(to bottom, 
     rgba(252,229,148) 1%,
@@ -400,10 +401,10 @@ select{
     margin: 50px 2% 0 0;
     color: #007bff;
     font-weight: bolder;
-    height:90vh;
+    padding-bottom: 70px;
   }
   /*same as #searchCont, but this syncs with bootstrap specificty*/
-  .tab-content > .active {
+  .tab-content, .tab-content .active {
     display: block;
   }
   #searchCont .input-group{
@@ -457,16 +458,17 @@ select{
   }
   #footer2{
     background: #F0C869;
-    padding-top: 7px;
+    padding: 7px 0px;
     font-size:  0.8em;
     display: block;
+    position:fixed;
+    bottom: 0;
+    z-index:999999;
     width: 100%;
-    /* text-align: center; */
-    /* margin-top: -30px; */
   }
   #git2 {
     float: left;
-    width: 40px;
+    width: 30px;
     margin: 0 20px 0 20%;
   }
   #mobileTitle{
@@ -476,9 +478,39 @@ select{
   #brLvl{
     display: none;
   }
+  #navLinks{
+    margin-top: 0;
+    position: fixed;
+    top: 40px;
+    background-color: white;
+  }
+  #nav{
+    background-color: white;
+    z-index: 99;
+    display: flex;
+    width: 100%;
+  }
+  /* .nav-justified .nav-item{
+    width: 30%;
+  } */
+  .nav-item{
+    flex:1
+  }
+   #navLinks {
+    display: flex;
+    width: 100%;
+  } 
+  #navLinks li{
+    flex: 1
+  }
+  #nav .nav-tabs .nav-link{
+    border: 1px solid #DDDDDD;
+  }
+  .nav-tabs .nav-link.active{
+    background-color: #EEEEEE
+  }
 }
-
-@media screen and (max-width:540px){
+@media screen and (max-width:760px){
   .display-3{
     font-size: 30px;
     font-weight: 600;
@@ -509,38 +541,10 @@ select{
   margin: 83px 0 0 0;
   width: 100%
 }
-
 #links iframe{
   width: 100%; 
   height: 78vh
 }
-#navLinks{
-  margin-top: 0;
-  position: fixed;
-  top: 40px;
-  background-color: white;
-}
-#nav{
-  background-color: white;
-  z-index: 99;
-}
-.nav-justified .nav-item{
-  width: 163px;
-}
- #navLinks {
-  display: flex;
-  width: 100%;
-} 
-#navLinks li{
-  flex: 1
-}
-#nav .nav-tabs .nav-link{
-  border: 1px solid #DDDDDD;
-}
-.nav-tabs .nav-link.active{
-  background-color: #EEEEEE
-}
-
 #mobileTitle{
   display:none;
   color: rgb(189, 189, 189);
@@ -553,12 +557,9 @@ select{
   font-size: 2.2em;
   margin: 10px 0 20px 0;
 }
-
-
 picture{
   display:none;
 }
-
 #loadOverlay{
   display: none;
 }
