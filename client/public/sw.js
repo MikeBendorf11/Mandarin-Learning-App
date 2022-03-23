@@ -1,6 +1,7 @@
 
-const cacheName = 'worker-6'
+const cacheName = 'worker-1'
 const contentToCache = [
+  "/",
   "/index.html",
   "/favicon.ico",
   "/scripts/",
@@ -28,44 +29,32 @@ const contentToCache = [
   '/css/handwrite-style.css',
   '/css/myCss.css'
 ]
-self.addEventListener("install", installEvent => {
-  const cacheBypassRequests = assets.map(
-    (url) => new Request(url, {cache: 'reload'}))
-
-  installEvent.waitUntil(
-    caches.open(cacheName)
-    .then((cache) => {
-      return cache.addAll(cacheBypassRequests)
-      .then(() => {
-        return self.skipWaiting();
-      })
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open(cacheName).then(cache => {
+      return cache.addAll(contentToCache)
+          .then(() => self.skipWaiting());
     })
   );
 });
 
 // Fetching content using Service Worker
 self.addEventListener('fetch', (e) => {
-  console.log(e)
-  e.respondWith((async () => {
-    const r = await caches.match(e.request);
-    console.log(`[SW] Fetching resource: ${e.request.url}`);
-    if (r) return r;
-    const response = await fetch(e.request);
-    const cache = await caches.open(cacheName);
-    console.log(`[SW] Caching new resource: ${e.request.url}`);
-    cache.put(e.request, response.clone());
-    return response;
-  })());
+  e.respondWith(
+    caches.open(cacheName)
+      .then(cache => cache.match(e.request, {ignoreSearch: true}))
+      .then(response => {
+      return response || fetch(e.request);
+    })
+  );
 });
 
 self.addEventListener('activate', (e) => {
-  e.waitUntil(caches.keys().then((keyList) => {
-    // console.log('ACTIVATE')
-    // console.log('Avail caches:', keyList)
-    console.log('[SW] Activate currentCache: ',cacheName)
-    return Promise.all(keyList.map((key) => {
-      if (key === cacheName) { return; }
-      return caches.delete(key);
-    }))
-  }));
+  e.respondWith(
+    caches.open(cacheName)
+      .then(cache => cache.match(event.request, {ignoreSearch: true}))
+      .then(response => {
+      return response || fetch(event.request);
+    })
+  );
 });
