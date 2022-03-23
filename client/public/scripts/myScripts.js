@@ -256,9 +256,17 @@ function loadStroke(char){
   })
 }
 
+const delay = t => new Promise(resolve => setTimeout(resolve, t));
 
-window.onload = function () {
-  const delay = t => new Promise(resolve => setTimeout(resolve, t));
+window.onload = async function () {
+  await navigator.serviceWorker.register('sw.js').then(
+    function(registration) {
+        console.log('Service worker registration succeeded:', registration);
+      },
+    function(error) {
+    console.log('Service worker registration failed:', error);
+  })
+  
   var cssUrls = [
       "css/bootstrap.css",
       "css/handwrite-style.css",
@@ -273,13 +281,6 @@ window.onload = function () {
   $.get('/env', data=>{
     if(data=='production'){
       console.log('Prod Env: Will update Mongo');
-      navigator.serviceWorker.register('sw.js').then(
-        function(registration) {
-            console.log('Service worker registration succeeded:', registration);
-          },
-        function(error) {
-        console.log('Service worker registration failed:', error);
-      });
       (function herokuWakeUp(){
         setTimeout(function () {
           delay(5000).then(fetch('https://thechapp.herokuapp.com'))

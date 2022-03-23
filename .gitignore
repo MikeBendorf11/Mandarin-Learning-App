@@ -4,5 +4,3 @@ package-lock.json
 database.js
 .env
 .build
-.crt
-.key

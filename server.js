@@ -7,41 +7,22 @@ const fs = require('fs')
 const PORT = process.env.PORT || 4000
 const MongoClient = require('mongodb').MongoClient
 const app = express()
-const ENVIRONMENT = process.env.NODE_ENV === 'production'? 'production': 'testing'
-const DBCONNECTION = process.env.MONGOCONN
-
-var database, collection
-var key = fs.readFileSync(__dirname + '/certs/selfsigned.key');
-var cert = fs.readFileSync(__dirname + '/certs/selfsigned.crt');
-
-var MongoClient = require('mongodb').MongoClient
-var app = express()
 var database, collection
 
 app.use(bodyParser.json());
 
-if(ENVIRONMENT=='production'){
-  var server = app.listen(PORT, function () { 
-    var host = server.address().address;
-    var port = server.address().port;
-    console.log('listening ' + host + '' + port)
-  })  
-} else {
-  var server = https.createServer(options, app);
-  server.listen(PORT, () => {
-    console.log("server starting on port : " + PORT)
-  });
-  app.get('/', (req, res) => {
-    res.send('Now using https..');
- });
-}
+var server = app.listen(PORT, function () {
+  var host = server.address().address;
+  var port = server.address().port;
+  console.log('listening ' + host + '' + port)
+})
 
 app.get('/env', (rq, rs) => {
-  rs.send(ENVIRONMENT)
+  rs.send(process.env.NODE_ENV || 'production')
 })
 
 app.post('/ready', (rq, rs)=>{
-  console.log(req.body)
+  //console.log(rq.body)
   if(rq.body.password==process.env.PASSWORD){
     MongoClient.connect(process.env.MONGOCONN, { useUnifiedTopology: true },(error,client)=>{
       let msg = ''
@@ -56,16 +37,15 @@ app.post('/ready', (rq, rs)=>{
       collection = database.collection("units2.1")
       rs.send(`Prod: ${msg}`)
     }) 
-    rs.send(`Prod: ${msg}`)
   } else {
-    MongoClient.connect(DBCONNECTION, { useUnifiedTopology: true },(error,client)=>{
+    MongoClient.connect(process.env.MONGOCONN, { useUnifiedTopology: true },(error,client)=>{
       if(error) throw error 
       database = client.db('test')
       collection = database.collection("units2.1")
       rs.send('Dev: Using no credentials and test DB ')
       //console.log('collection', collection)
     })     
-    rs.send('Dev: Using no credentials and test DB ')
+    
   }
 })
 
@@ -115,7 +95,7 @@ app.get('/api/chars', (req, res) => {
   res.json(chars)
 })
 
-if (ENVIRONMENT === 'production') {
+if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'))
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
