@@ -2,43 +2,60 @@ require('dotenv').config({ silent: process.env.NODE_ENV === 'production' })
 
 const express = require('express')
 const bodyParser = require('body-parser')
+const https = require('https')
 const path = require("path")
 const fs = require('fs')
 const PORT = process.env.PORT || 4000
 const MongoClient = require('mongodb').MongoClient
 const app = express()
-var database, collection
+const ENVIRONMENT = process.env.NODE_ENV === 'production'? 'production': 'testing'
+const DBCONNECTION = process.env.MONGOCONN
 
+var database, collection
+var key = fs.readFileSync(__dirname + '/certs/selfsigned.key');
+var cert = fs.readFileSync(__dirname + '/certs/selfsigned.crt');
+
+var options = { key: key, cert: cert } 
 app.use(bodyParser.json());
 
-var server = app.listen(PORT, function () {
-  var host = server.address().address;
-  var port = server.address().port;
-  console.log('listening ' + host + '' + port)
-})
+if(ENVIRONMENT=='production'){
+  var server = app.listen(PORT, function () { 
+    var host = server.address().address;
+    var port = server.address().port;
+    console.log('listening ' + host + '' + port)
+  })  
+} else {
+  var server = https.createServer(options, app);
+  server.listen(PORT, () => {
+    console.log("server starting on port : " + PORT)
+  });
+  app.get('/', (req, res) => {
+    res.send('Now using https..');
+ });
+}
 
 app.get('/env', (rq, rs) => {
-  rs.send(process.env.NODE_ENV || 'production')
+  rs.send(ENVIRONMENT)
 })
 
 app.post('/ready', (rq, rs)=>{
   //console.log(rq.body)
   if(rq.body.password==process.env.PASSWORD){
-    MongoClient.connect(process.env.MONGOCONN, { useUnifiedTopology: true },(error,client)=>{
+    MongoClient.connect(DBCONNECTION, { useUnifiedTopology: true },(error,client)=>{
       let msg = ''
       if(error) throw error 
-      if(process.env.NODE_ENV=='development'){
-        database = client.db('test')
-        msg = 'Using test credentials and testDB'
-      } else {
+      if(ENVIRONMENT=='production'){
         database = client.db('chapp')
         msg = 'Using admin credentials and ProdDB' 
+      } else {
+        database = client.db('test')
+        msg = 'Using test credentials and testDB'
       }
       collection = database.collection("units2.1")
       rs.send(`Prod: ${msg}`)
     }) 
   } else {
-    MongoClient.connect(process.env.MONGOCONN, { useUnifiedTopology: true },(error,client)=>{
+    MongoClient.connect(DBCONNECTION, { useUnifiedTopology: true },(error,client)=>{
       if(error) throw error 
       database = client.db('test')
       collection = database.collection("units2.1")
@@ -95,7 +112,7 @@ app.get('/api/chars', (req, res) => {
   res.json(chars)
 })
 
-if (process.env.NODE_ENV === 'production') {
+if (ENVIRONMENT === 'production') {
   app.use(express.static('client/build'))
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))

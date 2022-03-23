@@ -31,11 +31,16 @@ const contentToCache = [
 ]
 self.addEventListener('install', (e) => {
   console.log('[SW] Install', cacheName);
-  e.waitUntil((async () => {
-    const cache = await caches.open(cacheName);
-    console.log('[SW] Caching ', cacheName);
-    await cache.addAll(contentToCache);
-  })());
+  const cacheBypassRequests = contentToCache.map(url=>new Request(url, {cache: 'reload'}))
+  installEvent.waitUntil(
+    caches.open(cacheName)
+    .then((cache) => {
+      return cache.addAll(cacheBypassRequests)
+      .then(() => {
+        return self.skipWaiting();
+      })
+    })
+  );
 });
 
 // Fetching content using Service Worker
