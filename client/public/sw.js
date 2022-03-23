@@ -1,5 +1,5 @@
 
-const cacheName = 'worker-1'
+const cacheName = 'worker-4'
 const contentToCache = [
   "/",
   "/index.html",
@@ -29,32 +29,38 @@ const contentToCache = [
   '/css/handwrite-style.css',
   '/css/myCss.css'
 ]
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(cacheName).then(cache => {
-      return cache.addAll(contentToCache)
-          .then(() => self.skipWaiting());
-    })
-  );
+self.addEventListener('install', (e) => {
+  console.log('[SW] Install', cacheName);
+  e.waitUntil((async () => {
+    const cache = await caches.open(cacheName);
+    console.log('[SW] Caching ', cacheName);
+    await cache.addAll(contentToCache);
+  })());
 });
 
 // Fetching content using Service Worker
 self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    caches.open(cacheName)
-      .then(cache => cache.match(e.request, {ignoreSearch: true}))
-      .then(response => {
-      return response || fetch(e.request);
-    })
-  );
+  console.log(e)
+  e.respondWith((async () => {
+    const r = await caches.match(e.request);
+    console.log(`[SW] Fetching resource: ${e.request.url}`);
+    if (r) return r;
+    const response = await fetch(e.request);
+    const cache = await caches.open(cacheName);
+    console.log(`[SW] Caching new resource: ${e.request.url}`);
+    cache.put(e.request, response.clone());
+    return response;
+  })());
 });
 
 self.addEventListener('activate', (e) => {
-  e.respondWith(
-    caches.open(cacheName)
-      .then(cache => cache.match(event.request, {ignoreSearch: true}))
-      .then(response => {
-      return response || fetch(event.request);
-    })
-  );
+  e.waitUntil(caches.keys().then((keyList) => {
+    // console.log('ACTIVATE')
+    // console.log('Avail caches:', keyList)
+    console.log('[SW] Activate currentCache: ',cacheName)
+    return Promise.all(keyList.map((key) => {
+      if (key === cacheName) { return; }
+      return caches.delete(key);
+    }))
+  }));
 });
