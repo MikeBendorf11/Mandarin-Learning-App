@@ -2,7 +2,6 @@ require('dotenv').config({ silent: process.env.NODE_ENV === 'production' })
 
 const express = require('express')
 const bodyParser = require('body-parser')
-const https = require('https')
 const path = require("path")
 const fs = require('fs')
 const PORT = process.env.PORT || 4000
@@ -15,7 +14,10 @@ var database, collection
 var key = fs.readFileSync(__dirname + '/certs/selfsigned.key');
 var cert = fs.readFileSync(__dirname + '/certs/selfsigned.crt');
 
-var options = { key: key, cert: cert } 
+var MongoClient = require('mongodb').MongoClient
+var app = express()
+var database, collection
+
 app.use(bodyParser.json());
 
 if(ENVIRONMENT=='production'){
@@ -39,21 +41,22 @@ app.get('/env', (rq, rs) => {
 })
 
 app.post('/ready', (rq, rs)=>{
-  //console.log(rq.body)
+  console.log(req.body)
   if(rq.body.password==process.env.PASSWORD){
-    MongoClient.connect(DBCONNECTION, { useUnifiedTopology: true },(error,client)=>{
+    MongoClient.connect(process.env.MONGOCONN, { useUnifiedTopology: true },(error,client)=>{
       let msg = ''
       if(error) throw error 
-      if(ENVIRONMENT=='production'){
-        database = client.db('chapp')
-        msg = 'Using admin credentials and ProdDB' 
-      } else {
+      if(process.env.NODE_ENV=='development'){
         database = client.db('test')
         msg = 'Using test credentials and testDB'
+      } else {
+        database = client.db('chapp')
+        msg = 'Using admin credentials and ProdDB' 
       }
       collection = database.collection("units2.1")
       rs.send(`Prod: ${msg}`)
     }) 
+    rs.send(`Prod: ${msg}`)
   } else {
     MongoClient.connect(DBCONNECTION, { useUnifiedTopology: true },(error,client)=>{
       if(error) throw error 
@@ -62,7 +65,7 @@ app.post('/ready', (rq, rs)=>{
       rs.send('Dev: Using no credentials and test DB ')
       //console.log('collection', collection)
     })     
-    
+    rs.send('Dev: Using no credentials and test DB ')
   }
 })
 
