@@ -273,7 +273,7 @@ window.onload = function () {
   $.get('/env', data=>{
     if(data=='production'){
       console.log('Prod Env: Will update Mongo');
-      navigator.serviceWorker.register('scripts/sw.js').then(
+      navigator.serviceWorker.register('sw.js').then(
         function(registration) {
             console.log('Service worker registration succeeded:', registration);
           },
