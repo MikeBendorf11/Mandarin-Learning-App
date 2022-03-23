@@ -302,7 +302,7 @@ window.onload = function () {
         'Content-Type': 'application/json'
       },
       body:JSON.stringify({password})
-    }).then(x=>x.text()).then(res=>console.log(res))
+    }).then(x=>x.text()).then(res=>console.log(res)).catch(e=>console.log(e))
   })
 
   var index;

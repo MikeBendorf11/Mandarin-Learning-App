@@ -1,14 +1,13 @@
 require('dotenv').config({ silent: process.env.NODE_ENV === 'production' })
 
-const express = require('express'),
-  bodyParser = require('body-parser')
-app = express(),
-  path = require("path"),
-  MongoClient = require('mongodb').MongoClient,
-  //client = new MongoClient(process.env.MONGOCONN, { useNewUrlParser: true }),
-  fs = require('fs')
-var database, collection
+const express = require('express')
+const bodyParser = require('body-parser')
+const path = require("path")
+const fs = require('fs')
 const PORT = process.env.PORT || 4000
+const MongoClient = require('mongodb').MongoClient
+const app = express()
+var database, collection
 
 app.use(bodyParser.json());
 
@@ -23,21 +22,30 @@ app.get('/env', (rq, rs) => {
 })
 
 app.post('/ready', (rq, rs)=>{
+  //console.log(rq.body)
   if(rq.body.password==process.env.PASSWORD){
     MongoClient.connect(process.env.MONGOCONN, { useUnifiedTopology: true },(error,client)=>{
+      let msg = ''
       if(error) throw error 
-      database = process.env.NODE_ENV=='development'? 
-        client.db('test'):client.db('chapp') 
+      if(process.env.NODE_ENV=='development'){
+        database = client.db('test')
+        msg = 'Using test credentials and testDB'
+      } else {
+        database = client.db('chapp')
+        msg = 'Using admin credentials and ProdDB' 
+      }
       collection = database.collection("units2.1")
+      rs.send(`Prod: ${msg}`)
     }) 
-    rs.send('Using registered user DB')
   } else {
     MongoClient.connect(process.env.MONGOCONN, { useUnifiedTopology: true },(error,client)=>{
       if(error) throw error 
       database = client.db('test')
       collection = database.collection("units2.1")
+      rs.send('Dev: Using no credentials and test DB ')
+      //console.log('collection', collection)
     })     
-    rs.send('Using unregistered user DB')
+    
   }
 })
 
