@@ -177,6 +177,10 @@ h2{
   font-family: "Ionicons";
   content: "\f21f"
 }
+.ion-eye:before{
+  font-family: "Ionicons";
+  content: "\f133" 
+}
 .ion-new:before{
   font-family: "Ionicons";
   content: "\f48a"
@@ -205,7 +209,7 @@ h2{
   border-right: 0px;
   
 }
-#ionSea:hover, #ionNew:hover, #ionSave:hover{
+#ionSea:hover, #ionNew:hover, #ionSave:hover, #ionEye:hover{
   background-color: lightgrey;
   cursor: pointer;
 }
@@ -424,7 +428,7 @@ select{
   }
   #searchCont .input-group{
     margin: 10px auto;
-    width: 61%
+    width: 71%
   }
   #searchCont table{
     border-bottom: 3px dashed lightgrey;

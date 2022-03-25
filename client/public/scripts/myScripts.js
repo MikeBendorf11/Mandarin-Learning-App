@@ -1093,6 +1093,15 @@ seaIpt.oninput = () => {
     }
     displaySearch(result, 0)
   })
+  setTimeout(_=>{
+    let ps = Array.from(document.querySelectorAll('#searchCont [id*=Def]'))
+        .concat(Array.from(document.querySelectorAll('#searchCont [id*=Pron]')))
+        console.log('here', ps)
+        ps.forEach(el=>{
+      el.style.display='none'
+    })
+  }, 100)
+  
 }
 
 //magnifier icon: db has 2 def results per char
@@ -1120,6 +1129,17 @@ ionNew.onclick = () => {
   }
   prepareResults();
   displaySearch(results, 0);
+}
+
+let toggleV = false
+ionEye.onclick = () => {
+  let ps = Array.from(document.querySelectorAll('#searchCont [id*=Def]'))
+      .concat(Array.from(document.querySelectorAll('#searchCont [id*=Pron]')))
+  ps.forEach(el=>{
+    if(toggleV) el.style.display='none'
+    else el.style.display='block'
+  })
+  toggleV=!toggleV
 }
 
 /**

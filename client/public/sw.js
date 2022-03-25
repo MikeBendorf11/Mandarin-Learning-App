@@ -1,5 +1,5 @@
 
-const cacheName = 'worker-4'
+const cacheName = 'worker-2'
 const contentToCache = [
   "./",
   "./index.html",
