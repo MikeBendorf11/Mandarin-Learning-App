@@ -1,9 +1,15 @@
 
-const cacheName = 'worker-2'
+const cacheName = 'worker-5'
 const contentToCache = [
   "./",
   "./index.html",
+  "/static/js/bundle.js",
+  "/static/js/1.chunk.js",
+  "/static/js/main.chunk.js",
   "./favicon.ico",
+  "./font/Chonburi-Regular.ttf",
+  "./font/ionicons-2.0.1/ionicons.ttf",
+  "./scripts/eruda.js",
   "./scripts/bootstrap.js",
   "./scripts/handwrite-hwime.js",
   "./scripts/jquery-1.11.2.min.js",

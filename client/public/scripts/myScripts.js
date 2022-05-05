@@ -1077,7 +1077,7 @@ revCons.onclick = () => {
   let script = document.createElement('script');
   script.src = 'scripts/eruda.js'
   let script2 = document.createElement('script')
-  script2.appendChild(document.createTextNode('eruda.init({container:footer2,tool:"console"})'))
+  script2.appendChild(document.createTextNode('eruda.init({container:footer2,tool:["console", "network"]})'))
   script.onload = () => {
     document.body.appendChild(script2)
   }
@@ -1105,7 +1105,6 @@ seaIpt.oninput = () => {
   setTimeout(_=>{
     let ps = Array.from(document.querySelectorAll('#searchCont [id*=Def]'))
         .concat(Array.from(document.querySelectorAll('#searchCont [id*=Pron]')))
-        console.log('here', ps)
         ps.forEach(el=>{
       el.style.display='none'
     })
