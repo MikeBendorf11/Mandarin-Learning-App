@@ -1263,6 +1263,7 @@ function clearSeaDisplay() {
   $('#seaLevel').val(0);
   seaConsult.checked = false;
   seaChar.innerHTML = '';
+  seaUid.innerHTML = '';
   seaPron.innerHTML = '';
   seaDef.innerHTML = '';
   seaSen.innerHTML = '';
@@ -1322,6 +1323,7 @@ function buildSingleDef(singleArr, display) {
 }
 function displaySearch(aResult, index) {
   seaChar.innerHTML = aResult[index].char;
+  seaUid.innerHTML = 'id:' + aResult[index].id;
   seaPron.innerHTML = aResult[index].pronunciation;
   if (!aResult[index].pronunciation || 
       aResult[index].definitions.single.filter(x=>!x).length!=0) { //it's new char     
