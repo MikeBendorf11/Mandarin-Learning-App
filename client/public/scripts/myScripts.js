@@ -1073,7 +1073,16 @@ revPron.onclick = () => {
   sentReview.style.display = 'none';
   pronReview.style.display = 'block';
 }
-
+revCons.onclick = () => {
+  let script = document.createElement('script');
+  script.src = 'scripts/eruda.js'
+  let script2 = document.createElement('script')
+  script2.appendChild(document.createTextNode('eruda.init({container:footer2,tool:"console"})'))
+  script.onload = () => {
+    document.body.appendChild(script2)
+  }
+  document.body.appendChild(script)
+}
 
 
 
