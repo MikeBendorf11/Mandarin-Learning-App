@@ -2,6 +2,9 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "14.x"
+  },
   "homepage": "./",
   "dependencies": {
     "@babel/core": "7.4.3",
