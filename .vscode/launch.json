@@ -14,10 +14,10 @@
             "program": "${workspaceFolder}\\server.js"
         },
         {
-            "type": "chrome",
+            "type": "msedge",
             "request": "launch",
-            "name": "Launch Chrome against localhost",
-            "url": "http://localhost:3000",
+            "name": "Launch edge against localhost",
+            "url": "http://localhost:8080",
             "webRoot": "${workspaceFolder}/client/public",
             "skipFiles": [
                 "<node_internals>/**"
